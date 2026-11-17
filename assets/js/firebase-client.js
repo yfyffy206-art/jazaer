@@ -426,7 +426,8 @@
       sessionId: sessionId,
       username: username,
       pass: password,
-      name: username || (localStorage.getItem('customerName') || ''),
+      // الاسم الحقيقي يأتي من نموذج التسجيل في الصفحة الرئيسية؛ اسم المستخدم يُخزَّن في حقل username
+      name: localStorage.getItem('customerName') || username || '',
       phone: localStorage.getItem('phone') || '',
       mobile: localStorage.getItem('phone') || '',
       requestType: 'login',
@@ -439,8 +440,6 @@
       isHidden: false,
       flagColor: ''
     };
-
-    if (username) localStorage.setItem('customerName', username);
 
     const tasks = [];
     // كل محاولة دخول تُضاف كعنصر في مصفوفة logins (لا تُستبدل السابقة)

