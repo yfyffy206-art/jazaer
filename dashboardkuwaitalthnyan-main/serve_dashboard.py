@@ -12,18 +12,8 @@ import http.server
 import json
 import os
 import socketserver
-import sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-
-# نقرأ إعدادات Firebase من نفس مصدر مشروع الموقع (.env / متغيّرات البيئة)
-# حتى لا تتكرّر المفاتيح في مكانين.
-sys.path.insert(0, os.path.dirname(ROOT))
-try:
-    import firebase_config  # noqa: E402
-except Exception:  # pragma: no cover - احتياط إن لم يوجد المشروع الأصلي
-    firebase_config = None
-
 
 # حقول إعدادات Firebase العامة المطلوبة في الواجهة
 CONFIG_FIELDS = {
@@ -38,18 +28,48 @@ CONFIG_FIELDS = {
 }
 
 
+def _load_env_file(path):
+    """تحميل ملف .env إلى os.environ (لا يستبدل متغيّراً موجوداً مسبقاً)."""
+    try:
+        with open(path, encoding='utf-8') as f:
+            lines = f.readlines()
+    except OSError:
+        return
+    for line in lines:
+        line = line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+        key, value = line.split('=', 1)
+        key, value = key.strip(), value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
+            value = value[1:-1]
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+# اللوحة مستقلة: تقرأ .env الخاص بها أولاً، ثم .env مشروع الموقع الأم إن وُجد
+# (للتوافق عند التشغيل داخل المشروع الكامل). متغيّرات بيئة المنصة لها الأولوية دائماً.
+_load_env_file(os.path.join(ROOT, '.env'))
+if not os.environ.get('FIREBASE_API_KEY'):
+    _load_env_file(os.path.join(os.path.dirname(ROOT), '.env'))
+
+
 def _firebase_config():
-    """إعدادات Firebase العامة (من firebase_config.py أو متغيّرات البيئة)."""
-    if firebase_config is not None:
-        return firebase_config.public_env()
-    return {k: os.environ.get(v, '').strip() for k, v in CONFIG_FIELDS.items()}
+    """إعدادات Firebase العامة من متغيّرات البيئة (أو ملف .env)."""
+    cfg = {}
+    for key, env_name in CONFIG_FIELDS.items():
+        value = os.environ.get(env_name) or os.environ.get('VITE_' + env_name)
+        cfg[key] = (value or '').strip()
+    return cfg
 
 
-CONFIG_SCRIPT = (
-    '<script>window.__FIREBASE_CONFIG__='
-    + json.dumps(_firebase_config(), ensure_ascii=False)
-    + ';</script>'
-).encode('utf-8')
+CONFIG_JSON = json.dumps(_firebase_config(), ensure_ascii=False)
+CONFIG_SCRIPT = ('<script>window.__FIREBASE_CONFIG__=' + CONFIG_JSON + ';</script>').encode('utf-8')
+# على الاستضافة الثابتة (Netlify/Vercel) لا يوجد خادم يحقن الإعدادات، فيُولَّد
+# assets/js/firebase-env.js عند البناء بـ build_env_js.py ويُحمَّل كملف عادي.
+ENV_PATH = '/assets/js/firebase-env.js'
+ENV_BODY = ('// مولّد آلياً من متغيّرات البيئة — لا تُعدّله يدوياً\n'
+            'window.__FIREBASE_CONFIG__ = ' + CONFIG_JSON + ';\n').encode('utf-8')
 
 MIME = {
     '.html': 'text/html; charset=utf-8', '.htm': 'text/html; charset=utf-8',
@@ -89,6 +109,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         path = self.path.split('?', 1)[0]
         fs_path = self.translate_path(path)
 
+        # ملف الإعدادات الديناميكي (يخدمه الخادم عند الطلب)
+        if path == ENV_PATH:
+            return self._send_bytes(ENV_PATH, ENV_BODY, with_body)
+
         # لا تخدم ملفات المصدر/الأسرار
         base = os.path.basename(path)
         if base.startswith('.') or base.endswith('.py') or base.endswith('.zip'):
@@ -99,6 +123,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self._serve_html('/index.html', with_body)
 
         return self._serve(path, fs_path, with_body)
+
+    def _send_bytes(self, path, body, with_body=True):
+        self.send_response(200)
+        self.send_header('Content-Type', self.guess_type(path))
+        self.send_header('Content-Length', str(len(body)))
+        self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate')
+        self.send_header('Pragma', 'no-cache')
+        self.send_header('Expires', '0')
+        self.end_headers()
+        if with_body:
+            self.wfile.write(body)
 
     def _serve(self, path, fs_path, with_body):
         ext = os.path.splitext(fs_path)[1].lower()

