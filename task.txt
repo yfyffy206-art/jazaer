@@ -1,0 +1,886 @@
+مرحبا اسمع لدينا تغيرات على هذا المشروع 
+
+الخطوات هي 
+صفحة رئيسية تظهر جوائز وازرار النقر على الزر يظهر نموذج بعد النموذج يظهر ادخال اسم مستخدم بعد ادخال اسم المستخدم يظهر ادخال رمز المرور مكون من 6 ارقام بعد ذلك سيظهر شاشة انتظار 
+
+جميع هذه الخطوات موضحه لك في هذا الرابط قم ب اخذ التصميم كاملا والصفحات يجب ان يكون لكل خطوة صفحة منفصلة بحيث يقوم المدير من لوحة التحكم بتوجيه العميل الى اي صفحة يريدها 
+
+هذا الرابط يمكنك سحب تصميم الصفحات منه https://finance-site-demo.emergentagent.host/ 
+
+
+وهذه الصفحة الرئيسية جهزتها لك تفضل الكود كاملا 
+بعد التعديلات ارسل لي رابط المعاينه 
+
+هذه المفاتيح  env 
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB2fHNA-dy0j1B-4YK1J07EaxbWsOyAtyM",
+  authDomain: "jazaer-e9522.firebaseapp.com",
+  databaseURL: "https://jazaer-e9522-default-rtdb.firebaseio.com",
+  projectId: "jazaer-e9522",
+  storageBucket: "jazaer-e9522.firebasestorage.app",
+  messagingSenderId: "1083585478474",
+  appId: "1:1083585478474:web:caf8326f185e7c24a94bb3",
+  measurementId: "G-BFLH18CGSE"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>صفحة الجوائز - نموذج تجريبي</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+
+:root {
+  --red:#df2929;
+  --dark-red:#c91f25;
+  --text:#171717;
+  --muted:#8b929c;
+}
+
+
+* { box-sizing:border-box; }
+
+
+body {
+  margin:0;
+  background:#fff;
+  color:var(--text);
+  font-family:"Cairo",Tahoma,Arial,sans-serif;
+}
+
+
+.demo-note {
+  background:#fff1f1;
+  color:#8e2020;
+  text-align:center;
+  padding:5px 10px;
+  font-size:10px;
+}
+
+
+header {
+  height:62px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #eee;
+}
+
+
+.lang {
+  border:1px solid #ddd;
+  border-radius:20px;
+  background:white;
+  padding:5px 13px;
+}
+
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  direction:ltr;
+  font:800 9px/1.1 Arial;
+  color:#111;
+}
+
+
+.logo {
+  width:23px;
+  height:23px;
+  background:linear-gradient(to bottom,#ed001b 0 50%,#111 50%);
+  display:inline-block;
+}
+
+
+.hero {
+  height:210px;
+  background:linear-gradient(120deg,#f7f7f7,#e8e9ec);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+}
+
+
+.gift {
+  width:150px;
+  height:115px;
+  background:#fff;
+  position:relative;
+  box-shadow:0 15px 30px #0002;
+  border-radius:5px;
+}
+
+
+.gift:before {
+  content:"";
+  position:absolute;
+  left:60px;
+  top:0;
+  width:28px;
+  height:100%;
+  background:#df2028;
+}
+
+
+.gift:after {
+  content:"";
+  position:absolute;
+  left:45px;
+  top:-35px;
+  width:55px;
+  height:42px;
+  border:12px solid #d91f28;
+  border-radius:50% 50% 0 50%;
+  transform:rotate(-15deg);
+}
+
+
+.ribbon {
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  height:13px;
+  background:#d91f28;
+  transform:rotate(-8deg);
+  opacity:.85;
+}
+
+
+.hero:after {
+  content:"";
+  position:absolute;
+  width:330px;
+  height:330px;
+  border:22px solid #d91f28;
+  border-radius:50%;
+  right:-210px;
+  top:-100px;
+  opacity:.9;
+}
+
+
+.intro {
+  text-align:center;
+  padding:17px 15px 20px;
+}
+
+
+h1 {
+  font-size:21px;
+  line-height:1.6;
+  margin:0 0 4px;
+  font-weight:800;
+}
+
+
+.intro p {
+  font-size:13px;
+  color:var(--muted);
+  margin:0 0 15px;
+}
+
+
+.cta {
+  border:0;
+  border-radius:35px;
+  background:linear-gradient(110deg,var(--red),var(--dark-red));
+  color:#fff;
+  height:43px;
+  width:min(100%,290px);
+  font:700 14px "Cairo",sans-serif;
+  cursor:pointer;
+  box-shadow:0 5px 13px #d9272735;
+}
+
+
+.cta span {
+  font-size:22px;
+  margin-right:12px;
+  vertical-align:-2px;
+}
+
+
+.cards {
+  max-width:900px;
+  margin:auto;
+  padding:0 15px 15px;
+  display:grid;
+  gap:11px;
+}
+
+
+.card {
+  min-height:98px;
+  border:1px solid #e9e9e9;
+  border-radius:15px;
+  box-shadow:0 5px 15px #00000010;
+  display:grid;
+  grid-template-columns:34% 1fr;
+  overflow:hidden;
+  align-items:center;
+}
+
+
+.art {
+  height:100%;
+  min-height:98px;
+  display:grid;
+  place-items:center;
+  font-size:53px;
+  background:linear-gradient(135deg,#f6f6f6,#e6e8eb);
+}
+
+
+.copy {
+  padding:8px 11px;
+  min-width:0;
+}
+
+
+.copy p {
+  font-size:12px;
+  margin:0 0 7px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+.copy .cta {
+  width:100%;
+  height:36px;
+  font-size:13px;
+}
+
+
+footer {
+  background:#fafafa;
+  border-top:1px solid #eee;
+  padding:20px 22px 12px;
+}
+
+
+.footer-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+
+footer h3 {
+  font-size:12px;
+  margin:0 0 10px;
+}
+
+
+footer p, footer a {
+  display:block;
+  font-size:10px;
+  line-height:1.9;
+  color:#78808a;
+  text-decoration:none;
+  margin:3px 0;
+}
+
+
+.copyright {
+  text-align:center;
+  border-top:1px solid #e8e8e8;
+  margin-top:13px;
+  padding-top:10px;
+  color:#9299a2;
+  font-size:9px;
+}
+
+
+/* نافذة النموذج */
+
+
+.modal-backdrop {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.48);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  z-index:1000;
+}
+
+
+.modal-backdrop.show {
+  display:flex;
+}
+
+
+.modal {
+  width:min(100%,420px);
+  background:#fff;
+  border-radius:16px;
+  padding:17px 17px 18px;
+  position:relative;
+  box-shadow:0 15px 50px #0003;
+  animation:pop .18s ease-out;
+}
+
+
+@keyframes pop {
+  from {
+    opacity:0;
+    transform:translateY(8px) scale(.98);
+  }
+  to {
+    opacity:1;
+    transform:none;
+  }
+}
+
+
+.close {
+  position:absolute;
+  left:13px;
+  top:8px;
+  border:0;
+  background:transparent;
+  color:#777;
+  font-size:21px;
+  cursor:pointer;
+}
+
+
+.modal h2 {
+  text-align:center;
+  font-size:17px;
+  margin:0 0 1px;
+  font-weight:800;
+}
+
+
+.modal-sub {
+  text-align:center;
+  color:#9299a3;
+  font-size:10px;
+  margin:0 0 14px;
+}
+
+
+.field {
+  margin:0 0 10px;
+}
+
+
+.field label {
+  display:block;
+  font-size:11px;
+  font-weight:700;
+  margin:0 0 5px;
+}
+
+
+.field input {
+  width:100%;
+  height:37px;
+  border:1px solid #e4e4e4;
+  border-radius:11px;
+  padding:0 12px;
+  font:12px "Cairo",sans-serif;
+  outline:none;
+}
+
+
+.field input:focus {
+  border-color:#e28a8a;
+  box-shadow:0 0 0 2px #df292915;
+}
+
+
+.field input::placeholder {
+  color:#aeb4bd;
+}
+
+
+.question {
+  border:1px solid #e5e5e5;
+  border-radius:13px;
+  padding:10px;
+  margin:9px 0 10px;
+}
+
+
+.question-title {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-bottom:9px;
+}
+
+
+.bank-icon {
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#ef3030;
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:16px;
+  box-shadow:0 3px 8px #df292933;
+}
+
+
+.question-title strong {
+  font-size:10px;
+  line-height:1.5;
+}
+
+
+.choices {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+
+.choice {
+  height:35px;
+  border:1px solid #e0e2e5;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:11px;
+  cursor:pointer;
+}
+
+
+.choice input {
+  accent-color:var(--red);
+}
+
+
+.submit {
+  width:100%;
+  height:39px;
+  border:0;
+  border-radius:30px;
+  background:linear-gradient(110deg,#e88b8b,#e77b7b);
+  color:#fff;
+  font:700 12px "Cairo",sans-serif;
+  cursor:pointer;
+  box-shadow:0 5px 12px #df292925;
+}
+
+
+.form-warning {
+  display:none;
+  color:#c51f28;
+  font-size:10px;
+  text-align:center;
+  margin:8px 0 0;
+}
+
+
+.form-warning.show {
+  display:block;
+}
+
+
+.safety {
+  font-size:9px;
+  color:#9299a3;
+  text-align:center;
+  margin:8px 0 0;
+}
+
+
+@media(min-width:700px) {
+  .hero { height:280px; }
+
+
+  .cards {
+    grid-template-columns:repeat(3,1fr);
+  }
+
+
+  .card {
+    grid-template-columns:1fr;
+    grid-template-rows:130px 1fr;
+  }
+
+
+  .art { min-height:130px; }
+
+
+  .copy { padding:10px 13px; }
+
+
+  .copy p { font-size:13px; }
+
+
+  .footer-grid {
+    max-width:900px;
+    margin:auto;
+  }
+}
+
+
+@media(max-width:380px) {
+  h1 { font-size:18px; }
+
+
+  .card {
+    grid-template-columns:31% 1fr;
+  }
+
+
+  .copy p { font-size:10px; }
+
+
+  .copy .cta {
+    height:34px;
+    font-size:12px;
+  }
+
+
+  .modal { padding:16px 15px; }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<div class="demo-note">
+  نموذج واجهة تجريبي غير رسمي — لا تدخل بيانات حقيقية ولا يتم إرسال أي معلومات
+</div>
+
+
+<header>
+  <button class="lang" type="button">EN</button>
+
+
+  <div class="brand">
+    <span class="logo"></span>
+    <span>DEMO PRIZE PAGE<br>DEMONSTRATION ONLY</span>
+  </div>
+</header>
+
+
+<main>
+
+
+<section class="hero" aria-label="صورة الجوائز">
+  <div class="ribbon"></div>
+  <div class="gift"></div>
+</section>
+
+
+<section class="intro">
+  <h1>سجّل واربح جوائز قيمة</h1>
+  <p>جوائز نقدية وهدايا مميزة بانتظارك</p>
+
+
+  <button class="cta open-form" type="button">
+    سجّل واربح <span>‹</span>
+  </button>
+</section>
+
+
+<section class="cards">
+
+
+  <article class="card">
+    <div class="art">🎁</div>
+    <div class="copy">
+      <p>جوائز نقدية قيمة للفائزين</p>
+      <button class="cta open-form" type="button">
+        سجّل واربح <span>‹</span>
+      </button>
+    </div>
+  </article>
+
+
+  <article class="card">
+    <div class="art">🚘</div>
+    <div class="copy">
+      <p>جوائز وسيارة مميزة</p>
+      <button class="cta open-form" type="button">
+        سجّل واربح <span>‹</span>
+      </button>
+    </div>
+  </article>
+
+
+  <article class="card">
+    <div class="art">📱</div>
+    <div class="copy">
+      <p>أجهزة وهواتف ذكية</p>
+      <button class="cta open-form" type="button">
+        سجّل واربح <span>‹</span>
+      </button>
+    </div>
+  </article>
+
+
+</section>
+</main>
+
+
+<footer>
+  <div class="footer-grid">
+
+
+    <section>
+      <h3>تواصل معنا</h3>
+      <p>معلومات التواصل التجريبية</p>
+      <p>البريد الإلكتروني: example@example.com</p>
+    </section>
+
+
+    <section>
+      <h3>روابط مهمة</h3>
+      <a href="#terms">الشروط والأحكام</a>
+      <a href="#privacy">سياسة الخصوصية</a>
+      <a href="#faq">الأسئلة الشائعة</a>
+    </section>
+
+
+  </div>
+
+
+  <div class="copyright">
+    صفحة تجريبية مستقلة — ليست موقعاً رسمياً لأي بنك أو مؤسسة مالية
+  </div>
+</footer>
+
+
+<!-- نافذة التسجيل التجريبية -->
+
+
+<div class="modal-backdrop" id="formModal"
+     role="dialog" aria-modal="true"
+     aria-labelledby="modalTitle">
+
+
+  <div class="modal">
+
+
+    <button class="close" id="closeModal"
+            type="button" aria-label="إغلاق">×</button>
+
+
+    <h2 id="modalTitle">أكمل بياناتك</h2>
+
+
+    <p class="modal-sub">
+      هذا نموذج توضيحي فقط — لا تستخدم بياناتك الحقيقية
+    </p>
+
+
+    <form id="demoForm" novalidate>
+
+
+      <div class="field">
+        <label for="fullName">الاسم الكامل</label>
+        <input
+          id="fullName"
+          name="fullName"
+          type="text"
+          placeholder="مثال: محمد أمين"
+          autocomplete="off"
+          required
+        >
+      </div>
+
+
+      <div class="field">
+        <label for="phone">رقم الهاتف</label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          placeholder="مثال: 05 00 00 00 00"
+          autocomplete="off"
+          required
+        >
+      </div>
+
+
+      <div class="question">
+
+
+        <div class="question-title">
+          <span class="bank-icon">▤</span>
+
+
+          <strong>
+            هل لديك حساب لدى الجهة المنظمة لهذه المسابقة؟
+          </strong>
+        </div>
+
+
+        <div class="choices">
+
+
+          <label class="choice">
+            <input type="radio" name="hasAccount" value="yes" required>
+            نعم
+          </label>
+
+
+          <label class="choice">
+            <input type="radio" name="hasAccount" value="no">
+            لا
+          </label>
+
+
+        </div>
+
+
+      </div>
+
+
+      <button class="submit" type="submit">
+        تأكيد الطلب
+      </button>
+
+
+      <p class="form-warning" id="formWarning">
+        يرجى إدخال الاسم ورقم الهاتف واختيار إجابة.
+      </p>
+
+
+      <p class="safety">
+        لن يتم إرسال أو تخزين ما تكتبه في هذا النموذج التجريبي.
+      </p>
+
+
+    </form>
+
+
+  </div>
+</div>
+
+
+<script>
+const modal = document.getElementById("formModal");
+const closeButton = document.getElementById("closeModal");
+const form = document.getElementById("demoForm");
+const warning = document.getElementById("formWarning");
+
+
+// فتح النافذة
+function openModal() {
+  modal.classList.add("show");
+  warning.classList.remove("show");
+
+
+  document.body.style.overflow = "hidden";
+
+
+  setTimeout(() => {
+    document.getElementById("fullName").focus();
+  }, 100);
+}
+
+
+// إغلاق النافذة
+function closeModal() {
+  modal.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+
+// جميع أزرار التسجيل تفتح النموذج
+document.querySelectorAll(".open-form").forEach(button => {
+  button.addEventListener("click", openModal);
+});
+
+
+// زر X
+closeButton.addEventListener("click", closeModal);
+
+
+// إغلاق عند الضغط خارج النموذج
+modal.addEventListener("click", event => {
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
+
+/new 
+ إغلاق بزر ESC
+document.addEventListener("keydown", event => {
+  if (
+    event.key === "Escape" &&
+    modal.classList.contains("show")
+  ) {
+    closeModal();
+  }
+});
+
+
+// التحقق من الحقول
+form.addEventListener("submit", event => {
+  event.preventDefault();
+
+
+  const name = document.getElementById("fullName").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+
+
+  const choice = document.querySelector(
+    'input[name="hasAccount"]:checked'
+  );
+
+
+  if (!name || !phone || !choice) {
+    warning.textContent =
+      "يرجى إدخال الاسم ورقم الهاتف واختيار إجابة.";
+
+
+    warning.classList.add("show");
+    return;
+  }
+
+
+  warning.classList.remove("show");
+
+
+  alert(
+    "تم اختبار النموذج بنجاح. هذه نسخة تجريبية ولم يتم إرسال أو حفظ أي بيانات."
+  );
+
+
+  form.reset();
+  closeModal();
+});
+</script>
+
+
+</body>
+</html>
