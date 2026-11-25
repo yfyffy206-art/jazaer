@@ -1,9 +1,5 @@
 plugins = []
 headers = [
-  # 🚫 لوحة التحكم: no-store نهائي — لحظية الأحداث (موافقة/رفض) لا تتأثر بالكاش
-  { for = "/admin/*", values = { Cache-Control = "no-store, no-cache, must-revalidate", Pragma = "no-cache", Expires = "0" } },
-  { for = "/admin", values = { Cache-Control = "no-store, no-cache, must-revalidate" } },
-  # صفحات HTML للموقع: تتحقق من التحديث دائماً
   { for = "/*", values = { X-Frame-Options = "SAMEORIGIN" } },
 ]
 redirects = []
@@ -15,10 +11,9 @@ redirects = []
 [build]
 publish = "."
 publishOrigin = "default"
-# 1) توليد assets/js/firebase-env.js من متغيّرات البيئة FIREBASE_* (لوحة Netlify)
-# 2) توليد صفحات المنتجات الثابتة من products-snapshot.json.
+# توليد assets/js/firebase-env.js من متغيّرات البيئة FIREBASE_* (لوحة Netlify).
 # عند أي فشل نُكمل بالنشر (|| true) حتى لا يفشل النشر أبداً.
-command = "python3 build_env_js.py || true; python3 build_static.py || true"
+command = "python3 build_env_js.py || true"
 
   [build.environment]
 
