@@ -116,11 +116,17 @@ node --check assets/js/app.js   # quick syntax check for the vanilla bundle
 
 `assets/js/app.js` plays one tone whenever new data reaches the dashboard.
 
-- Sources: `customers`, `cards`, `otps` snapshots. A doc counts as new when it is
-  new to the page, or when any field other than `SOUND_IGNORED_FIELDS`
-  (`lastSeen`, `decision`, `status`, `decidedAt`, `decisionUpdatedAt`, `isBlocked`)
-  changed. Heartbeats and the admin's own decisions therefore stay silent.
+- Sources: `customers`, `cards`, `otps` snapshots. A doc counts as new only when a
+  field outside `SOUND_IGNORED_FIELDS` (session metadata such as `lastSeen`,
+  `currentPage`, `ip`, `country`, plus admin-written fields such as `decision`,
+  `status`, `isHidden`, `otpActions`) changed **and** the new value is real data
+  (`hasDataValue` drops empty strings, zeros and the `0.000 د.ك` default). A plain
+  visit, a page navigation and the 10 s heartbeat are therefore silent.
+- `sameFieldValue` normalises map key order before comparing: Firestore returns the
+  keys of map/array values in a different order on each read, which used to make an
+  unchanged `logins` array look modified on every heartbeat.
 - The first snapshot after login never rings; `logout()` resets the detection state.
+- `startListening()` unsubscribes any previous listeners so a re-login cannot double them.
 - Bursts are merged by `TONE_GAP` (900 ms) with one delayed tone, so nothing is lost.
 - Audio: `/assets/audio/notification.wav` (short two-note marimba "ding-dong" in the
   style of chat apps), with a synthesized fallback when the file or

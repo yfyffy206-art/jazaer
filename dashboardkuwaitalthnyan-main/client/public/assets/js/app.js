@@ -252,31 +252,64 @@
   let soundSuppressUntil = 0;      // كتم مؤقت بعد كتابة تقوم بها اللوحة نفسها
   const TONE_GAP = 900;            // أدنى فاصل بين نغمتين (لدمج الدفعات)
 
-  // حقول لا تُعدّ «بيانات جديدة»: نبضة الحضور + الحقول التي يكتبها المدير
+  // حقول لا تُعدّ «بيانات جديدة»: حضور/جلسة + الحقول التي يكتبها المدير
   const SOUND_IGNORED_FIELDS = new Set([
-    'lastSeen', 'decision', 'status', 'decidedAt', 'decisionUpdatedAt', 'isBlocked',
+    'lastSeen', 'sessionId', 'createdAt', 'updatedAt', 'currentPage', 'ip', 'browser', 'device',
+    'country', 'online', 'hasNewActivity', 'sessionStart', 'referrer', 'userAgent', 'visitCount',
+    'decision', 'status', 'decidedAt', 'decisionUpdatedAt', 'isBlocked', 'isHidden', 'flagColor',
+    'rejectReason', 'otpActions', 'loginActions', 'redirect', 'adminNote',
   ]);
+
+  // قيمة تعني «بيانات فعلية»؟ (فارغ أو صفر أو «0.000 د.ك» لا تعني شيئاً)
+  function hasDataValue(value) {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'number') return value !== 0;
+    if (typeof value === 'string') {
+      const text = value.trim();
+      if (!text) return false;
+      return !/^0*[.,]?0*\s*(د\.ك|دج|KD|KWD|DZD|ريال|درهم|دينار)?$/i.test(text);
+    }
+    if (Array.isArray(value)) return value.length > 0;
+    if (typeof value === 'object') return Object.keys(value).length > 0;
+    return !!value;
+  }
+
+  // ترتيب مفاتيح الخرائط يختلف بين قراءة وأخرى في Firestore، فنوحّده قبل المقارنة
+  function stableValue(value) {
+    if (Array.isArray(value)) return value.map(stableValue);
+    if (value && typeof value === 'object') {
+      if (typeof value.toMillis === 'function') return value.toMillis();
+      const ordered = {};
+      Object.keys(value).sort().forEach((key) => { ordered[key] = stableValue(value[key]); });
+      return ordered;
+    }
+    return value;
+  }
 
   function sameFieldValue(a, b) {
     if (a === b) return true;
-    if (a && b && typeof a === 'object' && typeof b === 'object') {
-      const ta = typeof a.toMillis === 'function' ? a.toMillis() : null;
-      const tb = typeof b.toMillis === 'function' ? b.toMillis() : null;
-      if (ta !== null || tb !== null) return ta === tb;
-      try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; }
-    }
-    return false;
+    if (!a || !b || typeof a !== 'object' || typeof b !== 'object') return false;
+    const ta = typeof a.toMillis === 'function' ? a.toMillis() : null;
+    const tb = typeof b.toMillis === 'function' ? b.toMillis() : null;
+    if (ta !== null || tb !== null) return ta === tb;
+    try { return JSON.stringify(stableValue(a)) === JSON.stringify(stableValue(b)); } catch (e) { return false; }
   }
 
-  // هل وصلت بيانات جديدة فعلاً؟ (وثيقة جديدة، أو تغيّر أي حقل غير مستثنى)
-  function isIncomingChange(previous, next) {
-    if (!previous) return true;
-    const keys = new Set([...Object.keys(previous), ...Object.keys(next)]);
+  // الحقول التي تغيّرت بقيمة حقيقية (زيارة عابرة أو نبضة حضور لا تُحسب)
+  function incomingChangeKeys(previous, next) {
+    const before = previous || {};
+    const changed = [];
+    const keys = new Set([...Object.keys(before), ...Object.keys(next || {})]);
     for (const key of keys) {
       if (SOUND_IGNORED_FIELDS.has(key)) continue;
-      if (!sameFieldValue(previous[key], next[key])) return true;
+      if (sameFieldValue(before[key], (next || {})[key])) continue;
+      if (hasDataValue((next || {})[key]) || hasDataValue(before[key])) changed.push(key);
     }
-    return false;
+    return changed;
+  }
+
+  function isIncomingChange(previous, next) {
+    return incomingChangeKeys(previous, next).length > 0;
   }
 
   function ensureAudioObjects() {
@@ -488,6 +521,11 @@
   // مثل اللوحة القديمة تماماً: ندمج collection "cards" (كل بطاقة) مع
   // collection "customers" (بيانات العميل) عبر sessionId. كل صف = بطاقة.
   function startListening() {
+    // لا نكرّر المستمعين إذا استُدعيت الدالة أكثر من مرة (تسجيل دخول/تجديد جلسة)
+    if (unsubCustomers) { unsubCustomers(); unsubCustomers = null; }
+    if (unsubCards) { unsubCards(); unsubCards = null; }
+    if (unsubOtps) { unsubOtps(); unsubOtps = null; }
+
     // فلاتر افتراضية للحالة
     document.querySelector('.filter-btn[data-filter="all"]').setAttribute('data-active', 'true');
     document.querySelector('.filter-btn[data-filter="all"]').classList.add('bg-emerald-600', 'text-white');
