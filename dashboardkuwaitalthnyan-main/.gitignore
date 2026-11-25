@@ -8,8 +8,6 @@ firebase.config.json
 *.log
 .DS_Store
 
-# ملف مفاتيح Firebase الحقيقي (عام بطبيعته لكنه لا يُرفع)
-اعداداتenv
-
-# ملف الإعدادات المولَّد (يُولَّد عند البناء من متغيّرات البيئة)
-assets/js/firebase-env.js
+# ملاحظة: assets/js/firebase-env.js مرفق عمداً — يحتوي معرّفات Firebase العامة
+# فقط (apiKey/authDomain/...) وهي ليست أسراراً؛ الأمان يأتي من Firebase Auth
+# وقواعد Firestore/RTDB. كلمة سر اللوحة لا تُكتب في الكود إطلاقاً.

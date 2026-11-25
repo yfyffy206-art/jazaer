@@ -1,12 +1,26 @@
-[build]
-  command = "pnpm build"
-  publish = "dist/public"
+# لوحة التحكم — موقع ثابت (بدون خطوة بناء إلزامية)
+# assets/js/firebase-env.js مُرفَق في المستودع، فلا حاجة لمتغيّرات بيئة عند النشر.
+# لو أردت توليده من متغيّرات المنصة: اجعل command = "python3 build_env_js.py"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[build]
+  publish = "."
+  command = ""
 
 [[headers]]
   for = "/*"
-  values = { Cache-Control = "no-store, no-cache, must-revalidate", Pragma = "no-cache", Expires = "0" }
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive, nosnippet"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "geolocation=(), camera=(), microphone=()"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=600, must-revalidate"

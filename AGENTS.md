@@ -106,3 +106,18 @@ python3 dashboardkuwaitalthnyan-main/serve_dashboard.py   # اللوحة، PORT 
   `home.js` يحافظ على `?v=` عند تبديل اللغة.
 - عند تحديث صورة: زد الرقم `?v=3` في `index.html` وإلا سيبقى الزائر يرى النسخة القديمة.
 - `og:image` يصبح رابطاً مطلقاً تلقائياً في `serve.py` (منصّات المشاركة ترفض الرابط النسبي).
+
+## فصل الاستضافات (موقع العملاء ↔ لوحة التحكم)
+
+- مستودع اللوحة: `yfyffy206-art/dashboard-jazaer` — محتواه الآن **اللوحة فقط**
+  (`index.html`, `assets/`, `serve_dashboard.py`, `build_env_js.py`, `netlify.toml`,
+  `vercel.json`, `_headers`, `robots.txt`, `README.md`). النسخة القديمة محفوظة في فرع
+  `backup-before-replace` داخل المستودع نفسه.
+- مستودع الموقع: `yfyffy206-art/jazaer` (هذا المشروع) — لا تُرفع إليه ملفات اللوحة
+  الثقيلة، ويُبقى المجلد المحلي متطابقاً مع المستودع المنفصل.
+- مسارات اللوحة **نسبية** (`assets/...` لا `/assets/...`) لتعمل على نطاق جذر أو مسار فرعي.
+- `dashboardkuwaitalthnyan-main/assets/js/firebase-env.js` مرفق ويحتوي معرّفات Firebase
+  العامة فقط؛ كلمة سر المدير لا توجد في الكود (الدخول عبر Firebase Auth).
+- ترويسات أمنية للوحة: `X-Robots-Tag: noindex`, `X-Frame-Options: DENY`, `nosniff`,
+  `Referrer-Policy: no-referrer` (في `netlify.toml` / `vercel.json` / `_headers`).
+- عند تحديث `app.js` ارفع `?v=` في `index.html` لتجاوز كاش المتصفح.
