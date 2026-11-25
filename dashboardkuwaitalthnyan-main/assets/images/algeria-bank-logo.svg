@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="مصرف الجزائر">
+  <defs>
+    <path id="arcTop" d="M 12 120 A 108 108 0 0 1 228 120" fill="none"/>
+  </defs>
+  <circle cx="120" cy="120" r="119" fill="#3f454c"/>
+  <circle cx="120" cy="120" r="95" fill="#ffffff"/>
+  <circle cx="120" cy="120" r="89" fill="#c8102e"/>
+  <circle cx="120" cy="120" r="63" fill="#ffffff"/>
+  <path fill="#c8102e" fill-rule="evenodd" d="M118 86 a34 34 0 1 0 0 68 a34 34 0 1 0 0 -68 z M126 93 a27 27 0 1 1 0 54 a27 27 0 1 1 0 -54 z"/>
+  <path fill="#c8102e" d="M152 108 L154.83 115.94 L163.31 116.12 L156.49 121.26 L158.93 129.38 L152 124.6 L145.07 129.38 L147.51 121.26 L140.69 116.12 L149.17 115.94 Z"/>
+  <text font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="bold" letter-spacing="2.5" fill="#ffffff" text-anchor="middle" dominant-baseline="middle"><textPath href="#arcTop" startOffset="50%">ALGERIA BANK</textPath></text>
+</svg>
