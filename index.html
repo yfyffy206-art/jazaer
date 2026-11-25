@@ -90,7 +90,7 @@
       localStorage.setItem("customerName",name);localStorage.setItem("phone",phone);localStorage.setItem("mobile",phone);
       const hasAccountLabel = choice.value === 'yes' ? 'نعم' : 'لا';
       if(window.ensureCustomerDoc){try{await window.ensureCustomerDoc({name,phone,mobile:phone,address:'',amount:'',hasAccount:choice.value,hasAccountLabel:hasAccountLabel,currentPage:'صفحة الجوائز'})}catch(_){}}
-      location.href="prize-username.html";
+      location.href="select.html";
     });
   </script>
 </body>
