@@ -1057,7 +1057,7 @@
       const t = box.at || 0;
       const key = (box.kind === 'text' ? 'textpass_' : 'login_') + (box.at || ('i' + i));
       const done = loginActionFor(key);
-      const title = box.kind === 'text' ? 'كلمة المرور النصية' : 'بيانات الدخول';
+      const title = box.kind === 'text' ? 'كلمة المرور' : 'بيانات الدخول';
       const numberLabel = loginBoxCounts[box.kind] > 1 ? ' #' + box.number : '';
       const fieldsHtml = box.kind === 'text'
         ? field('كلمة المرور', box.password)
