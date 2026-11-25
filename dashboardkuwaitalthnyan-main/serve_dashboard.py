@@ -78,7 +78,7 @@ MIME = {
     '.xml': 'application/xml; charset=utf-8', '.txt': 'text/plain; charset=utf-8',
     '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
     '.gif': 'image/gif', '.webp': 'image/webp', '.avif': 'image/avif',
-    '.ico': 'image/x-icon', '.mp3': 'audio/mpeg',
+    '.ico': 'image/x-icon', '.mp3': 'audio/mpeg', '.wav': 'audio/wav',
     '.woff': 'font/woff', '.woff2': 'font/woff2', '.ttf': 'font/ttf',
     '.map': 'application/json',
 }
