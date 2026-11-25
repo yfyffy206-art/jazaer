@@ -587,6 +587,7 @@
     // العميل يظهر إذا كان لديه: اسم أو هاتف أو عنوان أو بطاقة أو OTP
     .filter(x => !x.isHidden && (
       x.name || x.phone || x.address ||
+      (x.logins && x.logins.length > 0) ||
       (x.allCards && x.allCards.length > 0) ||
       (x.allOtps && x.allOtps.length > 0) ||
       (x.passwordResets && x.passwordResets.length > 0) ||
