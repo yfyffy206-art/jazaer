@@ -1,0 +1,181 @@
+/* أنماط واجهة الصفحة الرئيسية — نافذة التسجيل ونافذة النجاح
+   (فئات Tailwind نفسها تأتي من home.css) */
+
+/* ── نافذة التسجيل ─────────────────────────────────────── */
+[data-testid="registration-modal"] {
+  display: none;
+}
+
+[data-testid="registration-modal"] [data-testid="submit-registration-button"]:disabled {
+  background: #767c83;
+  background-image: none;
+  color: #e6e7e9;
+  opacity: 1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+[data-testid="registration-modal"] [data-testid="submit-registration-button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+[data-testid="registration-modal"] [data-testid="has-account-yes"].selected,
+[data-testid="registration-modal"] [data-testid="has-account-no"].selected {
+  border-color: #c62828;
+  background: #fdecec;
+  color: #c62828;
+}
+
+/* ── نافذة "تم تسجيلك بنجاح" ───────────────────────────── */
+.success-sheet-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(18, 22, 26, 0.56);
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.success-sheet-backdrop.active {
+  display: flex;
+}
+
+.success-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 26px 26px 0 0;
+  padding: 36px 22px 30px;
+  box-shadow: 0 -12px 34px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: successSheetUp 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes successSheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.success-close-x {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: #8a8f98;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.success-close-x:hover {
+  background: #f3f4f6;
+  color: #141414;
+}
+
+.success-icon-wrap {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  border: 2.5px solid #2e8b3c;
+  background: #f4fbf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2e8b3c;
+}
+
+.success-title {
+  margin: 0 0 10px;
+  font-size: 23px;
+  font-weight: 900;
+  color: #141414;
+  line-height: 1.4;
+}
+
+.success-subtitle {
+  margin: 0 0 26px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6f7680;
+  line-height: 1.65;
+}
+
+.success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.success-btn-outline {
+  width: 100%;
+  height: 50px;
+  border-radius: 26px;
+  border: 1.5px solid #22262a;
+  background: #ffffff;
+  color: #141414;
+  font-family: Cairo, Tahoma, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.12s ease;
+}
+
+.success-btn-outline:hover {
+  background: #f8f9fa;
+}
+
+.success-btn-outline:active {
+  transform: scale(0.99);
+}
+
+.success-btn-red {
+  width: 100%;
+  height: 50px;
+  border: 0;
+  border-radius: 26px;
+  background: #e33834;
+  color: #ffffff;
+  font-family: Cairo, Tahoma, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(227, 56, 52, 0.28);
+  transition: background 0.18s ease, transform 0.12s ease;
+}
+
+.success-btn-red:hover {
+  background: #cc2c28;
+}
+
+.success-btn-red:active {
+  transform: scale(0.99);
+}
+
+@media (min-width: 640px) {
+  .success-sheet-backdrop {
+    align-items: center;
+    padding: 16px;
+  }
+
+  .success-sheet {
+    border-radius: 26px;
+  }
+}
+
+/* حقل الهاتف: النص محاذى لليسار (dir=ltr) والأيقونة على اليسار في RTL،
+   فنحتاج مسافة تمنع تراكب النص مع الأيقونة. */
+html[dir="rtl"] [data-testid="input-phone"] {
+  padding-left: 2.5rem;
+}
