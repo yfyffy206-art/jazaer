@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-page="select">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="/assets/js/site-lang.js?v=1"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -168,6 +169,13 @@
     }
 
     .help-text { font-size: 14.5px; font-weight: 600; color: #333333; }
+
+    /* اللغة الإنجليزية/الفرنسية: اتجاه من اليسار لليمين */
+    html[dir="ltr"] .main-content { align-items: flex-start; }
+    html[dir="ltr"] .welcome-section { text-align: left; }
+    html[dir="ltr"] .welcome-ar { font-size: 28px; }
+    html[dir="ltr"] .welcome-en { text-align: left; }
+    html[dir="ltr"] .red-divider { margin-left: 0; margin-right: auto; }
   </style>
 </head>
 <body>
@@ -189,20 +197,20 @@
 
       <!-- نصوص الترحيب -->
       <div class="welcome-section">
-        <h1 class="welcome-ar">مرحبًا بك على تطبيق</h1>
-        <div class="welcome-en">APPLI SGA</div>
+        <h1 class="welcome-ar" data-i18n="select.welcome">مرحبًا بك على تطبيق</h1>
+        <div class="welcome-en" data-i18n="select.appName">APPLI SGA</div>
         <div class="red-divider"></div>
       </div>
     </div>
 
     <!-- الأزرار السفلية -->
     <div class="bottom-actions">
-      <button type="button" id="loginBtn" class="btn btn-login">تسجيل الدخول</button>
-      <button type="button" id="registerBtn" class="btn btn-register">طلب الاشتراك</button>
+      <button type="button" id="loginBtn" class="btn btn-login" data-i18n="select.login">تسجيل الدخول</button>
+      <button type="button" id="registerBtn" class="btn btn-register" data-i18n="select.register">طلب الاشتراك</button>
 
       <div class="help-section" id="helpBtn">
         <span class="chevron-up"></span>
-        <span class="help-text">المساعدات والخدمات</span>
+        <span class="help-text" data-i18n="select.help">المساعدات والخدمات</span>
       </div>
     </div>
   </div>
@@ -210,7 +218,7 @@
   <script>
     // التوجيه إلى صفحة prize-username.html عند النقر على زر تسجيل الدخول
     document.getElementById('loginBtn').addEventListener('click', function () {
-      window.location.href = 'prize-username.html';
+      window.location.href = window.SiteLang ? SiteLang.href('prize-username.html') : 'prize-username.html';
     });
 
     // يمكنك إضافة وظيفة لزر طلب الاشتراك أو المساعدات هنا مستقبلاً

@@ -81,3 +81,18 @@ python3 dashboardkuwaitalthnyan-main/serve_dashboard.py   # اللوحة، PORT 
 ملفات `.js` و`.css` تُخدَم بـ `Cache-Control: no-cache, must-revalidate` (لا `immutable`) حتى تصل
 الإصلاحات إلى الجوال فورًا. صفحات HTML تشير إلى `firebase-client.js?v=N` — ارفع الرقم عند أي
 تغيير كبير في الكلاينت.
+
+## اللغة (عربي / إنجليزي / فرنسي)
+
+- الملف الموحّد: `assets/js/site-lang.js` (`window.SiteLang`) — قاموس ar/en/fr + تطبيق الترجمة واتجاه الصفحة.
+- التخزين: `localStorage.homeLang` (مفتاح الصفحة الرئيسية) + نسخة في `siteLang`.
+- التمرير بين الصفحات: كل تنقّل داخلي يضيف `?lang=xx` عبر `SiteLang.href('page.html')`؛
+  الصفحة التالية تقرأ الرابط أولاً ثم التخزين، وتحفظ اللغة ثم تحذف `?lang=` من شريط العنوان.
+- الصفحة الرئيسية: `home.js` يترجم بترتيب عُقد النصوص (`I18N.texts`) + `PLACEHOLDERS` للحقول،
+  وينادي `SiteLang.set(code)` عند التبديل، وينتقل إلى `select.html?lang=…`.
+- بقية الصفحات: تُوسم العناصر بـ `data-i18n` / `data-i18n-html` / `data-i18n-ph` / `data-i18n-aria`
+  و`<html data-page="...">` لعنوان الصفحة ووصفها.
+- الاتجاه: `html[dir="ltr"]` في CSS لكل صفحة (محاذاة، قلب سهم الرجوع، موضع زر الحذف).
+- نصوص لوحة التحكم تبقى عربية: `currentPage` و`hasAccountLabel` تُرسل بالعربية دائماً.
+- عند إضافة صفحة جديدة: أضف `<script src="/assets/js/site-lang.js?v=1">` في `<head>`،
+  و`data-page` ووسوم الترجمة، واستخدم `SiteLang.href()` في كل تنقّل.

