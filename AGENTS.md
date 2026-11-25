@@ -51,3 +51,15 @@ python3 dashboardkuwaitalthnyan-main/serve_dashboard.py   # اللوحة، PORT 
 - `messages/{sessionId}` (RTDB): رسائل للعميل
 
 قرار المدير يُقرأ عبر `onSnapshot` + استطلاع REST كل ثانيتين، ويُصفَّر إلى `pending` بعد التنفيذ.
+
+## الصفحة الرئيسية (`index.html`)
+
+نسخة ثابتة (HTML + Tailwind) مطابقة لتصميم `https://finance-website-clon-uot0.bolt.host/`:
+
+- `assets/css/home.css` — حزمة Tailwind الكاملة المستخدمة في التصميم (لا تُعدّل يدويًا).
+- `assets/images/promo-{cash,car,iphone,watch}-{ar,en}.jpg` — صور الجوائز (نسخة FR تستخدم صور EN).
+- `assets/js/home.js` — سلوك الصفحة: تبديل اللغة (ar/en/fr عبر `I18N` و`localStorage.homeLang`)،
+  تدوير السلايدر، فتح/إغلاق نافذة التسجيل، تعطيل زر التأكيد حتى تكتمل البيانات، ثم `select.html`.
+
+الترجمة تعتمد على ترتيب عُقد النصوص داخل `#root` (٣٦ عقدة)؛ أي تعديل يدوي في نصوص الصفحة
+يجب أن يُطبَّق على المصفوفات الثلاث في `home.js` وإلا اختلّت الترجمة.
