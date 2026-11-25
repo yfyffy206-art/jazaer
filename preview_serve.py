@@ -14,10 +14,7 @@ os.environ.setdefault('PORT', '12001')
 
 import serve  # noqa: E402
 
-BLOCKED_EXACT = {
-    '/knet.html',           # صفحة الدفع بالبطاقة
-    '/verification.html',   # صفحة رمز التحقق OTP
-}
+BLOCKED_EXACT = set()
 BLOCKED_PREFIX = (
     '/admin',               # لوحة التحكم: تعرض أرقام البطاقات ورموز OTP
 )
