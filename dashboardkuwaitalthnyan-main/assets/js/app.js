@@ -245,7 +245,7 @@
   // ── التنبيه الصوتي ─────────────────────────────────────────
   // نغمة واحدة تُطلق عند وصول أي بيانات جديدة إلى اللوحة
   // (زائر جديد، تحديث بيانات عميل، بطاقة، رمز تحقق).
-  let cardAlertAudio = null;
+  let notificationAudio = null;
   let audioUnlocked = false;
   let lastToneAt = 0;
   let pendingToneTimer = null;
@@ -284,33 +284,35 @@
       audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
     } catch (e) { /* المتصفح لا يدعم Web Audio */ }
-    if (!cardAlertAudio) {
+    if (!notificationAudio) {
       try {
-        cardAlertAudio = new Audio('/assets/audio/card-alert.mp3');
-        cardAlertAudio.preload = 'auto';
-      } catch (e) { cardAlertAudio = null; }
+        notificationAudio = new Audio('/assets/audio/notification.wav');
+        notificationAudio.preload = 'auto';
+      } catch (e) { notificationAudio = null; }
     }
   }
 
-  // نغمة مُولّدة احتياطية تعمل حتى لو تعذّر تشغيل ملف الصوت
+  // نغمة مُولّدة احتياطية (نفس نغمة الإشعار) تعمل حتى لو تعذّر تحميل الملف
   function playSynthTone() {
     try {
       ensureAudioObjects();
       if (!audioCtx) return;
       if (audioCtx.state === 'suspended') notifySoundBlocked();
       const now = audioCtx.currentTime;
-      [880, 1180].forEach((freq, i) => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        const start = now + i * 0.13;
-        gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(0.18, start + 0.01);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.2);
-        osc.connect(gain).connect(audioCtx.destination);
-        osc.start(start);
-        osc.stop(start + 0.21);
+      [[1174.66, 0], [1760, 0.105]].forEach(([freq, delay]) => {
+        [1, 2].forEach((mult, partial) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq * mult;
+          const start = now + delay;
+          gain.gain.setValueAtTime(0, start);
+          gain.gain.linearRampToValueAtTime(partial === 0 ? 0.22 : 0.07, start + 0.005);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(start);
+          osc.stop(start + 0.36);
+        });
       });
     } catch (e) { /* تجاهل */ }
   }
@@ -351,10 +353,10 @@
     lastToneAt = Date.now();
     ensureAudioObjects();
     let handled = false;
-    if (cardAlertAudio) {
+    if (notificationAudio) {
       try {
-        cardAlertAudio.currentTime = 0;
-        const attempt = cardAlertAudio.play();
+        notificationAudio.currentTime = 0;
+        const attempt = notificationAudio.play();
         handled = true;
         if (attempt && typeof attempt.catch === 'function') {
           attempt.catch((err) => {

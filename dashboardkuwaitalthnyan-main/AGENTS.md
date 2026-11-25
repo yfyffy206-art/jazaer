@@ -122,7 +122,8 @@ node --check assets/js/app.js   # quick syntax check for the vanilla bundle
   changed. Heartbeats and the admin's own decisions therefore stay silent.
 - The first snapshot after login never rings; `logout()` resets the detection state.
 - Bursts are merged by `TONE_GAP` (900 ms) with one delayed tone, so nothing is lost.
-- Audio: `/assets/audio/card-alert.mp3`, with a synthesized fallback when the file or
+- Audio: `/assets/audio/notification.wav` (short two-note marimba "ding-dong" in the
+  style of chat apps), with a synthesized fallback when the file or
   autoplay is unavailable, plus a one-time toast when the browser blocks sound until
   the admin clicks.
 - `DocumentReference.set/update/delete` are wrapped so writes made by the dashboard
