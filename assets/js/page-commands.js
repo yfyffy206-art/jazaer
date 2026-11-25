@@ -18,7 +18,7 @@
   var started = false;
 
   // الصفحات الحساسة (الدفع/الرموز): لا يتدخّل هذا الملف في توجيهها.
-  var SENSITIVE = { 'knet.html': 1, 'verification.html': 1 };
+  var SENSITIVE = {};
 
   function currentFile() {
     var parts = window.location.pathname.split('/');
