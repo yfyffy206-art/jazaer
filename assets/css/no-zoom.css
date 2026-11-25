@@ -1,0 +1,34 @@
+/* منع التكبير/التصغير في كل صفحات موقع العملاء (هواتف) */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* pan فقط: يلغي pinch-zoom والنقر المزدوج مع إبقاء التمرير */
+  touch-action: pan-x pan-y;
+  -ms-touch-action: pan-x pan-y;
+}
+
+body {
+  touch-action: pan-x pan-y;
+}
+
+/* العناصر التفاعلية: لا تأخير ولا تكبير بالنقر المزدوج */
+a,
+button,
+input,
+select,
+textarea,
+label,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* iOS يكبّر الشاشة تلقائياً عند التركيز على حقل خطّه أقل من 16px */
+@media (max-width: 900px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

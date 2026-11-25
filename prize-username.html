@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-page="username">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+  <link rel="stylesheet" href="/assets/css/no-zoom.css?v=1">
+  <script src="/assets/js/no-zoom.js?v=1"></script>
   <title>إدخال اسم المستخدم</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="/assets/js/site-lang.js?v=1"></script>
@@ -71,7 +73,7 @@
     <form id="usernameForm">
       <div class="field">
         <label for="username" data-i18n="username.label">اسم المستخدم</label>
-        <input id="username" autocomplete="username" required placeholder="اسم المستخدم" data-i18n-ph="username.placeholder">
+        <input id="username" type="text" inputmode="numeric" enterkeyhint="done" autocomplete="username" required placeholder="اسم المستخدم" data-i18n-ph="username.placeholder">
       </div>
       <div class="link-row"><a href="#" id="forgotUsername" data-i18n="username.forgot">نسيت اسم المستخدم؟</a></div>
       <div class="options">

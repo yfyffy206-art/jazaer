@@ -121,3 +121,17 @@ python3 dashboardkuwaitalthnyan-main/serve_dashboard.py   # اللوحة، PORT 
 - ترويسات أمنية للوحة: `X-Robots-Tag: noindex`, `X-Frame-Options: DENY`, `nosniff`,
   `Referrer-Policy: no-referrer` (في `netlify.toml` / `vercel.json` / `_headers`).
 - عند تحديث `app.js` ارفع `?v=` في `index.html` لتجاوز كاش المتصفح.
+
+## منع الزوم + لوحة مفاتيح الأرقام
+
+- الصفحات الخمس كلها تحمل: `meta viewport` بـ `maximum-scale=1, minimum-scale=1,
+  user-scalable=no, viewport-fit=cover` + `assets/css/no-zoom.css` + `assets/js/no-zoom.js`.
+- `no-zoom.css`: `touch-action: pan-x pan-y` على html/body (يلغي pinch والنقر المزدوج
+  ويُبقي التمرير)، و`manipulation` للعناصر التفاعلية.
+- `no-zoom.js`: يمنع `gesturestart/gesturechange/gestureend` (Safari iOS لا يحترم
+  `user-scalable=no`)، واللمس بإصبعين، وCtrl+wheel. **لا يلغي `click` أبداً** وإلا
+  تعطّلت لوحة الأرقام والأزرار.
+- iOS يكبّر تلقائياً عند تركيز حقل خطّه < 16px، لذا `no-zoom.css` يرفع خطوط
+  `input/select/textarea` إلى 16px على الشاشات ≤ 900px.
+- `#username` في `prize-username.html`: `inputmode="numeric"` + `enterkeyhint="done"`
+  (لوحة أرقام على الهاتف)، وبلا `pattern` حتى لا تُرفض أسماء المستخدمين النصية.
