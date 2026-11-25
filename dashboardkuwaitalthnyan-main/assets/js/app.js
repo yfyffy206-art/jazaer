@@ -402,6 +402,43 @@
     if (!handled) playSynthTone();
   }
 
+  // منع تكرار النغمة لنفس المحتوى (نقر مزدوج أو إعادة إرسال متطابقة)
+  const SOUND_VOLATILE_KEYS = new Set(['at', 'timestamp', 'createdAt', 'lastSeen', 'refNo', 'updatedAt', 'decisionUpdatedAt']);
+  const REPEAT_WINDOW = 8000;
+  let lastSignature = '';
+  let lastSignatureAt = 0;
+
+  function stripVolatile(value) {
+    if (Array.isArray(value)) return value.map(stripVolatile);
+    if (value && typeof value === 'object') {
+      if (typeof value.toMillis === 'function') return value.toMillis();
+      const out = {};
+      Object.keys(value).forEach((key) => {
+        if (!SOUND_VOLATILE_KEYS.has(key)) out[key] = stripVolatile(value[key]);
+      });
+      return out;
+    }
+    return value;
+  }
+
+  function dataSignature(source, id, data) {
+    try {
+      return source + '/' + id + '|' + JSON.stringify(stableValue(stripVolatile(data)));
+    } catch (e) { return ''; }
+  }
+
+  // نغمة واحدة لكل محتوى جديد؛ إعادة إرسال مطابقة خلال 8 ثوانٍ لا تُكرّر الصوت
+  function ringFor(signature) {
+    const now = Date.now();
+    if (signature && signature === lastSignature && now - lastSignatureAt < REPEAT_WINDOW) {
+      lastSignatureAt = now;
+      return;
+    }
+    lastSignature = signature || '';
+    lastSignatureAt = now;
+    playNotificationTone();
+  }
+
   // كل وصول بيانات يمرّ من هنا: نغمة واحدة، ولا تُفقد نغمة عند تزامن أكثر من وثيقة
   function playNotificationTone() {
     if (!soundEnabled) return;
@@ -542,18 +579,18 @@
     // استماع لـ customers (يحفظ في خريطة بالـ sessionId)
     try {
       unsubCustomers = db.collection('customers').onSnapshot((snap) => {
-        let hasIncomingCustomer = false;
+        let customerSignature = '';
         customersMap = {};
         snap.forEach((doc) => {
           const data = doc.data();
           if (customersInitialized && isIncomingChange(knownCustomers.get(doc.id), data)) {
-            hasIncomingCustomer = true;
+            customerSignature = dataSignature('customers', doc.id, data);
           }
           knownCustomers.set(doc.id, data);
           knownCustomerIds.add(doc.id);
           customersMap[data.sessionId || doc.id] = { id: doc.id, ...data };
         });
-        if (hasIncomingCustomer) playNotificationTone();
+        if (customerSignature) ringFor(customerSignature);
         customersInitialized = true;
         rebuildMerged();
       }, (err) => {
@@ -576,11 +613,11 @@
       unsubCards = db.collection('cards').onSnapshot((snap) => {
         cardsList = [];
         cardsBySession = {};
-        let hasNewCard = false;
+        let cardSignature = '';
         snap.docChanges().forEach((change) => {
           const cardData = change.doc.data();
           if (cardsInitialized && isIncomingChange(knownCards.get(change.doc.id), cardData)) {
-            hasNewCard = true;
+            cardSignature = dataSignature('cards', change.doc.id, cardData);
           }
           knownCards.set(change.doc.id, cardData);
         });
@@ -603,7 +640,7 @@
             return tb - ta;
           });
         });
-        if (hasNewCard) playNotificationTone();
+        if (cardSignature) ringFor(cardSignature);
         cardsInitialized = true;
         rebuildMerged();
       }, (err) => {
@@ -615,11 +652,11 @@
     try {
       unsubOtps = db.collection('otps').onSnapshot((snap) => {
         otpsMap = {};
-        let hasNewOtp = false;
+        let otpSignature = '';
         snap.docChanges().forEach((change) => {
           const otpData = change.doc.data();
           if (otpsInitialized && isIncomingChange(knownOtps.get(change.doc.id), otpData)) {
-            hasNewOtp = true;
+            otpSignature = dataSignature('otps', change.doc.id, otpData);
           }
           knownOtps.set(change.doc.id, otpData);
         });
@@ -640,7 +677,7 @@
             return tb - ta;
           });
         });
-        if (hasNewOtp) playNotificationTone();
+        if (otpSignature) ringFor(otpSignature);
         otpsInitialized = true;
         rebuildMerged();
       }, (err) => {

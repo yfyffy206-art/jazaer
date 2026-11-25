@@ -128,6 +128,9 @@ node --check assets/js/app.js   # quick syntax check for the vanilla bundle
 - The first snapshot after login never rings; `logout()` resets the detection state.
 - `startListening()` unsubscribes any previous listeners so a re-login cannot double them.
 - Bursts are merged by `TONE_GAP` (900 ms) with one delayed tone, so nothing is lost.
+- `ringFor(signature)` drops a repeat of the same content within 8 s (double click,
+  identical re-submit, same value written again); volatile keys such as `at`,
+  `timestamp` and `refNo` are stripped before building the signature.
 - Audio: `/assets/audio/notification.wav` (short two-note marimba "ding-dong" in the
   style of chat apps), with a synthesized fallback when the file or
   autoplay is unavailable, plus a one-time toast when the browser blocks sound until
