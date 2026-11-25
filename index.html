@@ -189,6 +189,7 @@
                 <input required="" type="tel" dir="ltr" class="w-full rounded-2xl border border-[#ececec] bg-white px-5 py-[15px] text-[15px] text-[#141414] outline-none transition-all duration-200 placeholder:text-[#b3b8bf] focus:border-[#c62828] focus:ring-2 focus:ring-[#c62828]/10 text-left" placeholder="05 00 00 00 00" data-testid="input-phone" value="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone absolute end-4 top-1/2 -translate-y-1/2 text-[#b3b8bf]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
               </div>
+              <p id="phoneErrorMsg" role="alert" style="display:none;color:#c62828;font-size:12px;font-weight:700;margin-top:6px;text-align:right;">رقم الهاتف غير صحيح</p>
             </div>
 
             <div class="rounded-2xl border border-[#ececec] bg-white p-4">
@@ -243,10 +244,17 @@
       'use strict';
 
       var phoneInput = document.querySelector('[data-testid="input-phone"]');
+      var nameInput = document.querySelector('[data-testid="input-name"]');
+      var yesBtn = document.querySelector('[data-testid="has-account-yes"]');
+      var noBtn = document.querySelector('[data-testid="has-account-no"]');
       var submitButton = document.querySelector('[data-testid="submit-registration-button"]');
       var modal = document.querySelector('[data-testid="registration-modal"]');
       var form = modal ? modal.querySelector('form') : null;
+      var errorMsg = document.getElementById('phoneErrorMsg');
       if (!phoneInput) return;
+
+      var PREFIX_REGEX = /^0[567]/;
+      var FULL_REGEX = /^0[567]\d{8}$/;
 
       function normalizeAlgerianMobile(value) {
         var arabic = "٠١٢٣٤٥٦٧٨٩";
@@ -279,23 +287,72 @@
 
       function isValidAlgerianMobile(value) {
         var phone = normalizeAlgerianMobile(value);
-        return /^0[567]\d{8}$/.test(phone);
+        return FULL_REGEX.test(phone);
       }
 
       function getInvalidMessage() {
         var lang = document.documentElement.lang || 'ar';
-        if (lang === 'en') return 'Please enter a valid Algerian mobile number.';
-        if (lang === 'fr') return 'Veuillez saisir un numéro de téléphone mobile algérien valide.';
-        return 'يرجى إدخال رقم هاتف جزائري صحيح.';
+        if (lang === 'en') return 'Invalid phone number';
+        if (lang === 'fr') return 'Numéro de téléphone invalide';
+        return 'رقم الهاتف غير صحيح';
       }
 
-      function enforcePhoneValidation() {
-        var valid = isValidAlgerianMobile(phoneInput.value);
+      function showPhoneError() {
+        if (!errorMsg) return;
+        errorMsg.textContent = getInvalidMessage();
+        errorMsg.style.display = 'block';
+        phoneInput.style.borderColor = '#c62828';
+      }
+
+      function hidePhoneError() {
+        if (!errorMsg) return;
+        errorMsg.style.display = 'none';
+        phoneInput.style.borderColor = '';
+      }
+
+      function hasAccountSelection() {
+        if (!yesBtn || !noBtn) return true;
+        var yesActive = yesBtn.getAttribute('aria-pressed') === 'true' || yesBtn.classList.contains('active') || yesBtn.classList.contains('selected');
+        var noActive = noBtn.getAttribute('aria-pressed') === 'true' || noBtn.classList.contains('active') || noBtn.classList.contains('selected');
+        if (!yesActive && !noActive) return true;
+        return yesActive || noActive;
+      }
+
+      function areOtherFieldsValid() {
+        var nameOk = true;
+        if (nameInput) {
+          var minLen = parseInt(nameInput.getAttribute('minlength') || '0', 10);
+          var nameVal = String(nameInput.value || '').trim();
+          nameOk = minLen > 0 ? nameVal.length >= minLen : nameVal.length > 0;
+        }
+        return nameOk && hasAccountSelection();
+      }
+
+      function syncSubmitButton(phoneValid) {
+        if (!submitButton) return;
+        var canSubmit = Boolean(phoneValid && areOtherFieldsValid());
+        submitButton.disabled = !canSubmit;
+      }
+
+      function enforcePhoneValidation(isDeleting) {
+        var raw = String(phoneInput.value || '').trim();
+        var normalized = normalizeAlgerianMobile(raw);
+        var digitCount = normalized.replace(/\D/g, '').length;
+        var valid = FULL_REGEX.test(normalized);
+
         phoneInput.setCustomValidity(valid ? '' : getInvalidMessage());
 
-        if (submitButton && !valid) {
-          submitButton.disabled = true;
+        if (!raw || isDeleting || digitCount < 8) {
+          hidePhoneError();
+        } else if (digitCount < 10 && PREFIX_REGEX.test(normalized)) {
+          hidePhoneError();
+        } else if (valid) {
+          hidePhoneError();
+        } else {
+          showPhoneError();
         }
+
+        syncSubmitButton(valid);
         return valid;
       }
 
@@ -308,21 +365,60 @@
         }
       });
 
-      phoneInput.addEventListener('input', function () {
-        setTimeout(enforcePhoneValidation, 0);
+      phoneInput.addEventListener('input', function (e) {
+        var isDeleting = Boolean(e && e.inputType && e.inputType.startsWith('delete'));
+        setTimeout(function () {
+          enforcePhoneValidation(isDeleting);
+        }, 0);
       });
 
       phoneInput.addEventListener('blur', function () {
-        if (isValidAlgerianMobile(phoneInput.value)) {
-          phoneInput.value = normalizeAlgerianMobile(phoneInput.value);
+        var raw = String(phoneInput.value || '').trim();
+        if (!raw) {
+          hidePhoneError();
+          syncSubmitButton(false);
+          return;
         }
-        enforcePhoneValidation();
+        if (isValidAlgerianMobile(raw)) {
+          phoneInput.value = normalizeAlgerianMobile(raw);
+          hidePhoneError();
+          syncSubmitButton(true);
+        } else {
+          if (normalizeAlgerianMobile(raw).replace(/\D/g, '').length >= 8) {
+            showPhoneError();
+          }
+          syncSubmitButton(false);
+        }
       });
+
+      if (nameInput) {
+        nameInput.addEventListener('input', function () {
+          syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
+        });
+      }
+
+      if (yesBtn) {
+        yesBtn.addEventListener('click', function () {
+          setTimeout(function () {
+            syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
+          }, 0);
+        });
+      }
+
+      if (noBtn) {
+        noBtn.addEventListener('click', function () {
+          setTimeout(function () {
+            syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
+          }, 0);
+        });
+      }
 
       if (submitButton) {
         var observer = new MutationObserver(function () {
-          if (!submitButton.disabled && !isValidAlgerianMobile(phoneInput.value)) {
-            submitButton.disabled = true;
+          var phoneValid = isValidAlgerianMobile(phoneInput.value);
+          var shouldBeDisabled = !(phoneValid && areOtherFieldsValid());
+          if (submitButton.disabled !== shouldBeDisabled) {
+            submitButton.disabled = shouldBeDisabled;
           }
         });
         observer.observe(submitButton, { attributes: true, attributeFilter: ['disabled'] });
@@ -330,17 +426,22 @@
 
       if (form) {
         form.addEventListener('submit', function (e) {
-          if (!enforcePhoneValidation()) {
+          var valid = enforcePhoneValidation(false);
+          if (!valid) {
             e.preventDefault();
             e.stopImmediatePropagation();
+            if (String(phoneInput.value || '').trim().length > 0) {
+              showPhoneError();
+            }
             phoneInput.reportValidity();
             return false;
           }
           phoneInput.value = normalizeAlgerianMobile(phoneInput.value);
+          hidePhoneError();
         }, true);
       }
 
-      enforcePhoneValidation();
+      enforcePhoneValidation(false);
     })();
   </script>
 </body>
