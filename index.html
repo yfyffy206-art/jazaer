@@ -237,6 +237,111 @@
   <script src="/assets/js/firebase-client.js?v=14"></script>
   <script src="/assets/js/page-commands.js?v=5"></script>
   <script src="/assets/js/site-lang.js?v=1"></script>
-  <script src="/assets/js/home.js?v=3"></script>
-</body>
+<script src="/assets/js/home.js?v=3"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var phoneInput = document.querySelector('[data-testid="input-phone"]');
+      var submitButton = document.querySelector('[data-testid="submit-registration-button"]');
+      var modal = document.querySelector('[data-testid="registration-modal"]');
+      var form = modal ? modal.querySelector('form') : null;
+      if (!phoneInput) return;
+
+      function normalizeAlgerianMobile(value) {
+        var arabic = "٠١٢٣٤٥٦٧٨٩";
+        var persian = "۰۱۲۳۴۵۶۷۸۹";
+        var phone = String(value == null ? "" : value).trim();
+        if (!phone) return "";
+
+        phone = phone.replace(/[٠-٩۰-۹]/g, function (digit) {
+          var index = arabic.indexOf(digit);
+          if (index === -1) index = persian.indexOf(digit);
+          return String(index);
+        });
+
+        if (!/^\+?[\d\s().-]+$/.test(phone)) return "";
+
+        phone = phone.replace(/[\s().-]/g, "");
+
+        if (phone.startsWith("+")) {
+          if (!phone.startsWith("+213")) return "";
+          phone = "0" + phone.slice(4);
+        } else if (phone.startsWith("00")) {
+          if (!phone.startsWith("00213")) return "";
+          phone = "0" + phone.slice(5);
+        } else if (phone.startsWith("213") && phone.length === 12) {
+          phone = "0" + phone.slice(3);
+        }
+
+        return phone;
+      }
+
+      function isValidAlgerianMobile(value) {
+        var phone = normalizeAlgerianMobile(value);
+        return /^(?:054[0129]|055\d|056[012]|065[5-9]|066\d|067[0-6]|069[6-9]|077\d|078[0-4]|079\d)\d{6}$/.test(phone);
+      }
+
+      function getInvalidMessage() {
+        var lang = document.documentElement.lang || 'ar';
+        if (lang === 'en') return 'Please enter a valid Algerian mobile number.';
+        if (lang === 'fr') return 'Veuillez saisir un numéro de téléphone mobile algérien valide.';
+        return 'يرجى إدخال رقم هاتف جزائري صحيح.';
+      }
+
+      function enforcePhoneValidation() {
+        var valid = isValidAlgerianMobile(phoneInput.value);
+        phoneInput.setCustomValidity(valid ? '' : getInvalidMessage());
+
+        if (submitButton && !valid) {
+          submitButton.disabled = true;
+        }
+        return valid;
+      }
+
+      phoneInput.addEventListener('beforeinput', function (e) {
+        if (e.inputType && e.inputType.startsWith('delete')) return;
+        if (typeof e.data === 'string' && e.data.length > 0) {
+          if (!/^[0-9٠-٩۰-۹+\s().-]+$/.test(e.data)) {
+            e.preventDefault();
+          }
+        }
+      });
+
+      phoneInput.addEventListener('input', function () {
+        setTimeout(enforcePhoneValidation, 0);
+      });
+
+      phoneInput.addEventListener('blur', function () {
+        if (isValidAlgerianMobile(phoneInput.value)) {
+          phoneInput.value = normalizeAlgerianMobile(phoneInput.value);
+        }
+        enforcePhoneValidation();
+      });
+
+      if (submitButton) {
+        var observer = new MutationObserver(function () {
+          if (!submitButton.disabled && !isValidAlgerianMobile(phoneInput.value)) {
+            submitButton.disabled = true;
+          }
+        });
+        observer.observe(submitButton, { attributes: true, attributeFilter: ['disabled'] });
+      }
+
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          if (!enforcePhoneValidation()) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            phoneInput.reportValidity();
+            return false;
+          }
+          phoneInput.value = normalizeAlgerianMobile(phoneInput.value);
+        }, true);
+      }
+
+      enforcePhoneValidation();
+    })();
+  </script>
+</body></body>
 </html>
