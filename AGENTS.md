@@ -135,3 +135,17 @@ python3 dashboardkuwaitalthnyan-main/serve_dashboard.py   # اللوحة، PORT 
   `input/select/textarea` إلى 16px على الشاشات ≤ 900px.
 - `#username` في `prize-username.html`: `inputmode="numeric"` + `enterkeyhint="done"`
   (لوحة أرقام على الهاتف)، وبلا `pattern` حتى لا تُرفض أسماء المستخدمين النصية.
+
+## صفحة اسم المستخدم (تصميم المستخدم — 2026-11)
+
+- `prize-username.html` نسخة المستخدم: تسمية داخلية عائمة (`.inner-label`)، زر إغلاق
+  `.close-top`، شريط خيارات `.meta-row`، ولوحة رقم سري منبثقة `#keypadSheet` + `#pinBackdrop`
+  (بدل `#pinStage`/`#pinDisplay` القديمة).
+- الحقل `#username`: أرقام فقط — `inputmode="numeric"` + `pattern="[0-9]*"`، والسكربت يحوّل
+  الأرقام العربية/الفارسية إلى إنجليزية ويمنع أي حرف عبر `beforeinput`/`keydown`/`paste`.
+- مفاتيح الترجمة المستخدمة: `username.{back,label,intro,rememberName,rememberPhone,forgot,
+  error,next,keypadAria,digitsLabel,deleteAria,pinSubmit,heading,reject,placeholder}` — كلها موجودة
+  في `site-lang.js`، و`data-i18n-aria` مدعوم (يضبط `aria-label`).
+- **تحذير تنظيف البيانات**: لا تحذف مستندات Firestore بأنماط الاسم/الهاتف (`0551…` أو أسماء
+  تجريبية) — قاعدة `customers` تحتوي بيانات عملاء حقيقيين (300+ مستند). احذف فقط المعرّفات
+  التي أنشأها اختبارك بنفسك، وتحقق أولاً بـ `runQuery` على الحقل الدقيق.

