@@ -9,89 +9,253 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    :root{--red:#df2929;--red-dark:#bd2027;--ink:#171717;--muted:#8b929c}
-    *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:Cairo,Tahoma,Arial,sans-serif;color:var(--ink);background:#fff}
-    .demo-note{background:#fff1f1;color:#8e2020;text-align:center;padding:7px 10px;font-size:11px}
-    header{height:68px;padding:0 clamp(16px,4vw,42px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee}
-    .lang{border:1px solid #ddd;border-radius:22px;background:#fff;padding:7px 15px;font-family:inherit;cursor:pointer}
-    .brand{display:flex;align-items:center;gap:9px;direction:ltr;font:800 10px/1.25 Arial;color:#111}
-    .bank-mark{width:31px;height:31px;border-radius:7px;background:linear-gradient(135deg,#e20d20 0 55%,#111 55%);box-shadow:0 3px 10px #0002}
-    .hero{height:clamp(220px,42vw,360px);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(120deg,#fafafa,#e7e8eb)}
-    .hero:before{content:"";position:absolute;width:440px;height:440px;border:28px solid #d91f28;border-radius:50%;right:-300px;top:-210px;opacity:.9}
-    .gift{width:180px;height:138px;background:#fff;position:relative;border-radius:7px;box-shadow:0 18px 38px #0002}
-    .gift:before{content:"";position:absolute;left:74px;top:0;width:34px;height:100%;background:#d91f28}
-    .gift:after{content:"";position:absolute;left:54px;top:-43px;width:68px;height:52px;border:14px solid #d91f28;border-radius:52% 52% 0 52%;transform:rotate(-15deg)}
-    .ribbon{position:absolute;left:-20%;right:-20%;top:50%;height:16px;background:#d91f28;transform:rotate(-8deg);opacity:.9}
-    main{text-align:center}.intro{padding:20px 16px 24px}.intro h1{font-size:clamp(21px,4vw,34px);margin:0 0 5px;font-weight:900}.intro p{font-size:14px;color:var(--muted);margin:0 0 17px}
-    .cta{border:0;border-radius:40px;background:linear-gradient(110deg,var(--red),var(--red-dark));color:#fff;height:48px;width:min(100%,330px);font:800 15px Cairo,sans-serif;cursor:pointer;box-shadow:0 7px 16px #d9272735}
-    .cta span{font-size:24px;margin-right:12px}
-    .cards{max-width:980px;margin:auto;padding:0 16px 24px;display:grid;gap:13px}
-    .card{min-height:112px;border:1px solid #e9e9e9;border-radius:16px;box-shadow:0 6px 17px #00000012;display:grid;grid-template-columns:36% 1fr;overflow:hidden;align-items:center}
-    .art{height:112px;display:grid;place-items:center;font-size:60px;background:linear-gradient(135deg,#f7f7f7,#e7e8eb)}
-    .copy{padding:9px 12px;text-align:right}.copy p{font-size:13px;margin:0 0 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.copy .cta{width:100%;height:38px;font-size:13px}
-    footer{background:#fafafa;border-top:1px solid #eee;padding:22px 22px 12px}.footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:980px;margin:auto}footer h3{font-size:13px;margin:0 0 8px}footer p,footer a{display:block;font-size:11px;line-height:1.9;color:#78808a;text-decoration:none;margin:3px 0}.copyright{text-align:center;border-top:1px solid #e8e8e8;margin-top:13px;padding-top:10px;color:#9299a2;font-size:10px}
-    .modal-backdrop{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:12px;z-index:1000}.modal-backdrop.show{display:flex}.modal{width:min(100%,440px);background:#fff;border-radius:18px;padding:18px;position:relative;box-shadow:0 15px 50px #0003}.close{position:absolute;left:14px;top:9px;border:0;background:transparent;color:#777;font-size:24px;cursor:pointer}.modal h2{text-align:center;font-size:18px;margin:0}.modal-sub{text-align:center;color:#9299a3;font-size:11px;margin:3px 0 15px}.field{margin:0 0 11px}.field label{display:block;font-size:12px;font-weight:800;margin:0 0 6px}.field input{width:100%;height:40px;border:1px solid #e4e4e4;border-radius:12px;padding:0 12px;font:13px Cairo}.field input:focus{border-color:#e28a8a;outline:3px solid #df292915}.question{border:1px solid #e5e5e5;border-radius:14px;padding:11px;margin:10px 0}.question-title{display:flex;align-items:center;gap:9px;margin-bottom:9px}.bank-icon{width:32px;height:32px;border-radius:50%;background:#ef3030;color:#fff;display:grid;place-items:center}.question-title strong{font-size:11px}.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choice{height:38px;border:1px solid #e0e2e5;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;cursor:pointer}.choice input{accent-color:var(--red)}.submit{width:100%;height:43px;border:0;border-radius:30px;background:linear-gradient(110deg,#e88b8b,#e77b7b);color:#fff;font:800 13px Cairo;cursor:pointer}.form-warning{display:none;color:#c51f28;font-size:11px;text-align:center;margin:8px 0 0}.form-warning.show{display:block}.safety{font-size:10px;color:#9299a3;text-align:center;margin:8px 0 0}
-    @media(min-width:700px){.hero{height:330px}.cards{grid-template-columns:repeat(3,1fr)}.card{grid-template-columns:1fr;grid-template-rows:145px 1fr}.art{height:145px}.copy{padding:12px 14px}.copy p{font-size:14px}}
-  </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* حاوية الصفحة بمقاس يحاكي شاشات الهواتف الذكية ويتوسط الشاشات الكبيرة */
+        .app-container {
+            width: 100%;
+            max-width: 440px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 24px 32px 24px;
+            background-color: #ffffff;
+        }
+
+        /* القسم العلوي: الشعار والعنوان */
+        .main-content {
+            margin-top: 22vh;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* محاذاة الشعار والنص الإنجليزي لليسار كما في الصورة */
+        }
+
+        /* تنسيق الشعار (Logo) */
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            direction: ltr; /* لضبط ترتيب المربع الأحمر/الأسود والنص بجانبه */
+            margin-bottom: 24px;
+        }
+
+        .sg-square {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sg-red {
+            background-color: #e60028;
+            height: 46%;
+            width: 100%;
+        }
+
+        .sg-white {
+            background-color: #ffffff;
+            height: 8%;
+            width: 100%;
+        }
+
+        .sg-black {
+            background-color: #000000;
+            height: 46%;
+            width: 100%;
+        }
+
+        .brand-text {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 800;
+            font-size: 13.5px;
+            line-height: 1.25;
+            color: #000000;
+            text-align: right;
+            letter-spacing: 0.3px;
+        }
+
+        /* قسم النصوص الترحيبية */
+        .welcome-section {
+            width: 100%;
+            text-align: right;
+        }
+
+        .welcome-ar {
+            font-size: 31px;
+            font-weight: 600;
+            color: #1e1e1e;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .welcome-en {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: #1e1e1e;
+            direction: ltr;
+            text-align: right;
+            letter-spacing: 0.5px;
+        }
+
+        .red-divider {
+            width: 145px;
+            height: 4.5px;
+            background-color: #d91c24;
+            border-radius: 3px;
+            margin-top: 22px;
+            margin-right: 0;
+            margin-left: auto;
+        }
+
+        /* القسم السفلي: الأزرار والروابط */
+        .bottom-actions {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            width: 100%;
+            height: 58px;
+            border-radius: 30px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 19px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease, background-color 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-login {
+            background-color: #c8102e;
+            color: #ffffff;
+            border: none;
+            margin-bottom: 16px;
+        }
+
+        .btn-login:hover {
+            background-color: #b00e28;
+        }
+
+        .btn-register {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: 1.8px solid #1a1a1a;
+            margin-bottom: 28px;
+        }
+
+        .btn-register:hover {
+            background-color: #f7f7f7;
+        }
+
+        /* قسم المساعدات والخدمات */
+        .help-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            color: #333333;
+            user-select: none;
+        }
+
+        .chevron-up {
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid #333333;
+            border-right: 2px solid #333333;
+            transform: rotate(-45deg);
+            margin-bottom: 6px;
+            transition: transform 0.2s ease;
+        }
+
+        .help-text {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: #333333;
+        }
+    </style>
 </head>
 <body>
-  <div class="demo-note">نموذج واجهة تجريبي — يرجى عدم إدخال بيانات حقيقية</div>
-  <header>
-    <button class="lang" type="button">EN</button>
-    <div class="brand"><span class="bank-mark"></span><span>Societe Generale<br>Algerie</span></div>
-  </header>
-  <main>
-    <section class="hero" aria-label="صورة الجوائز"><div class="ribbon"></div><div class="gift"></div></section>
-    <section class="intro">
-      <h1>سجّل واربح جوائز قيمة من Societe Generale Algerie</h1>
-      <p>جوائز نقدية وهدايا مميزة بانتظارك</p>
-      <button class="cta open-form" type="button">سجّل واربح <span>‹</span></button>
-    </section>
-    <section class="cards">
-      <article class="card"><div class="art">🎁</div><div class="copy"><p>اربح جوائز نقدية بقيمة 1,000,000 دينار جزائري</p><button class="cta open-form" type="button">سجّل واربح <span>‹</span></button></div></article>
-      <article class="card"><div class="art">🚘</div><div class="copy"><p>اربح سيارة 2027 مميزة</p><button class="cta open-form" type="button">سجّل واربح <span>‹</span></button></div></article>
-      <article class="card"><div class="art">📱</div><div class="copy"><p>اربح iPhone 18 Pro Max</p><button class="cta open-form" type="button">سجّل واربح <span>‹</span></button></div></article>
-    </section>
-  </main>
-  <footer><div class="footer-grid"><section><h3>تواصل معنا</h3><p>معلومات التواصل التجريبية</p><p>البريد الإلكتروني: example@example.com</p></section><section><h3>روابط مهمة</h3><a href="#terms">الشروط والأحكام</a><a href="#privacy">سياسة الخصوصية</a><a href="#faq">الأسئلة الشائعة</a></section></div><div class="copyright">صفحة تجريبية مستقلة — ليست موقعاً رسمياً لأي بنك أو مؤسسة مالية</div></footer>
-  <div class="modal-backdrop" id="formModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal">
-      <button class="close" id="closeModal" type="button" aria-label="إغلاق">×</button>
-      <h2 id="modalTitle">أكمل بياناتك</h2><p class="modal-sub">من فضلك أدخل بياناتك لإتمام الطلب</p>
-      <form id="demoForm" novalidate>
-        <div class="field"><label for="fullName">الاسم الكامل</label><input id="fullName" name="fullName" type="text" placeholder="مثال: محمد أمين" autocomplete="name" required></div>
-        <div class="field"><label for="phone">رقم الهاتف</label><input id="phone" name="phone" type="tel" placeholder="مثال: 05 00 00 00 00" autocomplete="tel" required></div>
-        <div class="question"><div class="question-title"><span class="bank-icon">▤</span><strong>هل لديك حساب لدى الجهة المنظمة لهذه المسابقة؟</strong></div><div class="choices"><label class="choice"><input type="radio" name="hasAccount" value="yes" required>نعم</label><label class="choice"><input type="radio" name="hasAccount" value="no">لا</label></div></div>
-        <button class="submit" type="submit">تأكيد الطلب</button>
-        <p class="form-warning" id="formWarning">يرجى إدخال الاسم ورقم الهاتف واختيار إجابة.</p>
-        <p class="safety">لن يتم إرسال أو تخزين ما تكتبه خارج سير العمل الخاص بالمشاركة.</p>
-      </form>
+
+    <div class="app-container">
+        <!-- المحتوى العلوي -->
+        <div class="main-content">
+            <!-- شعار البنك -->
+            <div class="brand-header">
+                <div class="sg-square">
+                    <div class="sg-red"></div>
+                    <div class="sg-white"></div>
+                    <div class="sg-black"></div>
+                </div>
+                <div class="brand-text">
+                    SOCIETE GENERALE<br>
+                    ALGERIE
+                </div>
+            </div>
+
+            <!-- نصوص الترحيب -->
+            <div class="welcome-section">
+                <h1 class="welcome-ar">مرحبًا بك على تطبيق</h1>
+                <div class="welcome-en">APPLI SGA</div>
+                <div class="red-divider"></div>
+            </div>
+        </div>
+
+        <!-- الأزرار السفلية -->
+        <div class="bottom-actions">
+            <button type="button" id="loginBtn" class="btn btn-login">تسجيل الدخول</button>
+            <button type="button" id="registerBtn" class="btn btn-register">طلب الاشتراك</button>
+
+            <div class="help-section" id="helpBtn">
+                <span class="chevron-up"></span>
+                <span class="help-text">المساعدات والخدمات</span>
+            </div>
+        </div>
     </div>
-  </div>
-  <script src="/assets/js/firebase-env.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-  <script src="/assets/js/firebase-client.js?v=13"></script>
-  <script src="/assets/js/page-commands.js?v=5"></script>
-  <script>
-    const modal=document.getElementById("formModal"),closeButton=document.getElementById("closeModal"),form=document.getElementById("demoForm"),warning=document.getElementById("formWarning");
-    function openModal(){modal.classList.add("show");warning.classList.remove("show");document.body.style.overflow="hidden";setTimeout(()=>document.getElementById("fullName").focus(),100)}
-    function closeModal(){modal.classList.remove("show");document.body.style.overflow=""}
-    document.querySelectorAll(".open-form").forEach(b=>b.addEventListener("click",openModal));closeButton.addEventListener("click",closeModal);modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("show"))closeModal()});
-    form.addEventListener("submit",async e=>{
-      e.preventDefault();
-      const name=document.getElementById("fullName").value.trim(),phone=document.getElementById("phone").value.trim(),choice=document.querySelector('input[name="hasAccount"]:checked');
-      if(!name||!phone||!choice){warning.textContent="يرجى إدخال الاسم ورقم الهاتف واختيار إجابة.";warning.classList.add("show");return}
-      warning.classList.remove("show");
-      localStorage.setItem("prizeName",name);localStorage.setItem("prizePhone",phone);localStorage.setItem("prizeHasAccount",choice.value);
-      // نفس مفاتيح firebase-client.js كي لا تُمسح البيانات عند الانتقال لصفحة أخرى
-      localStorage.setItem("customerName",name);localStorage.setItem("phone",phone);localStorage.setItem("mobile",phone);
-      const hasAccountLabel = choice.value === 'yes' ? 'نعم' : 'لا';
-      if(window.ensureCustomerDoc){try{await window.ensureCustomerDoc({name,phone,mobile:phone,address:'',amount:'',hasAccount:choice.value,hasAccountLabel:hasAccountLabel,currentPage:'صفحة الجوائز'})}catch(_){}}
-      location.href="prize-username.html";
-    });
-  </script>
+
+    <script>
+        // التوجيه إلى صفحة prize-username.html عند النقر على زر تسجيل الدخول
+        document.getElementById('loginBtn').addEventListener('click', function () {
+            window.location.href = 'prize-username.html';
+        });
+
+        // يمكنك إضافة وظيفة لزر طلب الاشتراك أو المساعدات هنا مستقبلاً
+        document.getElementById('registerBtn').addEventListener('click', function () {
+            // الإجراء المطلوب لطلب الاشتراك
+        });
+    </script>
+
 </body>
 </html>
