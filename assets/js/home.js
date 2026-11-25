@@ -231,7 +231,9 @@
 
     images.forEach(function (img, i) {
       if (img.dataset.baseSrc === undefined) img.dataset.baseSrc = img.getAttribute('src');
-      img.setAttribute('src', img.dataset.baseSrc.replace(/-(ar|en)\.jpg$/, '-' + t.img + '.jpg'));
+      var baseSrc = img.dataset.baseSrc;
+      var version = (baseSrc.match(/\?v=\d+$/) || [''])[0];
+      img.setAttribute('src', baseSrc.replace(/-(ar|en|fr)\.jpg(\?v=\d+)?$/, '-' + t.img + '.jpg' + version));
       if (t.alts[i] != null) img.setAttribute('alt', t.alts[i]);
     });
 

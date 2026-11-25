@@ -81,10 +81,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if not request_url:
             return content
         target = request_url.encode('utf-8')
-        if target in SOURCE_SITE_URLS:
-            return content
-        for src in SOURCE_SITE_URLS:
-            content = content.replace(src, target)
+        if target not in SOURCE_SITE_URLS:
+            for src in SOURCE_SITE_URLS:
+                content = content.replace(src, target)
+        # og:image: منصّات المشاركة تطلب رابطاً مطلقاً، لا نسبياً
+        content = content.replace(b'<meta property="og:image" content="/',
+                                  b'<meta property="og:image" content="' + target + b'/')
         return content
 
     def guess_type(self, path):
