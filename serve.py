@@ -57,6 +57,8 @@ COMPRESSIBLE = {'.html', '.htm', '.css', '.js', '.svg', '.json', '.xml', '.txt'}
 # الملفات الثابتة طويلة الأمد (تُخزّن سنة عند العميل)
 STATIC_ASSETS = {'.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.webp',
                  '.avif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot', '.map'}
+# الأكواد تتغيّر مع كل إصلاح: لا نخزّنها طويلاً حتى تصل التعديلات للجوال فوراً
+REVALIDATE_ASSETS = {'.js', '.css'}
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -167,6 +169,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         if ext in {'.html', '.htm'}:
             cache = 'no-cache, must-revalidate'  # صفحات HTML: تتحقق من التحديث دائماً
+        elif ext in REVALIDATE_ASSETS:
+            cache = 'no-cache, must-revalidate'  # الأكواد: تحقّق من التحديث في كل مرة
         elif ext in STATIC_ASSETS:
             cache = 'public, max-age=31536000, immutable'  # ملفات ثابتة
         else:

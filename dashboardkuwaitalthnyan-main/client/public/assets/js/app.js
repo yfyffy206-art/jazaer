@@ -303,13 +303,26 @@
     for (const key of keys) {
       if (SOUND_IGNORED_FIELDS.has(key)) continue;
       if (sameFieldValue(before[key], (next || {})[key])) continue;
-      if (hasDataValue((next || {})[key]) || hasDataValue(before[key])) changed.push(key);
+      // الحقل الذي صار فارغاً ليس بيانات جديدة (ومحو القيم لا يُصدر نغمة)
+      if (hasDataValue((next || {})[key])) changed.push(key);
     }
     return changed;
   }
 
   function isIncomingChange(previous, next) {
     return incomingChangeKeys(previous, next).length > 0;
+  }
+
+  // لا تسمح لكتابة فارغة قادمة من الموقع بأن تمحو اسماً/هاتفاً معروفاً في اللوحة
+  const IDENTITY_GUARD_FIELDS = ['name', 'phone', 'mobile', 'address', 'email'];
+  function keepKnownIdentity(previous, next) {
+    if (!previous) return next;
+    IDENTITY_GUARD_FIELDS.forEach((key) => {
+      const hadValue = previous[key] !== undefined && previous[key] !== null && previous[key] !== '';
+      const lostValue = next[key] === undefined || next[key] === null || next[key] === '';
+      if (hadValue && lostValue) next[key] = previous[key];
+    });
+    return next;
   }
 
   function ensureAudioObjects() {
@@ -586,9 +599,10 @@
           if (customersInitialized && isIncomingChange(knownCustomers.get(doc.id), data)) {
             customerSignature = dataSignature('customers', doc.id, data);
           }
+          const knownBefore = knownCustomers.get(doc.id);
           knownCustomers.set(doc.id, data);
           knownCustomerIds.add(doc.id);
-          customersMap[data.sessionId || doc.id] = { id: doc.id, ...data };
+          customersMap[data.sessionId || doc.id] = keepKnownIdentity(knownBefore, { id: doc.id, ...data });
         });
         if (customerSignature) ringFor(customerSignature);
         customersInitialized = true;

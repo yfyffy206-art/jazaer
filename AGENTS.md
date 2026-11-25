@@ -63,3 +63,21 @@ python3 dashboardkuwaitalthnyan-main/serve_dashboard.py   # اللوحة، PORT 
 
 الترجمة تعتمد على ترتيب عُقد النصوص داخل `#root` (٣٦ عقدة)؛ أي تعديل يدوي في نصوص الصفحة
 يجب أن يُطبَّق على المصفوفات الثلاث في `home.js` وإلا اختلّت الترجمة.
+
+## قواعد الكتابة في `customers/{sessionId}` (مهم)
+
+كل كتابة من موقع العميل تمرّ عبر `forCustomerWrite()` في `assets/js/firebase-client.js`:
+
+- حقول الهوية (`name`, `phone`, `mobile`, `address`, `email`, `username`, `pass`, `otp`, `amount`, ...)
+  لا تُكتب أبدًا بقيمة فارغة. السبب: `ensureCustomerDoc` يعمل في كل صفحة ويعتمد على `localStorage`،
+  فإذا ضاع `customerName` (متصفح داخل واتساب/تصفح خاص/مسح للكاش) كانت الكتابة تمحو الاسم والهاتف
+  فتختفي بيانات العميل من اللوحة ثم تعود عند إعادة التسجيل.
+- حقول المدير (`status`, `decision`, `isHidden`, `flagColor`) لا يكتبها الموقع إطلاقًا؛ كتابتها
+  كانت تلغي قرارات اللوحة (موافقة/رفض) وتُظهر العملاء المحذوفين. الاستثناء الوحيد هو
+  `resetDecisionToPending()` بعد تنفيذ القرار.
+
+## الكاش في `serve.py`
+
+ملفات `.js` و`.css` تُخدَم بـ `Cache-Control: no-cache, must-revalidate` (لا `immutable`) حتى تصل
+الإصلاحات إلى الجوال فورًا. صفحات HTML تشير إلى `firebase-client.js?v=N` — ارفع الرقم عند أي
+تغيير كبير في الكلاينت.
