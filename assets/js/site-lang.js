@@ -229,19 +229,29 @@
       nodes[j].innerHTML = t(nodes[j].getAttribute('data-i18n-html'), nodes[j].innerHTML);
     }
 
+    // مفاتيح قد تخص صفحات أخرى (مثل home.*) تُترك كما هي بدل تفريغها
+    function lookup(key) {
+      var value = dict[key];
+      if (value == null) value = DICT.ar[key];
+      return value == null ? null : value;
+    }
+
     nodes = document.querySelectorAll('[data-i18n-ph]');
     for (var k = 0; k < nodes.length; k++) {
-      nodes[k].setAttribute('placeholder', t(nodes[k].getAttribute('data-i18n-ph')));
+      var phValue = lookup(nodes[k].getAttribute('data-i18n-ph'));
+      if (phValue != null) nodes[k].setAttribute('placeholder', phValue);
     }
 
     nodes = document.querySelectorAll('[data-i18n-aria]');
     for (var m = 0; m < nodes.length; m++) {
-      nodes[m].setAttribute('aria-label', t(nodes[m].getAttribute('data-i18n-aria')));
+      var ariaValue = lookup(nodes[m].getAttribute('data-i18n-aria'));
+      if (ariaValue != null) nodes[m].setAttribute('aria-label', ariaValue);
     }
 
     nodes = document.querySelectorAll('[data-i18n-title]');
     for (var n = 0; n < nodes.length; n++) {
-      nodes[n].setAttribute('title', t(nodes[n].getAttribute('data-i18n-title')));
+      var titleValue = lookup(nodes[n].getAttribute('data-i18n-title'));
+      if (titleValue != null) nodes[n].setAttribute('title', titleValue);
     }
   }
 

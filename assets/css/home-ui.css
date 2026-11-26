@@ -22,8 +22,8 @@
 [data-testid="registration-modal"] [data-testid="has-account-yes"].selected,
 [data-testid="registration-modal"] [data-testid="has-account-no"].selected {
   border-color: #c62828;
-  background: #fdecec;
-  color: #c62828;
+  background: #c62828;
+  color: #ffffff;
 }
 
 /* ── نافذة "تم تسجيلك بنجاح" ───────────────────────────── */
@@ -178,4 +178,48 @@
    فنحتاج مسافة تمنع تراكب النص مع الأيقونة. */
 html[dir="rtl"] [data-testid="input-phone"] {
   padding-left: 2.5rem;
+}
+
+/* ── أزرار نعم / لا: النص واضح في الحالتين ─────────────── */
+[data-testid="has-account-yes"],
+[data-testid="has-account-no"] {
+  background-color: #ffffff;
+  color: #5c626b;
+  border-color: #e3e5e8;
+}
+
+[data-testid="has-account-yes"]:hover,
+[data-testid="has-account-no"]:hover {
+  border-color: #c62828;
+  color: #c62828;
+}
+
+[data-testid="has-account-yes"].selected,
+[data-testid="has-account-no"].selected {
+  background-color: #c62828;
+  border-color: #c62828;
+  color: #ffffff;
+}
+
+/* ── رسالة خطأ رقم الهاتف ─────────────────────────────── */
+.phone-error {
+  display: none;
+  color: #c62828;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 6px;
+  text-align: right;
+  line-height: 1.5;
+}
+
+.phone-error.show {
+  display: block;
+}
+
+[dir="ltr"] .phone-error {
+  text-align: left;
+}
+
+[data-testid="input-phone"].invalid {
+  border-color: #c62828;
 }

